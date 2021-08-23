@@ -1,0 +1,56 @@
+service: open-box
+
+provider:
+    name: aws
+    runtime: nodejs12.x
+    memorySize: 128
+    timeout: 10
+    stage: production
+    region: eu-central-1
+    websocketsApiName: open-box-websocket
+    websocketsApiRouteSelectionExpression: $request.body.action
+
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - 'execute-api:ManageConnections'
+              - 'execute-api:Invoke'
+          Resource:
+              - 'arn:aws:execute-api:*:*:**/@connections/*'
+
+functions:
+    api:
+        handler: lambda.api
+        events:
+            - http: OPTIONS /lobby
+            - http: DELETE /lobby
+            - http: GET /lobby
+            - http: POST /lobby
+            - http: OPTIONS /lobby/players
+            - http: DELETE /lobby/players
+            - http: GET /lobby/players
+            - http: PUT /lobby/players
+            - http: OPTIONS /lobby/game
+            - http: DELETE /lobby/game
+            - http: GET /lobby/game
+            - http: PUT /lobby/game
+            - http: OPTIONS /gamemode
+            - http: GET /gamemode
+            - http: GET /game
+            - http: OPTIONS /lobby/host
+            - http: GET /lobby/host
+            - http: PUT /lobby/host
+
+    connectionHandler:
+        handler: lambda.websocketConnection
+        events:
+            - websocket:
+                  route: $connect
+            - websocket:
+                  route: $disconnect
+
+    actionHandler:
+        handler: lambda.websocketAction
+        events:
+            - websocket:
+                  route: $default

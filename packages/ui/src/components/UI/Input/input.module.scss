@@ -1,0 +1,14 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+label {
+    font-family: $Second-FontType;
+    font-size: 0.8rem;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: black solid 1.5px;
+}

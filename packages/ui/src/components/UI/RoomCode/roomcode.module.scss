@@ -1,0 +1,31 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+.RoomCode {
+    width: min-content;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+        color: black;
+        font-family: 'Varela';
+        font-size: 2.5vh;
+        font-weight: normal;
+        margin: 5px;
+    }
+
+    p {
+        background-color: $Second-BackgroundColor;
+        font-family: $First-FontType;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 4vh;
+        margin: 5px;
+        padding: 2% 40px;
+        color: black;
+        border-radius: 10px;
+        letter-spacing: 5px;
+    }
+}

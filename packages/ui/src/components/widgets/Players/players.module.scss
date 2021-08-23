@@ -1,0 +1,29 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+.Players {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8%;
+    height: 70%;
+    overflow-y: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: $First-BackgroundColor;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: $First-BackgroundColor;
+    border-radius: 10px;
+    transition: 0.3s;
+}

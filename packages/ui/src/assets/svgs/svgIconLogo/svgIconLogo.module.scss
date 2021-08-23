@@ -1,0 +1,28 @@
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+
+.OpenBoxIcon {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    height: 35vh;
+
+    @include respond(desktop) {
+        height: 40vh;
+    }
+    @include respond(lrg-desktop) {
+        height: 50vh;
+    }
+}
+
+.Modal {
+    display: none;
+
+    @include respond(phone) {
+        display: block;
+        height: 25vh;
+        path {
+            fill: $Third-FontColor;
+        }
+    }
+}
