@@ -1,0 +1,14 @@
+{
+  "name": "@openbox/common",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@typegoose/typegoose": "^7.6.0",
+    "typescript": "^4.1.3"
+  },
+  "devDependencies": {}
+}

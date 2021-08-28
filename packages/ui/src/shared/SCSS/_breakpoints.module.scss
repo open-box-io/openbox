@@ -1,0 +1,33 @@
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+      @media (max-width: 37.5em) {
+        // 600px
+        @content;
+      }
+    }
+    @if $breakpoint == tab-portrait {
+      // 740px
+      @media (min-width: 46.25em) {
+        @content;
+      }
+    }
+    @if $breakpoint == tab-landscape {
+      // 1200px
+      @media (min-width: 75em) {
+        @content;
+      }
+    }
+    @if $breakpoint == desktop {
+      //  1280px
+      @media (min-width: 80em) {
+        @content;
+      }
+    }
+    @if $breakpoint == lrg-desktop {
+      // 1800px
+      @media (min-width: 112.5em) {
+        @content;
+      }
+    }
+  }
+  

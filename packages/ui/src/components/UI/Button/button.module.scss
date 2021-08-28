@@ -1,0 +1,38 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+.Default {
+    text-align: center;
+    text-decoration: none;
+    padding: 6px;
+    border: none;
+    box-shadow: inset 0px 3px 5px rgba(68, 68, 68, 0.5);
+    background-color: $First-BackgroundColor;
+    width: 170px;
+    margin: 10px;
+
+    &:focus {
+        outline: 0;
+    }
+
+    p {
+        margin: 0;
+        padding: 10px;
+        font-family: $Second-FontType;
+        font-size: 1rem;
+        color: darken($First-BackgroundColor, 25%);
+        box-shadow: 0px 3px 5px rgba(68, 68, 68, 0.5);
+        background-color: $Second-BackgroundColor;
+    }
+}
+
+.Back {
+    border: none;
+    cursor: pointer;
+    color: $First-BackgroundColor;
+    background-color: transparent;
+    &:focus {
+        outline: 0;
+    }
+}

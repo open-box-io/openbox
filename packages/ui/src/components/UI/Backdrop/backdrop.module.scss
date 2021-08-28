@@ -1,0 +1,28 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+.Backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    background-color: $Modal-BackgroundColor;
+    left: 0;
+    top: 0;
+    @supports (backdrop-filter: blur(3px)) {
+        backdrop-filter: blur(3px);
+    }
+}
+
+.BackdropLobby {
+    @include respond(phone) {
+        display: none;
+    }
+    @include respond(tab-portrait) {
+        display: none;
+    }
+    @include respond(tab-landscape) {
+        display: block;
+    }
+}

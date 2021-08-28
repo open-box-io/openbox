@@ -1,0 +1,10 @@
+@import 'shared/SCSS/_color.module.scss';
+
+body, html {
+  background-color:  $First-BackgroundColor;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
