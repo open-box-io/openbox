@@ -7,3 +7,4 @@ module.exports.api = (event, context) =>
     awsServerlessExpress.proxy(server, event, context);
 
 module.exports.websocketConnection = connectionHandler;
+module.exports.websocketAction = () => undefined;

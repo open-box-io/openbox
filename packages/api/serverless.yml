@@ -1,4 +1,5 @@
 service: open-box
+useDotenv: true
 
 provider:
     name: aws
