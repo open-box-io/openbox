@@ -1,9 +1,7 @@
-import { Game, GameResponse } from '@openbox/common/src/types/gameTypes';
+import { Game, GameResponse, Lobby, WebsocketAction } from '@openbox/common';
 import { formatGamemodeResponse, getGamemodeById } from './gamemode';
 import { formatPlayerViewResponse, getPlayerView } from './component';
 
-import { Lobby } from '@openbox/common/src/types/lobbyTypes';
-import { WebsocketAction } from '@openbox/common/src/types/websocketTypes';
 import { sendToPlayer } from './websocket';
 
 export const websocketGameUpdate = async (

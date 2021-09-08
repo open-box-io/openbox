@@ -1,4 +1,4 @@
-import { LobbyGameAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { LobbyGameAPIResponse } from '@openbox/common';
 import { Request } from 'express';
 import { formatGameResponse } from '../../../helpers/game';
 import { getLobbyById } from '../../../helpers/lobby';

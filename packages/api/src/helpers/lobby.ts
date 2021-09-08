@@ -1,10 +1,14 @@
-import { Lobby, LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
-import { Player, PlayerResponse } from '@openbox/common/src/types/playerTypes';
+import {
+    APIError,
+    Game,
+    Lobby,
+    LobbyResponse,
+    Player,
+    PlayerResponse,
+    PlayerView,
+    WebsocketAction,
+} from '@openbox/common';
 
-import { APIError } from '@openbox/common/src/types/errorTypes';
-import { Game } from '@openbox/common/src/types/gameTypes';
-import { PlayerView } from '@openbox/common/src/types/componentTypes';
-import { WebsocketAction } from '@openbox/common/src/types/websocketTypes';
 import { formatGameResponse } from './game';
 import { formatPlayerResponse } from './player';
 import { generateGameCode } from '../helpers/gameCode';

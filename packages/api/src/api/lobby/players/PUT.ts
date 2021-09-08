@@ -1,3 +1,4 @@
+import { JoinLobbyAPIResponse, WebsocketActionType } from '@openbox/common';
 import {
     addPlayerToLobby,
     formatLobbyResponse,
@@ -10,9 +11,7 @@ import {
 } from '../../../helpers/player';
 import { getLobbyId, getPlayerName } from '../../../helpers/requestValidation';
 
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import { Request } from 'express';
-import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
 
 export const putLobbyPlayers = async (
     request: Request,

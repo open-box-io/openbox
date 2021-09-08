@@ -1,14 +1,12 @@
 import {
+    APIError,
     Component,
-    PlayerView,
-} from '@openbox/common/src/types/componentTypes';
-import {
     Gamemode,
     GamemodeResponse,
-} from '@openbox/common/src/types/gamemodeTypes';
+    Lobby,
+    PlayerView,
+} from '@openbox/common';
 
-import { APIError } from '@openbox/common/src/types/errorTypes';
-import { Lobby } from '@openbox/common/src/types/lobbyTypes';
 import { formatLobbyResponse } from './lobby';
 import { gamemodeDB } from '../database/database';
 

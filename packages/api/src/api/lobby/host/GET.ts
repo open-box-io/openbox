@@ -1,4 +1,4 @@
-import { LobbyHostAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { LobbyHostAPIResponse } from '@openbox/common';
 import { Request } from 'express';
 import { formatPlayerResponse } from '../../../helpers/player';
 import { getLobbyById } from '../../../helpers/lobby';

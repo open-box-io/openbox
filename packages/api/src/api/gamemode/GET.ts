@@ -3,7 +3,7 @@ import {
     getGamemodeById,
 } from '../../helpers/gamemode';
 
-import { GamemodeAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { GamemodeAPIResponse } from '@openbox/common';
 import { Request } from 'express';
 import { getGamemodeId } from '../../helpers/requestValidation';
 

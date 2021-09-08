@@ -1,11 +1,10 @@
 import {
+    APIError,
+    Lobby,
+    Player,
     PlayerView,
     PlayerViewResponse,
-} from '@openbox/common/src/types/componentTypes';
-
-import { APIError } from '@openbox/common/src/types/errorTypes';
-import { Lobby } from '@openbox/common/src/types/lobbyTypes';
-import { Player } from '@openbox/common/src/types/playerTypes';
+} from '@openbox/common';
 
 export const getPlayerView = (lobby: Lobby, player: Player): PlayerView => {
     const view = lobby.game?.playerViews.find(

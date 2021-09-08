@@ -1,9 +1,5 @@
-import {
-    Component,
-    getComponent,
-} from '@openbox/common/src/types/componentTypes';
+import { APIError, Component, getComponent } from '@openbox/common';
 
-import { APIError } from '@openbox/common/src/types/errorTypes';
 import { Request } from 'express';
 
 const nameValidation = (name: string): string => {

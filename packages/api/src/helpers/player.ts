@@ -1,12 +1,12 @@
 import {
+    APIError,
+    Lobby,
     Player,
     PlayerResponse,
     PlayerSecretResponse,
-} from '@openbox/common/src/types/playerTypes';
+} from '@openbox/common';
 
-import { APIError } from '@openbox/common/src/types/errorTypes';
 import Base64 from 'crypto-js/enc-base64';
-import { Lobby } from '@openbox/common/src/types/lobbyTypes';
 import crypto from 'crypto';
 import sha512 from 'crypto-js/sha512';
 import uuid from 'uuid-random';

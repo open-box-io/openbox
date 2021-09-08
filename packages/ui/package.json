@@ -3,11 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "main": "app.ts",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.1",
-    "@typegoose/typegoose": "^8.1.0",
     "axios": "^0.21.1",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
@@ -27,12 +32,6 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/node-sass": "^4.11.2",
     "@types/react-dom": "^17.0.9"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [

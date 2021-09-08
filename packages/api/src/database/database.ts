@@ -1,6 +1,5 @@
-import { APIError } from '@openbox/common/src/types/errorTypes';
-import { Gamemode } from '@openbox/common/src/types/gamemodeTypes';
-import { Lobby } from '@openbox/common/src/types/lobbyTypes';
+import { APIError, Gamemode, Lobby } from '@openbox/common';
+
 import dotenv from 'dotenv';
 import { getModelForClass } from '@typegoose/typegoose';
 import mongoose from 'mongoose';

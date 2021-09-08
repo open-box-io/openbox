@@ -1,4 +1,4 @@
-import { ValidationHeaders } from '@openbox/common/src/types/storageTypes';
+import { ValidationHeaders } from '@openbox/common';
 
 export const getHeaders = (): ValidationHeaders =>
     JSON.parse(localStorage.getItem(`headers`) as string);

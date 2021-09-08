@@ -1,7 +1,7 @@
+import { JoinLobbyAPIResponse, LobbyResponse } from '@openbox/common';
+
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
 import Connect from '../../components/widgets/Connect/Connect';
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
-import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import Modal from '../../components/UI/Modal/Modal';
 import Players from '../../components/widgets/Players/Players';
 import React from 'react';
