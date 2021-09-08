@@ -2,7 +2,7 @@
   "name": "@openbox/api",
   "version": "1.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "app.js",
   "scripts": {
     "build": "tsc",
     "start": "node -r esm local.js",
@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@typegoose/typegoose": "^7.6.0",
+    "@openbox/common": "0.0.1",
     "amplify": "0.0.11",
     "aws-sdk": "^2.897.0",
     "aws-serverless-express": "^3.4.0",

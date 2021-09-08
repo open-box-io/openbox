@@ -1,5 +1,5 @@
-import { LobbyPlayersAPIResponse } from '@openbox/common/src/types/endpointTypes';
-import { Player } from '@openbox/common/src/types/playerTypes';
+import { LobbyPlayersAPIResponse, Player } from '@openbox/common';
+
 import { Request } from 'express';
 import { formatPlayerResponse } from '../../../helpers/player';
 import { getLobbyById } from '../../../helpers/lobby';

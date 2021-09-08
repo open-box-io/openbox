@@ -9,7 +9,7 @@ import {
 } from '../../helpers/requestValidation';
 import { getPlayer, verifyPlayer } from '../../helpers/player';
 
-import { GameAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { GameAPIResponse } from '@openbox/common';
 import { Request } from 'express';
 import { getLobbyById } from '../../helpers/lobby';
 

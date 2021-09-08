@@ -34,7 +34,7 @@ export const wsResponseWrapper = async (
             statusCode: 200,
             body: JSON.stringify(result),
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log(
             `response error`,
             error.code ? error.code : 500,

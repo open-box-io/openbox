@@ -1,3 +1,4 @@
+import { Game, WebsocketActionType } from '@openbox/common';
 import { getGamemodeById, getInitialState } from '../../../helpers/gamemode';
 import {
     getGamemodeId,
@@ -16,9 +17,7 @@ import {
     verifyPlayerHost,
 } from '../../../helpers/player';
 
-import { Game } from '@openbox/common/src/types/gameTypes';
 import { Request } from 'express';
-import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
 
 export const putLobbyGame = async (request: Request): Promise<void> => {
     console.log(`PUT /lobby/game`);

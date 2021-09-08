@@ -2,8 +2,11 @@
   "name": "@openbox/common",
   "version": "0.0.1",
   "description": "",
-  "main": "index.ts",
-  "scripts": {},
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

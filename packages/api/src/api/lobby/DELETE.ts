@@ -14,7 +14,7 @@ import {
 } from '../../helpers/player';
 
 import { Request } from 'express';
-import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
+import { WebsocketActionType } from '@openbox/common';
 import { sendToLobby } from '../../helpers/websocket';
 
 export const deleteLobby = async (request: Request): Promise<void> => {

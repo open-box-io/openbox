@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { JoinLobbyAPIResponse } from '@openbox/common';
 import styles from './connect.module.scss';
 import { useHistory } from 'react-router-dom';
 

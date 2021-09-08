@@ -1,7 +1,6 @@
+import { Lobby, Player, WebsocketMessage } from '@openbox/common';
+
 import AWS from 'aws-sdk';
-import { Lobby } from '@openbox/common/src/types/lobbyTypes';
-import { Player } from '@openbox/common/src/types/playerTypes';
-import { WebsocketMessage } from '@openbox/common/src/types/websocketTypes';
 
 export const getEndpoint = (): string => {
     return `ws.open-box.io`;

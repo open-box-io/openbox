@@ -1,12 +1,10 @@
+import { JoinLobbyAPIResponse, LobbyResponse, PlayerResponse } from '@openbox/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { createLobby, joinLobby } from './api/lobby';
 
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import Landing from './screens/Landing/Landing';
 import Lobby from './screens/Lobby/Lobby';
-import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
-import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import { getHeaders } from './store/store';
 import styles from './app.module.scss';
 

@@ -1,4 +1,4 @@
-import { APIError } from '@openbox/common/src/types/errorTypes';
+import { APIError } from '@openbox/common';
 import { lobbyDB } from '../database/database';
 
 const timeNumbersInGameId = 4;

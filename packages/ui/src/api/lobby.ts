@@ -1,6 +1,6 @@
 import { getHeaders, setHeaders } from '../store/store';
 
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { JoinLobbyAPIResponse } from '@openbox/common';
 import axios from '../shared/axios';
 
 export const createLobby = async (

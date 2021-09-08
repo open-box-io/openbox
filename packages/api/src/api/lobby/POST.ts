@@ -1,7 +1,7 @@
 import { createLobby, formatLobbyResponse } from '../../helpers/lobby';
 import { createPlayer, formatPlayerSecretResponse } from '../../helpers/player';
 
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { JoinLobbyAPIResponse } from '@openbox/common';
 import { Request } from 'express';
 import { getPlayerName } from '../../helpers/requestValidation';
 

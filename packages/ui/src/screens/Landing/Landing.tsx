@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
 import Button from '../../components/UI/Button/Button';
 import Connect from '../../components/widgets/Connect/Connect';
-import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { JoinLobbyAPIResponse } from '@openbox/common';
 import Modal from '../../components/UI/Modal/Modal';
 import styles from './landing.module.scss';
 

@@ -1,6 +1,6 @@
 import Cross from '../../../assets/svgs/svgCross/svgCross';
 import Crown from '../../../assets/svgs/svgCrown/svgCrown';
-import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
+import { PlayerResponse } from '@openbox/common';
 import React from 'react';
 import { getHeaders } from '../../../store/store';
 import { removePlayer } from '../../../api/lobby';
