@@ -1,7 +1,7 @@
-const app = require(`./dist/app`);
+const { getAPI } = require(`./dist/api/src/app`);
 const port = process.env.PORT || 8000;
 
 // Server
-app.listen(port, () => {
+getAPI().listen(port, () => {
     console.log(`Listening on: http://localhost:${port}`);
 });

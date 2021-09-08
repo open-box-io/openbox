@@ -1,4 +1,4 @@
-const { getAPI, connectionHandler } = require(`./dist/app`);
+const { getAPI, connectionHandler } = require(`./dist/api/src/app`);
 const awsServerlessExpress = require(`aws-serverless-express`);
 
 const server = awsServerlessExpress.createServer(getAPI());

@@ -1,3 +1,4 @@
+import { APIError, GameAPIResponse } from '@openbox/common';
 import {
     formatPlayerViewResponse,
     getPlayerView,
@@ -12,7 +13,6 @@ import { getGamemodeById, submitAction } from '../../helpers/gamemode';
 import { getLobbyById, updateLobbyGameState } from '../../helpers/lobby';
 import { getPlayer, verifyPlayer } from '../../helpers/player';
 
-import { APIError, GameAPIResponse } from '@openbox/common';
 import { Request } from 'express';
 
 export const postGame = async (request: Request): Promise<GameAPIResponse> => {
