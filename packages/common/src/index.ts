@@ -8,13 +8,11 @@ import {
     TextBoxComponent,
     getComponent,
 } from './types/componentTypes';
-import { Game, GameResponse } from './types/gameTypes';
 import {
     GameAPIResponse,
     GamemodeAPIResponse,
     JoinLobbyAPIResponse,
     LobbyAPIResponse,
-    LobbyGameAPIResponse,
     LobbyHostAPIResponse,
     LobbyPlayersAPIResponse,
 } from './types/endpointTypes';
@@ -50,7 +48,6 @@ export {
     getComponent,
     GameAPIResponse,
     GamemodeAPIResponse,
-    LobbyGameAPIResponse,
     LobbyHostAPIResponse,
     LobbyPlayersAPIResponse,
     LobbyAPIResponse,
@@ -60,8 +57,6 @@ export {
     Phase,
     Gamemode,
     GamemodeResponse,
-    Game,
-    GameResponse,
     Lobby,
     LobbyResponse,
     Player,

@@ -1,6 +1,6 @@
 import {
     getLobbyById,
-    setLobbyGame,
+    setLobbyGamemode,
     websocketLobbyUpdate,
 } from '../../../helpers/lobby';
 import {
@@ -34,7 +34,7 @@ export const deleteLobbyGame = async (request: Request): Promise<void> => {
     verifyPlayer(player, playerSecret);
     verifyPlayerHost(lobby, player);
 
-    const updatedLobby = await setLobbyGame(lobbyId, undefined);
+    const updatedLobby = await setLobbyGamemode(lobbyId, undefined);
 
     await websocketLobbyUpdate(updatedLobby, updatedLobby, {
         type: WebsocketActionType.GAME_REMOVED,

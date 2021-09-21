@@ -2,7 +2,6 @@ import { connectDB, disconnectDB } from '../database/database';
 import express, { Request, Response } from 'express';
 
 import { APIError } from '@openbox/common';
-import { GetAppInstanceStreamingConfigurationsResponse } from 'aws-sdk/clients/chime';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { deleteLobby } from './lobby/DELETE';

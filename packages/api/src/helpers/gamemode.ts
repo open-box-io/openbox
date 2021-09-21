@@ -59,7 +59,7 @@ export const evaluateState = async (
         interpreter = new Interpreter(allCode);
     } catch (e) {
         console.log(`error interpreting code`, e);
-        throw new APIError(500, e);
+        throw new APIError(500, <string>e);
     }
 
     interpreter.run();
@@ -67,43 +67,6 @@ export const evaluateState = async (
     const result: string = interpreter.value;
 
     return evaluateOutput(result);
-};
-
-export const getInitialState = async (
-    gamemode: Gamemode,
-    lobby: Lobby,
-): Promise<{
-    currentState: string;
-    playerViews: PlayerView[];
-}> => {
-    const initialState = await evaluateState(
-        lobby,
-        gamemode.calculateState.initialState,
-        gamemode.calculateState.sharedFunctions,
-        lobby.game?.currentState,
-    );
-
-    return initialState;
-};
-
-export const submitAction = async (
-    gamemode: Gamemode,
-    lobby: Lobby,
-    context: Component[],
-): Promise<{
-    currentState: string;
-    playerViews: PlayerView[];
-}> => {
-    const nextState = await evaluateState(
-        lobby,
-        gamemode.calculateState.initialState,
-        gamemode.calculateState.sharedFunctions,
-        lobby.game?.currentState,
-        lobby?.game?.playerViews,
-        context,
-    );
-
-    return nextState;
 };
 
 export const formatGamemodeResponse = (

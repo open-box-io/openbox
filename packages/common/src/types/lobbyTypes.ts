@@ -1,5 +1,6 @@
 import { Player, PlayerResponse } from './playerTypes';
 
+import { GamemodeResponse } from './gamemodeTypes';
 import { prop } from '@typegoose/typegoose';
 
 export class Lobby {
@@ -8,7 +9,7 @@ export class Lobby {
     @prop() host: Player;
     @prop() players: Player[];
 
-    @prop() gamemode_id?: string;
+    @prop() gamemodeId?: string;
 }
 
 export class LobbyResponse {
@@ -17,5 +18,5 @@ export class LobbyResponse {
     host: PlayerResponse;
     players: PlayerResponse[];
 
-    gamemode_id?: string;
+    gamemode?: GamemodeResponse;
 }

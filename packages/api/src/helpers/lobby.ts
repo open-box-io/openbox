@@ -1,15 +1,13 @@
 import {
     APIError,
-    Game,
     Lobby,
     LobbyResponse,
     Player,
     PlayerResponse,
-    PlayerView,
     WebsocketAction,
 } from '@openbox/common';
+import { formatGamemodeResponse, getGamemodeById } from './gamemode';
 
-import { formatGameResponse } from './game';
 import { formatPlayerResponse } from './player';
 import { generateGameCode } from '../helpers/gameCode';
 import { lobbyDB } from '../database/database';
@@ -95,13 +93,13 @@ export const promotePlayerToHost = async (
     return updatedLobby;
 };
 
-export const setLobbyGame = async (
+export const setLobbyGamemode = async (
     lobbyId: string,
-    game?: Game,
+    gamemodeId?: string,
 ): Promise<Lobby> => {
     const lobby = await lobbyDB.findOneAndUpdate(
         { _id: lobbyId },
-        { game: game },
+        { gamemodeId: gamemodeId },
     );
 
     if (!lobby) {
@@ -109,39 +107,6 @@ export const setLobbyGame = async (
     }
 
     return await getLobbyById(lobbyId);
-};
-
-export const updateLobbyGameState = async (
-    lobby: Lobby,
-    newState: {
-        currentState: string;
-        playerViews: PlayerView[];
-    },
-): Promise<Lobby> => {
-    if (!lobby.game) {
-        throw new APIError(500, `No game found`);
-    }
-
-    const game = lobby.game;
-
-    game.currentState = newState.currentState;
-    game.playerViews = game.playerViews.filter((view) =>
-        newState.playerViews.some(
-            (newView) => newView.playerId === view.playerId,
-        ),
-    );
-    game.playerViews = game.playerViews.concat(newState.playerViews);
-
-    const updatedLobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobby._id },
-        { game: game },
-    );
-
-    if (!updatedLobby) {
-        throw new APIError(500, `Could not update game`);
-    }
-
-    return updatedLobby;
 };
 
 export const updatePlayer = async (
@@ -183,7 +148,9 @@ export const formatLobbyResponse = async (
         (player: Player): PlayerResponse => formatPlayerResponse(player),
     ),
 
-    game: await formatGameResponse(lobby.game),
+    gamemode: lobby.gamemodeId ?
+        await formatGamemodeResponse(await getGamemodeById(lobby.gamemodeId))
+        : undefined,
 });
 
 export const websocketLobbyUpdate = async (

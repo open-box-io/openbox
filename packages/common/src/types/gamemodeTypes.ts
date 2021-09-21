@@ -19,7 +19,7 @@ export class Gamemode {
     @prop() name: string;
 
     @prop() initialPhaseName: string;
-    @prop() initialContext: string;
+    @prop() initialGameState: string;
 
     @prop() phases: Phase[];
 }
