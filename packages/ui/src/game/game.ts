@@ -1,30 +1,56 @@
-import { Game, Player, PlayerView, WebsocketMessage } from '@openbox/common';
+import {
+    Gamemode,
+    Phase,
+    PlayerResponse,
+    PlayerView,
+    WebsocketMessage,
+} from '@openbox/common';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Interpreter = require(`js-interpreter`);
 
 export interface InterpreterOutput {
-    context: string;
+    gameState: Record<string, unknown>;
     playerViews: PlayerView[];
     phaseName: string;
 }
 
 export class GameInstance {
-    game: Game;
-    context: string;
+    gamemode: Gamemode;
+    gameState: Record<string, unknown>;
     playerViews: PlayerView[];
     phaseName: string;
 
-    execute(players: Player[], code: string) {
+    getPhase(phaseName: string): Phase | undefined {
+        return this.gamemode.phases.find(
+            (phase) => phase.phaseName === phaseName,
+        );
+    }
+
+    getCurrentPhase(): Phase | undefined {
+        return this.getPhase(this.phaseName);
+    }
+
+    execute(players: PlayerResponse[], code: string, context?: string): void {
         const executable
             // eslint-disable-next-line prefer-template
             = `var players = ${JSON.stringify(players)}; `
-            + `var context = ${this.context}; `
+            + `var gamestate = ${JSON.stringify(this.gameState)}; `
+            + `var context = ${context};`
             + code;
+
+        console.log(`executing game code: `, {
+            players,
+            gameState: this.gameState,
+            context,
+            code,
+        });
 
         const interpreter = new Interpreter(executable);
         interpreter.run();
         const result: InterpreterOutput = JSON.parse(interpreter.value);
+
+        console.log(`execution result`, { result: result });
 
         const editedPlayerViews = result.playerViews;
         const uneditedPlayerViews = this.playerViews.filter(
@@ -38,25 +64,53 @@ export class GameInstance {
         this.playerViews = [...uneditedPlayerViews, ...editedPlayerViews];
 
         const newPhaseName = result.phaseName;
-        if (this.phaseName !== newPhaseName) {
-            this.setPhase(newPhaseName);
+        if (newPhaseName && this.phaseName !== newPhaseName) {
+            this.setPhase(players, newPhaseName);
         }
+
+        this.gameState = {
+            ...result.gameState,
+            ...this.gameState,
+        };
     }
 
-    constructor() {
-        // create game state
-        // excecute first state
+    constructor(players: PlayerResponse[], gamemode: Gamemode) {
+        this.setPhase(players, gamemode.initialPhaseName);
+        this.gameState = JSON.parse(gamemode.initialGameState);
+        this.gamemode = gamemode;
     }
 
-    setPhase(newPhaseName: string) {}
+    setPhase(players: PlayerResponse[], newPhaseName: string): void {
+        const newPhase = this.getPhase(newPhaseName);
 
-    submit(message: WebsocketMessage) {
-        // check valid?
-        // excecute game code
-        // update state
+        if (!newPhase) {
+            throw new Error(`No phase found with name ${newPhaseName}`);
+        }
+
+        this.execute(players, newPhase.onInitialisation);
+
+        this.phaseName = newPhaseName;
     }
 
-    request() {
+    submit(players: PlayerResponse[], message: WebsocketMessage): void {
+        const code = this.getCurrentPhase()?.onSubmit || ``;
+
+        this.execute(players, code, JSON.stringify(message));
+    }
+
+    playerJoined(players: PlayerResponse[], message: WebsocketMessage): void {
+        const code = this.getCurrentPhase()?.onPlayerJoined || ``;
+
+        this.execute(players, code, JSON.stringify(message));
+    }
+
+    playerLeft(players: PlayerResponse[], message: WebsocketMessage): void {
+        const code = this.getCurrentPhase()?.onPlayerLeft || ``;
+
+        this.execute(players, code, JSON.stringify(message));
+    }
+
+    request(message: WebsocketMessage): void {
         // return a player view for a player
     }
 }

@@ -6,14 +6,20 @@ export class GamemodeScreen {
 }
 
 export class Phase {
+    @prop() phaseName: string;
     @prop() onInitialisation: string;
     @prop() onSubmit: string;
     @prop() onTimeout: string;
+    @prop() onPlayerJoined: string;
+    @prop() onPlayerLeft: string;
 }
 
 export class Gamemode {
     @prop() _id: string;
     @prop() name: string;
+
+    @prop() initialPhaseName: string;
+    @prop() initialContext: string;
 
     @prop() phases: Phase[];
 }

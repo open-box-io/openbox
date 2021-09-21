@@ -1,8 +1,15 @@
-import { JoinLobbyAPIResponse, LobbyResponse, PlayerResponse } from '@openbox/common';
+import {
+    JoinLobbyAPIResponse,
+    LobbyResponse,
+    PlayerResponse,
+    WebsocketActionType,
+    WebsocketMessage,
+} from '@openbox/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { createLobby, joinLobby } from './api/lobby';
 
+import { GameInstance } from './game/game';
 import Landing from './screens/Landing/Landing';
 import Lobby from './screens/Lobby/Lobby';
 import { getHeaders } from './store/store';
@@ -13,6 +20,7 @@ const App = (): JSX.Element => {
 
     const [lobby, setLobby] = useState<LobbyResponse>();
     const [player, setPlayer] = useState<PlayerResponse>();
+    const [game, setGame] = useState<GameInstance>();
 
     const connectToWebSocket = useCallback(
         (): Promise<void> =>
@@ -26,6 +34,38 @@ const App = (): JSX.Element => {
                 newWebSocket.addEventListener(`open`, () => {
                     resolve();
                 });
+
+                newWebSocket.addEventListener(
+                    `message`,
+                    (event: MessageEvent<WebsocketMessage>) => {
+                        switch (event.data.action.type) {
+                        case WebsocketActionType.PLAYER_LEFT:
+                        case WebsocketActionType.PLAYER_REMOVED:
+                            game?.playerLeft(
+                                lobby?.players || [],
+                                event.data,
+                            );
+                            setLobby(event.data.lobby);
+                            break;
+
+                        case WebsocketActionType.PLAYER_JOINED:
+                            game?.playerJoined(
+                                lobby?.players || [],
+                                event.data,
+                            );
+                            setLobby(event.data.lobby);
+                            break;
+
+                        case WebsocketActionType.GAME_SUBMIT:
+                            game?.submit(lobby?.players || [], event.data);
+                            break;
+
+                        case WebsocketActionType.GAME_REQUEST:
+                            game?.request(event.data);
+                            break;
+                        }
+                    },
+                );
 
                 setWebSocket(newWebSocket);
             }),
