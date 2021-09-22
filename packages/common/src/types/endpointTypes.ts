@@ -1,8 +1,8 @@
-import { GamemodeResponse } from './gamemodeTypes';
-import { PlayerViewResponse } from './componentTypes';
-import { GameResponse } from './gameTypes';
 import { PlayerResponse, PlayerSecretResponse } from './playerTypes';
+
+import { GamemodeResponse } from './gamemodeTypes';
 import { LobbyResponse } from './lobbyTypes';
+import { PlayerViewResponse } from './componentTypes';
 
 export interface GameAPIResponse {
     playerView: PlayerViewResponse;
@@ -11,11 +11,6 @@ export interface GameAPIResponse {
 export interface GamemodeAPIResponse {
     gamemode: GamemodeResponse;
 }
-
-export interface LobbyGameAPIResponse {
-    game?: GameResponse;
-}
-
 export interface LobbyHostAPIResponse {
     host: PlayerResponse;
 }

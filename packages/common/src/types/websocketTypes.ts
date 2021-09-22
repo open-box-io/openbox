@@ -14,6 +14,10 @@ export enum WebsocketActionType {
     PLAYER_JOINED = `PLAYER_JOINED`,
 
     HOST_CHANGED = `HOST_PROMOTION`,
+
+    GAME_SUBMIT = `GAME_SUBMIT`,
+    GAME_UPDATE = `GAME_UPDATE`,
+    GAME_REQUEST = `GAME_REQUEST`,
 }
 
 export class WebsocketAction {

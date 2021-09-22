@@ -22,7 +22,6 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "js-interpreter": "^2.3.0",
     "mongoose": "^5.12.3",
     "semver": "^7.3.4",
     "typegoose": "^5.9.1",

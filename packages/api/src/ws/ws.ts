@@ -1,3 +1,4 @@
+import { WebsocketActionType, WebsocketMessage } from '@openbox/common';
 import { connectDB, disconnectDB } from '../database/database';
 
 import { connect } from './connection/connect';
@@ -11,10 +12,25 @@ export const connectionHandler = async (
     context: any,
     callback: (a: null, response: unknown) => Promise<unknown>,
 ): Promise<void> => {
-    if (event.requestContext.eventType === `CONNECT`) {
+    switch (event.requestContext.eventType) {
+    case `CONNECT`:
         await wsResponseWrapper(event, callback, connect);
-    } else if (event.requestContext.eventType === `DISCONNECT`) {
+        break;
+    case `DISCONNECT`:
         await wsResponseWrapper(event, callback, disconnect);
+        break;
+    }
+};
+
+export const actionHandler = async (
+    event: MessageEvent<WebsocketMessage>,
+    context: any,
+    callback: (a: null, response: unknown) => Promise<unknown>,
+): Promise<void> => {
+    switch (event.data.action.type) {
+    case WebsocketActionType.GAME_SUBMIT:
+        connect(event);
+        break;
     }
 };
 

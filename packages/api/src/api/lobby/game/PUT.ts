@@ -1,5 +1,3 @@
-import { Game, WebsocketActionType } from '@openbox/common';
-import { getGamemodeById, getInitialState } from '../../../helpers/gamemode';
 import {
     getGamemodeId,
     getLobbyId,
@@ -8,7 +6,7 @@ import {
 } from '../../../helpers/requestValidation';
 import {
     getLobbyById,
-    setLobbyGame,
+    setLobbyGamemode,
     websocketLobbyUpdate,
 } from '../../../helpers/lobby';
 import {
@@ -18,6 +16,7 @@ import {
 } from '../../../helpers/player';
 
 import { Request } from 'express';
+import { WebsocketActionType } from '@openbox/common';
 
 export const putLobbyGame = async (request: Request): Promise<void> => {
     console.log(`PUT /lobby/game`);
@@ -37,21 +36,7 @@ export const putLobbyGame = async (request: Request): Promise<void> => {
     verifyPlayer(player, playerSecret);
     verifyPlayerHost(lobby, player);
 
-    const gamemode = await getGamemodeById(gamemodeId);
-
-    console.log({ gamemode });
-
-    const initialState = await getInitialState(gamemode, lobby);
-
-    console.log({ initialState });
-
-    const game: Game = {
-        gamemode_id: gamemodeId,
-        currentState: initialState.currentState,
-        playerViews: initialState.playerViews,
-    };
-
-    const updatedLobby = await setLobbyGame(lobbyId, game);
+    const updatedLobby = await setLobbyGamemode(lobbyId, gamemodeId);
 
     await websocketLobbyUpdate(updatedLobby, updatedLobby, {
         type: WebsocketActionType.GAME_CHANGED,

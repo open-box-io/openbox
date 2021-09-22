@@ -10218,7 +10218,7 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
-js-interpreter@^2.3.0:
+js-interpreter@^2.3.0, js-interpreter@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/js-interpreter/-/js-interpreter-2.3.1.tgz#6e7137a2e9f2f9d19ddb303d596219d432c52b93"
   integrity sha512-zqs0+W/9MqJGchXTkKLcsiNxF5i7dxH3r5aNlYCgt17WjBbRZu+x0WBG5yUAnewVq3tKnWUkibsQXuJGWt9bUw==

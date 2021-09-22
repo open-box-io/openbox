@@ -1,12 +1,13 @@
-import { LobbyGameAPIResponse } from '@openbox/common';
+import { formatGamemodeResponse, getGamemodeById } from 'src/helpers/gamemode';
+
+import { GamemodeAPIResponse } from '@openbox/common';
 import { Request } from 'express';
-import { formatGameResponse } from '../../../helpers/game';
 import { getLobbyById } from '../../../helpers/lobby';
 import { getLobbyId } from '../../../helpers/requestValidation';
 
 export const getLobbyGame = async (
     request: Request,
-): Promise<LobbyGameAPIResponse> => {
+): Promise<GamemodeAPIResponse> => {
     console.log(`GET /lobby/game`);
 
     const lobbyId = getLobbyId(request);
@@ -17,7 +18,11 @@ export const getLobbyGame = async (
 
     console.log({ lobby });
 
+    const gamemode = await getGamemodeById(lobby.gamemodeId || ``);
+
+    console.log({ gamemode });
+
     return {
-        game: await formatGameResponse(lobby.game),
+        gamemode: await formatGamemodeResponse(gamemode),
     };
 };
