@@ -9,7 +9,6 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "composite": true,
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,13 +19,14 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "rootDir": "src",
-    "outDir": "dist"
+    "rootDir": "../",
+    "outDir": "dist",
+    "isolatedModules": true,
   },
   "include": [
-    "src"
+    "src",
+    "../common"
   ]
 }

@@ -5,7 +5,7 @@ import {
     WebsocketActionType,
     WebsocketMessage,
 } from '@openbox/common';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { createLobby, joinLobby } from './api/lobby';
 

@@ -37,7 +37,7 @@ import {
 import { APIError } from './types/errorTypes';
 import { ValidationHeaders } from './types/storageTypes';
 
-export {
+export type {
     ComponentTypes,
     Component,
     SubmitButtonComponent,
