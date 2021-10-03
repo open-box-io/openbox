@@ -1,17 +1,17 @@
-import {
-    JoinLobbyAPIResponse,
-    LobbyResponse,
-    PlayerResponse,
-    WebsocketActionType,
-    WebsocketMessage,
-} from '@openbox/common';
 import React, { useCallback, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import {
+    WebsocketActionType,
+    WebsocketMessage,
+} from '../../common/src/types/websocketTypes';
 import { createLobby, joinLobby } from './api/lobby';
 
 import { GameInstance } from './game/game';
+import { JoinLobbyAPIResponse } from '../../common/src/types/endpointTypes';
 import Landing from './screens/Landing/Landing';
 import Lobby from './screens/Lobby/Lobby';
+import { LobbyResponse } from '../../common/src/types/lobbyTypes';
+import { PlayerResponse } from '../../common/src/types/playerTypes';
 import { getHeaders } from './store/store';
 import styles from './app.module.scss';
 
