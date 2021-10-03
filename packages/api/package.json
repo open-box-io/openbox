@@ -5,8 +5,6 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node -r esm local.js",
-    "test": "jest",
     "deploy": "serverless deploy"
   },
   "author": "",

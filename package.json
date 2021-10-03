@@ -4,6 +4,7 @@
     "private": true,
     "workspaces": [
         "packages/common",
+        "packages/bot",
         "packages/ui",
         "packages/api"
     ],

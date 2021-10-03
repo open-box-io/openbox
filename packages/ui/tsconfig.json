@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "esnext",
+    "module": "CommonJS",
     "strict": true,
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
@@ -21,12 +21,9 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "rootDir": "../",
-    "outDir": "dist",
-    "isolatedModules": true,
+    "outDir": "dist"
   },
   "include": [
     "src",
-    "../common"
   ]
 }
