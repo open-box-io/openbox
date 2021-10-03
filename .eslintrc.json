@@ -35,10 +35,6 @@
                 }
             }
         ],
-        "linebreak-style": [
-            "warn",
-            "windows"
-        ],
         "no-use-before-define": 0,
         "comma-dangle": [
             "error",
