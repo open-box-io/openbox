@@ -5,13 +5,14 @@
   "main": "dist/app.js",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon dist/app.js"
+    "start": "forever start dist/app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@typegoose/typegoose": "^7.6.0",
     "discord.js": "^13.1.0",
+    "forever": "^4.0.1",
     "nodemon": "^2.0.13",
     "typescript": "^4.1.3"
   },
