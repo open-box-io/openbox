@@ -21,7 +21,13 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "outDir": "dist"
+    "outDir": "dist",
+
+    "paths": {
+      "@openbox/common": [
+        "../common/src"
+      ]
+    },
   },
   "include": [
     "src",
