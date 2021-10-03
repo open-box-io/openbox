@@ -4,6 +4,7 @@
   "private": true,
   "main": "app.ts",
   "scripts": {
+    "prebuild": "yarn --dev",
     "build": "webpack --mode production",
     "start": "webpack serve --open"
   },
