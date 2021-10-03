@@ -1,4 +1,5 @@
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 
 const config = {
@@ -33,17 +34,24 @@ const config = {
         path: path.resolve(__dirname, `build`),
         filename: `bundle.js`,
     },
-    // devServer: {
-    //     static: path.join(__dirname, `build`),
-    //     compress: true,
-    //     port: 4000,
-    // },
+    devServer: {
+        // static: path.join(__dirname, `build`),
+        // compress: true,
+        // port: 4000,
+        contentBase: path.resolve(__dirname, `build`),
+        compress: true,
+        hot: true,
+        publicPath: `/`,
+    },
     plugins: [
         new ForkTsCheckerWebpackPlugin({
             async: false,
             eslint: {
                 files: `./src/**/*.{ts,tsx,js,jsx}`,
             },
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, `src`, `index.html`),
         }),
     ],
 };
