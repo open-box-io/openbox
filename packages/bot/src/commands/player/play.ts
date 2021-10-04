@@ -1,40 +1,58 @@
-import { Command } from '../../types/command';
+import {
+    CommandContext,
+    CommandOptionType,
+    SlashCommand,
+    SlashCreator,
+} from 'slash-create';
+import { client, player } from '../../app';
+
 import { QueryType } from 'discord-player';
-import discord from 'discord.js';
 
-export const play: Command = {
-    command: {
-        name: `play`,
-        description: `Add a song to the queue`,
+export class play extends SlashCommand {
+    constructor(creator: SlashCreator) {
+        super(creator, {
+            name: `play`,
+            description: `Add a song to the queue`,
 
-        options: [
-            {
-                name: `search_term`,
-                type: discord.Constants.ApplicationCommandOptionTypes.STRING,
-                description: `The name of the song you want to play`,
-                required: true,
-            },
-        ],
-    },
+            options: [
+                {
+                    name: `search_term`,
+                    type: CommandOptionType.STRING,
+                    description: `The name of the song you want to play`,
+                    required: true,
+                },
+            ],
+        });
+    }
 
-    execute: async (interaction, client, player) => {
-        const guild = interaction.guildId ?
-            client.guilds.cache.get(interaction.guildId)
+    async run(ctx: CommandContext): Promise<void> {
+        const guild = ctx.guildID ?
+            client.guilds.cache.get(ctx.guildID)
             : undefined;
-
         if (!guild) {
-            interaction.reply({
-                content: `You must be in a server to play songs.`,
+            ctx.send({
+                content: `This command must be sent in a server.`,
                 ephemeral: true,
             });
             return;
         }
 
-        const channel = guild.channels.cache.get(interaction.channelId);
-        const query = interaction.options.getString(`search_term`);
+        const member
+            = guild.members.cache.get(ctx.user.id)
+            ?? (await guild.members.fetch(ctx.user.id));
+        if (!member) {
+            ctx.send({
+                content: `Could not find user.`,
+                ephemeral: true,
+            });
+            return;
+        }
 
+        const channel = guild.channels.cache.get(ctx.channelID);
+
+        const query = ctx.options.search_term;
         if (!query) {
-            interaction.reply({
+            ctx.send({
                 content: `Please provide a song title.`,
                 ephemeral: true,
             });
@@ -42,12 +60,12 @@ export const play: Command = {
         }
 
         const searchResult = await player.search(query, {
-            requestedBy: interaction.user,
+            requestedBy: member,
             searchEngine: QueryType.AUTO,
         });
 
         if (!searchResult || !searchResult.tracks.length) {
-            interaction.reply({
+            ctx.send({
                 content: `${query} was not found.`,
                 ephemeral: true,
             });
@@ -58,12 +76,8 @@ export const play: Command = {
             metadata: channel,
         });
 
-        const member
-            = guild.members.cache.get(interaction.user.id)
-            ?? (await guild.members.fetch(interaction.user.id));
-
         if (!member.voice.channel) {
-            interaction.reply({
+            ctx.send({
                 content: `You must be in a voice channel.`,
                 ephemeral: true,
             });
@@ -74,20 +88,22 @@ export const play: Command = {
             if (!queue.connection) await queue.connect(member.voice.channel);
         } catch {
             void player.deleteQueue(guild.id);
-            interaction.reply({
+            ctx.send({
                 content: `Unable to join your voice channel.`,
                 ephemeral: true,
             });
             return;
         }
 
-        interaction.reply({
-            content: `Queued: ${searchResult.tracks[0].source}`,
-        });
-
         searchResult.playlist ?
             queue.addTracks(searchResult.tracks)
             : queue.addTrack(searchResult.tracks[0]);
+
+        ctx.send({
+            content: `Queueing: ${searchResult.tracks[0]}`,
+            ephemeral: true,
+        });
+
         if (!queue.playing) await queue.play();
-    },
-};
+    }
+}
