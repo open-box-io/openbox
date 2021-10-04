@@ -1,12 +1,15 @@
-import { Command } from '../../types/command';
+import { CommandContext, SlashCommand, SlashCreator } from 'slash-create';
+import { client, player } from '../../app';
 
-export const ping: Command = {
-    command: { name: `ping`, description: `pong` },
+export class ping extends SlashCommand {
+    constructor(creator: SlashCreator) {
+        super(creator, { name: `ping`, description: `pong` });
+    }
 
-    execute: (interaction) => {
-        interaction.reply({
+    async run(ctx: CommandContext): Promise<void> {
+        ctx.send({
             content: `pong`,
             ephemeral: true,
         });
-    },
-};
+    }
+}

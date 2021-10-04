@@ -1,6 +1,8 @@
-import { commands, getCommand } from './commands/command';
+import { GatewayServer, SlashCreator } from 'slash-create';
 
 import { Player } from 'discord-player';
+import { attachPlayer } from './player/attachPlayer';
+import { commands } from './commands/command';
 import discord from 'discord.js';
 import dotenv from 'dotenv';
 
@@ -14,42 +16,35 @@ export const client = new discord.Client({
     ],
 });
 
-const player = new Player(client);
+export const player = new Player(client);
+attachPlayer(player);
 
 client.once(`ready`, () => {
     client.user?.setActivity(`open-box.io`, {
         type: `PLAYING`,
-    });
-
-    const guildId = `713358142913904661`;
-    const guild = client.guilds.cache.get(guildId);
-
-    let clientCommands:
-        | discord.GuildApplicationCommandManager
-        | discord.ApplicationCommandManager<
-              discord.ApplicationCommand<{ guild: discord.GuildResolvable }>,
-              { guild: discord.GuildResolvable },
-              null
-          >
-        | undefined;
-
-    if (guild) {
-        clientCommands = guild.commands;
-    } else {
-        clientCommands = client.application?.commands;
-    }
-
-    commands.forEach((command) => {
-        if (clientCommands) {
-            clientCommands.create(command.command);
-        }
+        url: `open-box.io`,
     });
 });
 
-client.on(`interactionCreate`, async (interaction) => {
-    if (!interaction.isCommand()) return;
-
-    getCommand(interaction.commandName)?.execute(interaction, client, player);
+const creator = new SlashCreator({
+    applicationID: process.env.BOT_ID || ``,
+    token: process.env.BOT_TOKEN,
 });
+
+creator
+    .withServer(
+        new GatewayServer((handler) =>
+            client.ws.on(`INTERACTION_CREATE`, handler),
+        ),
+    )
+    .registerCommands(commands);
+
+creator.syncCommands();
+
+// client.on(`interactionCreate`, async (interaction) => {
+//     if (!interaction.isCommand()) return;
+
+//     getCommand(interaction.commandName)?.execute(interaction, client, player);
+// });
 
 client.login(process.env.BOT_TOKEN);
