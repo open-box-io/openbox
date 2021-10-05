@@ -1,3 +1,14 @@
+export const MUSIC = {
+    PLAY: `▶️`,
+    PAUSE: `⏸️`,
+    STOP: `⏹️`,
+    BACK: `⏪`,
+    SKIP: `⏩`,
+    LOOP: `🔁`,
+    LOOPTRACK: `🔂`,
+    SHUFFLE: `🔀`,
+};
+
 export const NUMBERS = [
     `0⃣`,
     `1⃣`,
