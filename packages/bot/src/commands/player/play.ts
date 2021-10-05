@@ -99,10 +99,12 @@ export class play extends SlashCommand {
             queue.addTracks(searchResult.tracks)
             : queue.addTrack(searchResult.tracks[0]);
 
+        const track = searchResult.tracks[0];
         ctx.send({
-            content: `Queueing: ${searchResult.tracks[0]}`,
-            ephemeral: true,
+            content: `Added to Queue: **${track.title}**`,
         });
+
+        setTimeout(async () => (await ctx.fetch()).delete(), 10000);
 
         if (!queue.playing) await queue.play();
     }

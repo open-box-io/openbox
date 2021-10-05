@@ -1,5 +1,4 @@
 import { CommandContext, SlashCommand, SlashCreator } from 'slash-create';
-import { client, player } from '../../app';
 
 export class ping extends SlashCommand {
     constructor(creator: SlashCreator) {

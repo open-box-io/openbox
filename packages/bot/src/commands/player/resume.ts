@@ -14,7 +14,7 @@ export class resume extends SlashCommand {
         });
     }
 
-    async run(ctx: CommandContext) {
+    async run(ctx: CommandContext): Promise<void> {
         if (!ctx.guildID) {
             ctx.send({
                 content: `This command must be sent in a server.`,

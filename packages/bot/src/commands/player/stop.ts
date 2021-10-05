@@ -1,5 +1,6 @@
 import { CommandContext, SlashCommand, SlashCreator } from 'slash-create';
 
+import { deleteQueueMessage } from '../../helpers/message';
 import { player } from '../../app';
 
 export class stop extends SlashCommand {
@@ -30,6 +31,8 @@ export class stop extends SlashCommand {
                 ephemeral: true,
             });
         queue.destroy();
+        deleteQueueMessage(queue);
+
         return void ctx.sendFollowUp({
             content: `Stopped the player!`,
             ephemeral: true,

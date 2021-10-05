@@ -1,7 +1,9 @@
 import { GatewayServer, SlashCreator } from 'slash-create';
 
 import { Player } from 'discord-player';
+import { PlayerInstance } from './types/player';
 import { attachPlayer } from './player/attachPlayer';
+import { clickButton } from './buttons/button';
 import { commands } from './commands/command';
 import discord from 'discord.js';
 import dotenv from 'dotenv';
@@ -19,10 +21,16 @@ export const client = new discord.Client({
 export const player = new Player(client);
 attachPlayer(player);
 
+export let playerInstances: PlayerInstance[] = [];
+export const removePlayerInstance = (guildId: string): void => {
+    playerInstances = playerInstances.filter(
+        (instance) => guildId !== instance.guild.id,
+    );
+};
+
 client.once(`ready`, () => {
     client.user?.setActivity(`open-box.io`, {
         type: `PLAYING`,
-        url: `open-box.io`,
     });
 });
 
@@ -41,10 +49,9 @@ creator
 
 creator.syncCommands();
 
-// client.on(`interactionCreate`, async (interaction) => {
-//     if (!interaction.isCommand()) return;
-
-//     getCommand(interaction.commandName)?.execute(interaction, client, player);
-// });
+client.on(`interactionCreate`, (interaction) => {
+    if (!interaction.isButton()) return;
+    clickButton(interaction);
+});
 
 client.login(process.env.BOT_TOKEN);

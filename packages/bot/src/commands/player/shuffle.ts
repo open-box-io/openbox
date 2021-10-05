@@ -1,6 +1,7 @@
 import { CommandContext, SlashCommand, SlashCreator } from 'slash-create';
 
 import { player } from '../../app';
+import { updateQueueMessage } from '../../helpers/message';
 
 export class shuffle extends SlashCommand {
     constructor(creator: SlashCreator) {
@@ -14,7 +15,7 @@ export class shuffle extends SlashCommand {
         });
     }
 
-    async run(ctx: CommandContext) {
+    async run(ctx: CommandContext): Promise<void> {
         if (!ctx.guildID) {
             ctx.send({
                 content: `This command must be sent in a server.`,
@@ -30,7 +31,8 @@ export class shuffle extends SlashCommand {
                 ephemeral: true,
             });
 
-        await queue.shuffle();
+        queue.shuffle();
+        updateQueueMessage(queue);
 
         ctx.sendFollowUp({
             content: `Queue has been shuffled!`,
