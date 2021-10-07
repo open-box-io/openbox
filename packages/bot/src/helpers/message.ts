@@ -4,6 +4,13 @@ import { Queue, QueueRepeatMode } from 'discord-player';
 
 import { MUSIC } from './emoji';
 import { playerInstances, removePlayerInstance } from '../app';
+import { getServerById } from './server';
+
+export interface options {
+    playing: boolean;
+    likedTrack?: boolean;
+    repeatMode?: QueueRepeatMode;
+}
 
 export const deleteQueueMessage = async (queue: Queue<any>): Promise<void> => {
     const playerInstance = playerInstances.find(
@@ -18,7 +25,7 @@ export const deleteQueueMessage = async (queue: Queue<any>): Promise<void> => {
 
 export const updateQueueMessage = async (
     queue: Queue<any>,
-    options?: { playing?: boolean; repeatMode?: QueueRepeatMode },
+    options?: options,
 ): Promise<void> => {
     const playerInstance = playerInstances.find(
         (instance) => queue.guild.id === instance.guild.id,
@@ -27,7 +34,7 @@ export const updateQueueMessage = async (
     if (!playerInstance) {
         const message: Message = await queue.metadata.send({
             embeds: [formatPlaylistEmbed(queue)],
-            components: formatPlaylistButtons(queue, options),
+            components: await formatPlaylistButtons(queue, options),
         });
 
         playerInstances.push({
@@ -38,7 +45,7 @@ export const updateQueueMessage = async (
         playerInstance.message.edit({
             embeds: [formatPlaylistEmbed(queue)],
             components: <ComponentActionRow[]>(
-                (<unknown>formatPlaylistButtons(queue, options))
+                (<unknown>await formatPlaylistButtons(queue, options))
             ),
         });
 
@@ -57,9 +64,9 @@ export const formatPlaylistEmbed = (
     const lastTracks
         = queue.tracks.length > 7 ?
             queue.tracks.slice(-2).map((track, index) => {
-                return `${index + queue.tracks.length}. ([**${
+                return `${index + queue.tracks.length}. [**${
                     track.title
-                }**](${track.url}))`;
+                }**](${track.url})`;
             })
             : [];
 
@@ -80,15 +87,12 @@ export const formatPlaylistEmbed = (
 
 export const formatPlayButton = (
     queue: Queue<unknown>,
-    options?: { playing?: boolean; repeatMode?: QueueRepeatMode },
+    options?: options,
 ): MessageButton => {
-    console.log(
-        `playing`,
-        options && options.playing,
-        !options && queue.playing,
-        (options && options.playing) || (!options && queue.playing),
-    );
-    return (options && options.playing) || (!options && queue.playing) ?
+    let playing = queue.playing;
+    if (options) playing = options.playing;
+
+    return playing ?
         new MessageButton()
             .setCustomId(`pause`)
             .setEmoji(MUSIC.PAUSE)
@@ -99,18 +103,44 @@ export const formatPlayButton = (
             .setStyle(`DANGER`);
 };
 
+export const formatLikeButton = async (
+    queue: Queue<unknown>,
+    options?: options,
+): Promise<MessageButton> => {
+    const track = queue.nowPlaying().url;
+
+    let likedTrack = false;
+    if (options && options.likedTrack !== undefined)
+        likedTrack = options.likedTrack;
+    else {
+        const { playList } = await getServerById(queue.guild.id);
+        likedTrack = playList.includes(track);
+    }
+
+    return likedTrack ?
+        new MessageButton()
+            .setCustomId(`unlike`)
+            .setEmoji(MUSIC.UNLIKE)
+            .setStyle(`PRIMARY`)
+        : new MessageButton()
+            .setCustomId(`like`)
+            .setEmoji(MUSIC.LIKE)
+            .setStyle(`PRIMARY`);
+};
+
 export const formatLoopButton = (
     queue: Queue<unknown>,
-    options?: { playing?: boolean; repeatMode?: QueueRepeatMode },
+    options?: options,
 ): MessageButton => {
-    return (options && options.repeatMode === QueueRepeatMode.TRACK)
-        || (!options && queue.repeatMode === QueueRepeatMode.TRACK) ?
+    let repeatMode = queue.repeatMode;
+    if (options && options.repeatMode) repeatMode = options.repeatMode;
+
+    return repeatMode === QueueRepeatMode.TRACK ?
         new MessageButton()
             .setCustomId(`loop`)
             .setEmoji(MUSIC.LOOPTRACK)
             .setStyle(`SUCCESS`)
-        : (options && options.repeatMode === QueueRepeatMode.QUEUE)
-          || (!options && queue.repeatMode === QueueRepeatMode.QUEUE) ?
+        : repeatMode === QueueRepeatMode.QUEUE ?
             new MessageButton()
                 .setCustomId(`loop`)
                 .setEmoji(MUSIC.LOOP)
@@ -121,10 +151,10 @@ export const formatLoopButton = (
                 .setStyle(`SECONDARY`);
 };
 
-export const formatPlaylistButtons = (
+export const formatPlaylistButtons = async (
     queue: Queue<unknown>,
-    options?: { playing?: boolean; repeatMode?: QueueRepeatMode },
-): MessageActionRow[] => {
+    options?: options,
+): Promise<MessageActionRow[]> => {
     const topRow = new MessageActionRow().addComponents(
         new MessageButton()
             .setCustomId(`back`)
@@ -138,10 +168,7 @@ export const formatPlaylistButtons = (
     );
 
     const secondRow = new MessageActionRow().addComponents(
-        new MessageButton()
-            .setCustomId(`stop`)
-            .setEmoji(MUSIC.STOP)
-            .setStyle(`PRIMARY`),
+        await formatLikeButton(queue),
         formatLoopButton(queue),
         new MessageButton()
             .setCustomId(`shuffle`)

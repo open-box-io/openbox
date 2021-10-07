@@ -7,6 +7,7 @@ import {
 import { client, player } from '../../app';
 
 import { QueryType } from 'discord-player';
+import { getServerById } from '../../helpers/server';
 
 export class play extends SlashCommand {
     constructor(creator: SlashCreator) {
@@ -19,7 +20,7 @@ export class play extends SlashCommand {
                     name: `search_term`,
                     type: CommandOptionType.STRING,
                     description: `The name of the song you want to play`,
-                    required: true,
+                    required: false,
                 },
             ],
         });
@@ -29,7 +30,7 @@ export class play extends SlashCommand {
         const guild = ctx.guildID ?
             client.guilds.cache.get(ctx.guildID)
             : undefined;
-        if (!guild) {
+        if (!guild || !ctx.guildID) {
             ctx.send({
                 content: `This command must be sent in a server.`,
                 ephemeral: true,
@@ -50,62 +51,76 @@ export class play extends SlashCommand {
 
         const channel = guild.channels.cache.get(ctx.channelID);
 
-        const query = ctx.options.search_term;
-        if (!query) {
-            ctx.send({
-                content: `Please provide a song title.`,
-                ephemeral: true,
-            });
-            return;
-        }
-
-        const searchResult = await player.search(query, {
-            requestedBy: member,
-            searchEngine: QueryType.AUTO,
-        });
-
-        if (!searchResult || !searchResult.tracks.length) {
-            ctx.send({
-                content: `${query} was not found.`,
-                ephemeral: true,
-            });
-            return;
-        }
-
         const queue = await player.createQueue(guild, {
             metadata: channel,
         });
 
-        if (!member.voice.channel) {
-            ctx.send({
-                content: `You must be in a voice channel.`,
-                ephemeral: true,
+        const query = ctx.options.search_term;
+        if (!query) {
+            const { playList } = await getServerById(ctx.guildID);
+
+            playList.forEach(async (track) => {
+                const searchResult = await player.search(track, {
+                    requestedBy: member,
+                    searchEngine: QueryType.AUTO,
+                });
+
+                if (searchResult) {
+                    searchResult.playlist ?
+                        queue.addTracks(searchResult.tracks)
+                        : queue.addTrack(searchResult.tracks[0]);
+                }
             });
-            return;
-        }
-
-        try {
-            if (!queue.connection) await queue.connect(member.voice.channel);
-        } catch {
-            void player.deleteQueue(guild.id);
-            ctx.send({
-                content: `Unable to join your voice channel.`,
-                ephemeral: true,
+        } else {
+            const searchResult = await player.search(query, {
+                requestedBy: member,
+                searchEngine: QueryType.AUTO,
             });
-            return;
+
+            if (!searchResult || !searchResult.tracks.length) {
+                ctx.send({
+                    content: `${query} was not found.`,
+                    ephemeral: true,
+                });
+                return;
+            }
+
+            if (!member.voice.channel) {
+                ctx.send({
+                    content: `You must be in a voice channel.`,
+                    ephemeral: true,
+                });
+                return;
+            }
+
+            try {
+                if (!queue.connection) {
+                    const { defaultVolume } = await getServerById(ctx.guildID);
+
+                    await queue.connect(member.voice.channel);
+                    queue.setVolume(defaultVolume);
+                }
+            } catch {
+                void player.deleteQueue(guild.id);
+                ctx.send({
+                    content: `Unable to join your voice channel.`,
+                    ephemeral: true,
+                });
+                return;
+            }
+
+            searchResult.playlist ?
+                queue.addTracks(searchResult.tracks)
+                : queue.addTrack(searchResult.tracks[0]);
+
+            const track = searchResult.tracks[0];
+            ctx.send({
+                content: `Added to Queue: **${track.title}**`,
+            });
+
+            setTimeout(async () => (await ctx.fetch()).delete(), 10000);
+
+            if (!queue.playing) await queue.play();
         }
-
-        searchResult.playlist ?
-            queue.addTracks(searchResult.tracks)
-            : queue.addTrack(searchResult.tracks[0]);
-
-        const track = searchResult.tracks[0];
-        ctx.send({
-            content: `Added to Queue: **${track.title}**`,
-        });
-
-        setTimeout(async () => (await ctx.fetch()).delete(), 10000);
-
-        if (!queue.playing) await queue.play();
     }
 }

@@ -2,6 +2,7 @@ import { SlashCommand } from 'slash-create';
 import { back } from './player/back';
 import { bassboost } from './player/bassboost';
 import { clear } from './player/clear';
+import { defaultVolume } from './player/defaultVolume';
 import { history } from './player/history';
 import { jump } from './player/jump';
 import { loop } from './player/loop';
@@ -24,6 +25,7 @@ export const commands: typeof SlashCommand[] = [
     back,
     bassboost,
     clear,
+    defaultVolume,
     history,
     jump,
     loop,
