@@ -57,7 +57,9 @@ export class play extends SlashCommand {
 
         const query = ctx.options.search_term;
         if (!query) {
-            const { playList } = await getServerById(ctx.guildID);
+            const { playList, defaultVolume } = await getServerById(
+                ctx.guildID,
+            );
 
             playList.forEach(async (track) => {
                 const searchResult = await player.search(track, {
@@ -75,10 +77,6 @@ export class play extends SlashCommand {
 
                 try {
                     if (!queue.connection) {
-                        const { defaultVolume } = await getServerById(
-                            ctx.guildID || ``,
-                        );
-
                         await queue.connect(member.voice.channel);
                         queue.setVolume(defaultVolume);
                     }
