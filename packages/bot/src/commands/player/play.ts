@@ -65,6 +65,32 @@ export class play extends SlashCommand {
                     searchEngine: QueryType.AUTO,
                 });
 
+                if (!member.voice.channel) {
+                    ctx.send({
+                        content: `You must be in a voice channel.`,
+                        ephemeral: true,
+                    });
+                    return;
+                }
+
+                try {
+                    if (!queue.connection) {
+                        const { defaultVolume } = await getServerById(
+                            ctx.guildID || ``,
+                        );
+
+                        await queue.connect(member.voice.channel);
+                        queue.setVolume(defaultVolume);
+                    }
+                } catch {
+                    void player.deleteQueue(guild.id);
+                    ctx.send({
+                        content: `Unable to join your voice channel.`,
+                        ephemeral: true,
+                    });
+                    return;
+                }
+
                 if (searchResult) {
                     searchResult.playlist ?
                         queue.addTracks(searchResult.tracks)
