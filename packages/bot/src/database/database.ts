@@ -13,6 +13,13 @@ export const connectDB = async (): Promise<void> => {
     mongoose.set(`useFindAndModify`, false);
 
     const db = mongoose.connection;
+
+    db.on(`error`, (e) => {
+        console.log(`Could not connect to MongoDB`, e);
+    });
+    db.once(`open`, () => {
+        console.log(`Connected to MongoDB`);
+    });
 };
 
 export const disconnectDB = async (): Promise<void> => {
