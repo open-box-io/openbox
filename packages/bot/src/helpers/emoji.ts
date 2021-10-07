@@ -7,6 +7,8 @@ export const MUSIC = {
     LOOP: `🔁`,
     LOOPTRACK: `🔂`,
     SHUFFLE: `🔀`,
+    LIKE: `🖤`,
+    UNLIKE: `❤️`,
 };
 
 export const NUMBERS = [
