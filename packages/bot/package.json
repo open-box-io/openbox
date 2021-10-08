@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "startNode": "nodemon dist/app.ts",
-    "start": "forever start dist/app.js"
+    "start": "forever start dist/app.js",
+    "stop": "forever stopAll"
   },
   "author": "",
   "license": "ISC",

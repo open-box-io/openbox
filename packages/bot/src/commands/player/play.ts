@@ -17,10 +17,16 @@ export class play extends SlashCommand {
 
             options: [
                 {
+                    name: `liked`,
+                    description: `play all liked songs`,
+                    type: CommandOptionType.SUB_COMMAND,
+                    required: true,
+                },
+                {
                     name: `search_term`,
                     type: CommandOptionType.STRING,
                     description: `The name of the song you want to play`,
-                    required: false,
+                    required: true,
                 },
             ],
         });
@@ -56,10 +62,26 @@ export class play extends SlashCommand {
         });
 
         const query = ctx.options.search_term;
-        if (!query) {
+        if (query === `liked`) {
             const { playList, defaultVolume } = await getServerById(
                 ctx.guildID,
             );
+
+            if (!member.voice.channel) {
+                ctx.send({
+                    content: `You must be in a voice channel.`,
+                    ephemeral: true,
+                });
+                return;
+            }
+
+            if (!playList.length) {
+                ctx.send({
+                    content: `This server has no liked songs.`,
+                    ephemeral: true,
+                });
+                return;
+            }
 
             playList.forEach(async (track) => {
                 const searchResult = await player.search(track, {
@@ -67,34 +89,32 @@ export class play extends SlashCommand {
                     searchEngine: QueryType.AUTO,
                 });
 
-                if (!member.voice.channel) {
-                    ctx.send({
-                        content: `You must be in a voice channel.`,
-                        ephemeral: true,
-                    });
-                    return;
-                }
-
-                try {
-                    if (!queue.connection) {
-                        await queue.connect(member.voice.channel);
-                        queue.setVolume(defaultVolume);
-                    }
-                } catch {
-                    void player.deleteQueue(guild.id);
-                    ctx.send({
-                        content: `Unable to join your voice channel.`,
-                        ephemeral: true,
-                    });
-                    return;
-                }
-
                 if (searchResult) {
                     searchResult.playlist ?
                         queue.addTracks(searchResult.tracks)
                         : queue.addTrack(searchResult.tracks[0]);
                 }
             });
+
+            try {
+                if (!queue.connection) {
+                    await queue.connect(member.voice.channel);
+                    queue.setVolume(defaultVolume);
+                }
+            } catch {
+                void player.deleteQueue(guild.id);
+                ctx.send({
+                    content: `Unable to join your voice channel.`,
+                    ephemeral: true,
+                });
+                return;
+            }
+
+            ctx.send({
+                content: `Playing liked songs`,
+            });
+
+            setTimeout(async () => (await ctx.fetch()).delete(), 10000);
         } else {
             const searchResult = await player.search(query, {
                 requestedBy: member,
