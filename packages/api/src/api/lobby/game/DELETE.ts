@@ -18,7 +18,7 @@ import { Request } from 'express';
 import { WebsocketActionType } from '@openbox/common';
 
 export const deleteLobbyGame = async (request: Request): Promise<void> => {
-    console.log(`DELETE /lobby/game`);
+    console.log(`DELETE /lobby/game`, request);
 
     const playerId = getPlayerId(request);
     const playerSecret = getPlayerSecret(request);

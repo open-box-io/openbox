@@ -6,8 +6,7 @@ import {
     WebsocketMessage,
 } from '@openbox/common';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Interpreter = require(`js-interpreter`);
+import acorn from 'acorn';
 
 export interface InterpreterOutput {
     gameState: Record<string, unknown>;
@@ -34,9 +33,9 @@ export class GameInstance {
     execute(players: PlayerResponse[], code: string, context?: string): void {
         const executable
             // eslint-disable-next-line prefer-template
-            = `var players = ${JSON.stringify(players)}; `
-            + `var gamestate = ${JSON.stringify(this.gameState)}; `
-            + `var context = ${context};`
+            = `const players = ${JSON.stringify(players)}; `
+            + `const gameState = ${JSON.stringify(this.gameState)}; `
+            + `const context = ${context};`
             + code;
 
         console.log(`executing game code: `, {
@@ -46,9 +45,9 @@ export class GameInstance {
             code,
         });
 
-        const interpreter = new Interpreter(executable);
-        interpreter.run();
-        const result: InterpreterOutput = JSON.parse(interpreter.value);
+        const result: InterpreterOutput = <any>acorn.parse(executable, {
+            ecmaVersion: `latest`,
+        });
 
         console.log(`execution result`, { result: result });
 

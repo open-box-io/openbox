@@ -22,7 +22,7 @@ import { WebsocketActionType } from '@openbox/common';
 import { disconnectPlayer } from '../../../helpers/websocket';
 
 export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
-    console.log(`DELETE /lobby/players`);
+    console.log(`DELETE /lobby/players`, request);
 
     const playerId = getPlayerId(request);
     const playerSecret = getPlayerSecret(request);

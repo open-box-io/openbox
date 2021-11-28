@@ -19,7 +19,7 @@ import { Request } from 'express';
 import { WebsocketActionType } from '@openbox/common';
 
 export const putLobbyGame = async (request: Request): Promise<void> => {
-    console.log(`PUT /lobby/game`);
+    console.log(`PUT /lobby/game`, request);
 
     const playerId = getPlayerId(request);
     const playerSecret = getPlayerSecret(request);

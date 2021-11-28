@@ -39,6 +39,18 @@ export const getLobbyById = async (id: string): Promise<Lobby> => {
     return lobby;
 };
 
+export const getLobbyByWebsocketId = async (id: string): Promise<Lobby> => {
+    const lobby = await lobbyDB.findOne(
+        {players: {$elemMatch: {websocketId: id}}},
+    )
+
+    if (!lobby) {
+        throw new APIError(500, `Could not find player`);
+    }
+
+    return lobby;
+}
+
 export const deleteLobby = async (lobby: Lobby): Promise<void> => {
     await lobbyDB.deleteOne({ _id: lobby._id });
 };

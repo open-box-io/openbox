@@ -18,7 +18,7 @@ import { WebsocketActionType } from '@openbox/common';
 import { sendToLobby } from '../../helpers/websocket';
 
 export const deleteLobby = async (request: Request): Promise<void> => {
-    console.log(`DELETE /lobby`);
+    console.log(`DELETE /lobby`, request);
 
     const playerId = getPlayerId(request);
     const playerSecret = getPlayerSecret(request);

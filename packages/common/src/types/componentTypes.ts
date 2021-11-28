@@ -2,33 +2,40 @@ import { APIError } from './errorTypes';
 import { prop } from '@typegoose/typegoose';
 
 export enum ComponentTypes {
-    SUBMIT_BUTTON = `SubmitButton`,
-    TEXT_BOX = `TextBox`,
-    CARD = `Card`,
+    SUBMIT_BUTTON = `SUBMIT_BUTTON`,
+    TEXT_BOX = `TEXT_BOX`,
+    CARD = `CARD`,
+    CARD_LIST = `CARD_LIST`,
 }
 
 export class Component {
     @prop() type: string;
 
-    @prop() data: unknown;
+    @prop() data?: unknown;
 }
 
 export class SubmitButtonComponent extends Component {
     @prop() type = ComponentTypes.SUBMIT_BUTTON;
 
-    @prop() data: undefined;
+    @prop() data?: string;
 }
 
 export class TextBoxComponent extends Component {
     @prop() type = ComponentTypes.TEXT_BOX;
 
-    @prop() data: string;
+    @prop() data?: string;
 }
 
 export class CardComponent extends Component {
     @prop() type = ComponentTypes.CARD;
 
-    @prop() data: string;
+    @prop() data?: string;
+}
+
+export class CardListComponent extends Component {
+    @prop() type = ComponentTypes.CARD_LIST;
+
+    @prop() data?: string[];
 }
 
 export class PlayerView {

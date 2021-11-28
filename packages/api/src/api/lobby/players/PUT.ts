@@ -16,7 +16,7 @@ import { Request } from 'express';
 export const putLobbyPlayers = async (
     request: Request,
 ): Promise<JoinLobbyAPIResponse> => {
-    console.log(`PUT /lobby/player`);
+    console.log(`PUT /lobby/player`, request);
 
     const playerName = getPlayerName(request);
     const lobbyId = getLobbyId(request);

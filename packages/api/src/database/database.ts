@@ -7,6 +7,8 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 export const connectDB = async (): Promise<void> => {
+    console.log("Connecting to MongoDB");
+    
     await mongoose.connect(`mongodb+srv://${process.env.DB_HOST}/OpenBox-DB`, {
         user: process.env.DB_USER,
         pass: process.env.DB_PASS,
@@ -20,9 +22,6 @@ export const connectDB = async (): Promise<void> => {
     db.on(`error`, () => {
         throw new APIError(500, `Could not connect to database`);
     });
-    db.once(`open`, () => {
-        console.log(`Connected to MongoDB`);
-    });
 };
 
 export const disconnectDB = async (): Promise<void> => {
@@ -31,3 +30,5 @@ export const disconnectDB = async (): Promise<void> => {
 
 export const lobbyDB = getModelForClass(Lobby);
 export const gamemodeDB = getModelForClass(Gamemode);
+
+connectDB();
