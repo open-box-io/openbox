@@ -7,7 +7,7 @@ import { getLobbyId } from '../../../helpers/requestValidation';
 export const getLobbyHost = async (
     request: Request,
 ): Promise<LobbyHostAPIResponse> => {
-    console.log(`GET /lobby/host`);
+    console.log(`GET /lobby/host`, request);
 
     const lobbyId = getLobbyId(request);
 

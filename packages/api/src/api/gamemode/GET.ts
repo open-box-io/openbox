@@ -10,13 +10,13 @@ import { getGamemodeId } from '../../helpers/requestValidation';
 export const getGamemode = async (
     request: Request,
 ): Promise<GamemodeAPIResponse> => {
-    console.log(`GET /gamemode`);
+    console.log(`GET /gamemode`, request);
 
     const gamemodeId = getGamemodeId(request);
 
-    const gamemode = await getGamemodeById(gamemodeId);
-
     console.log({ gamemodeId });
+
+    const gamemode = await getGamemodeById(gamemodeId);
 
     return {
         gamemode: formatGamemodeResponse(gamemode),

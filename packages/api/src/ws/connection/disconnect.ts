@@ -1,29 +1,27 @@
-import { getLobbyById, updatePlayer } from '../../helpers/lobby';
-import {
-    getLobbyIdWs,
-    getPlayerIdWs,
-    getPlayerSecretWs,
-} from '../../helpers/requestValidation';
-import { getPlayer, verifyPlayer } from '../../helpers/player';
+import { deleteLobby, getLobbyByWebsocketId, updatePlayer } from '../../helpers/lobby';
+
+import { getPlayerByWebsocketId } from '../../helpers/player';
+import { getWebsocketId } from '../../helpers/requestValidation';
 
 export const disconnect = async (event: any): Promise<string> => {
-    console.log(`DISCONNECT`);
+    console.log(`DISCONNECT`, event);
 
-    const lobbyId = getLobbyIdWs(event);
-    const playerId = getPlayerIdWs(event);
-    const playerSecret = getPlayerSecretWs(event);
+    const websocketId = getWebsocketId(event);
+    const lobby = await getLobbyByWebsocketId(websocketId)
 
-    console.log({ lobbyId, playerId, playerSecret });
+    console.log({ websocketId, lobby });
 
-    const lobby = await getLobbyById(lobbyId);
-    const player = getPlayer(lobby, playerId);
+    const player = getPlayerByWebsocketId(lobby, websocketId);
+
+    console.log({ player })
+
     player.websocketId = undefined;
 
-    console.log({ lobby, player });
+    if (lobby.players.filter(p => !!p.websocketId).length === 0) {
+        await deleteLobby(lobby);
+    } else {
+        await updatePlayer(lobby._id, player);
+    }
 
-    verifyPlayer(player, playerSecret);
-
-    await updatePlayer(lobbyId, player);
-
-    return `connected`;
+    return `disconnected`;
 };

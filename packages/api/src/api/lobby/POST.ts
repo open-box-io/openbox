@@ -8,7 +8,7 @@ import { getPlayerName } from '../../helpers/requestValidation';
 export const postLobby = async (
     request: Request,
 ): Promise<JoinLobbyAPIResponse> => {
-    console.log(`POST /lobby`);
+    console.log(`POST /lobby`, request);
 
     const playerName = getPlayerName(request);
 

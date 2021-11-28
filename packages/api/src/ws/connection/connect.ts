@@ -8,7 +8,7 @@ import {
 import { getPlayer, verifyPlayer } from '../../helpers/player';
 
 export const connect = async (event: any): Promise<string> => {
-    console.log(`CONNECT`);
+    console.log(`CONNECT`, event);
 
     const websocketId = getWebsocketId(event);
 

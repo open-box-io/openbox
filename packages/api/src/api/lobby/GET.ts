@@ -5,7 +5,7 @@ import { Request } from 'express';
 import { getLobbyId } from '../../helpers/requestValidation';
 
 export const getLobby = async (request: Request): Promise<LobbyAPIResponse> => {
-    console.log(`GET /lobby`);
+    console.log(`GET /lobby`, request);
 
     const lobbyId = getLobbyId(request);
 

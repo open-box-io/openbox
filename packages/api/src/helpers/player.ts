@@ -60,6 +60,19 @@ export const getPlayer = (lobby: Lobby, playerId: string): Player => {
     return player;
 };
 
+export const getPlayerByWebsocketId = (lobby: Lobby, websocketId: string): Player => {
+    const player = lobby.players.find(
+        (player: Player) => player.websocketId === websocketId,
+    );
+
+    if (!player) {
+        throw new APIError(404, `Player not found`);
+    }
+
+    return player;
+};
+
+
 export const formatPlayerResponse = (player: Player): PlayerResponse => ({
     _id: player._id,
     name: player.name,
