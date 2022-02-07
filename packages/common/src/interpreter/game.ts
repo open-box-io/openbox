@@ -1,12 +1,9 @@
-import {
-    Gamemode,
-    Phase,
-    PlayerResponse,
-    PlayerView,
-    WebsocketMessage,
-} from '@openbox/common';
+import { Gamemode, Phase } from '../types/gamemodeTypes';
 
-import acorn from 'acorn';
+import { PlayerResponse } from '../types/playerTypes';
+import { PlayerView } from '../types/componentTypes';
+import { WebsocketMessage } from '../types/websocketTypes';
+import { interpret } from './interpreter';
 
 export interface InterpreterOutput {
     gameState: Record<string, unknown>;
@@ -45,9 +42,8 @@ export class GameInstance {
             code,
         });
 
-        const result: InterpreterOutput = <any>acorn.parse(executable, {
-            ecmaVersion: `latest`,
-        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result: InterpreterOutput = interpret(executable);
 
         console.log(`execution result`, { result: result });
 
@@ -74,9 +70,11 @@ export class GameInstance {
     }
 
     constructor(players: PlayerResponse[], gamemode: Gamemode) {
-        this.setPhase(players, gamemode.initialPhaseName);
-        this.gameState = JSON.parse(gamemode.initialGameState);
+        this.gameState = gamemode.initialGameState ?
+            JSON.parse(gamemode.initialGameState)
+            : {};
         this.gamemode = gamemode;
+        this.setPhase(players, gamemode.initialPhaseName);
     }
 
     setPhase(players: PlayerResponse[], newPhaseName: string): void {
