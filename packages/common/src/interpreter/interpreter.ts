@@ -14,5 +14,3 @@ export const interpret = (code: string): void => {
 
     console.log(result);
 };
-
-interpret(`let a = 1; log("hello"); stringify(a)`);

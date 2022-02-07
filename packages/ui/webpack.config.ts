@@ -37,7 +37,7 @@ const config = {
     devServer: {
         // static: path.join(__dirname, `build`),
         // compress: true,
-        // port: 4000,
+        port: 3000,
         contentBase: path.resolve(__dirname, `build`),
         compress: true,
         hot: true,

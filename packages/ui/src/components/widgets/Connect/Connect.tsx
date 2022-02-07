@@ -93,7 +93,7 @@ const Connect = ({
                 <p>Loading</p>
             ) : (
                 <>
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <Input
                             type="text"
                             label="Nickname"
