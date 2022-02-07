@@ -37,31 +37,27 @@ const App = (): JSX.Element => {
 
                 newWebSocket.addEventListener(
                     `message`,
-                    (event: MessageEvent<WebsocketMessage>) => {
-                        switch (event.data.action.type) {
+                    (event: MessageEvent<string>) => {
+                        const data: WebsocketMessage = JSON.parse(event.data);
+
+                        switch (data.action.type) {
                         case WebsocketActionType.PLAYER_LEFT:
                         case WebsocketActionType.PLAYER_REMOVED:
-                            game?.playerLeft(
-                                lobby?.players || [],
-                                event.data,
-                            );
-                            setLobby(event.data.lobby);
+                            game?.playerLeft(lobby?.players || [], data);
+                            setLobby(data.lobby);
                             break;
 
                         case WebsocketActionType.PLAYER_JOINED:
-                            game?.playerJoined(
-                                lobby?.players || [],
-                                event.data,
-                            );
-                            setLobby(event.data.lobby);
+                            game?.playerJoined(lobby?.players || [], data);
+                            setLobby(data.lobby);
                             break;
 
                         case WebsocketActionType.GAME_SUBMIT:
-                            game?.submit(lobby?.players || [], event.data);
+                            game?.submit(lobby?.players || [], data);
                             break;
 
                         case WebsocketActionType.GAME_REQUEST:
-                            game?.request(event.data);
+                            game?.request(data);
                             break;
                         }
                     },
