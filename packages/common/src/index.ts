@@ -37,3 +37,5 @@ export {
 export { ValidationHeaders } from './types/storageTypes';
 
 export { APIError } from './types/errorTypes';
+
+export { interpret } from './interpreter/interpreter';

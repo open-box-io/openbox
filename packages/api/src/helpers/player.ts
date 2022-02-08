@@ -60,7 +60,10 @@ export const getPlayer = (lobby: Lobby, playerId: string): Player => {
     return player;
 };
 
-export const getPlayerByWebsocketId = (lobby: Lobby, websocketId: string): Player => {
+export const getPlayerByWebsocketId = (
+    lobby: Lobby,
+    websocketId: string,
+): Player => {
     const player = lobby.players.find(
         (player: Player) => player.websocketId === websocketId,
     );
@@ -71,7 +74,6 @@ export const getPlayerByWebsocketId = (lobby: Lobby, websocketId: string): Playe
 
     return player;
 };
-
 
 export const formatPlayerResponse = (player: Player): PlayerResponse => ({
     _id: player._id,

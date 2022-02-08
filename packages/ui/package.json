@@ -19,7 +19,6 @@
     "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
     "@types/webpack": "^5.28.0",
     "@types/webpack-dev-server": "^4.1.0",
-    "acorn": "8.5.0",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.1.1",
