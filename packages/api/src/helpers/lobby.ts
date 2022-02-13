@@ -6,7 +6,6 @@ import {
     PlayerResponse,
     WebsocketAction,
 } from '@openbox/common';
-import { formatGamemodeResponse, getGamemodeById } from './gamemode';
 
 import { formatPlayerResponse } from './player';
 import { generateGameCode } from '../helpers/gameCode';
@@ -40,16 +39,16 @@ export const getLobbyById = async (id: string): Promise<Lobby> => {
 };
 
 export const getLobbyByWebsocketId = async (id: string): Promise<Lobby> => {
-    const lobby = await lobbyDB.findOne(
-        {players: {$elemMatch: {websocketId: id}}},
-    )
+    const lobby = await lobbyDB.findOne({
+        players: { $elemMatch: { websocketId: id } },
+    });
 
     if (!lobby) {
         throw new APIError(500, `Could not find player`);
     }
 
     return lobby;
-}
+};
 
 export const deleteLobby = async (lobby: Lobby): Promise<void> => {
     await lobbyDB.deleteOne({ _id: lobby._id });
@@ -159,10 +158,6 @@ export const formatLobbyResponse = async (
     players: lobby.players.map(
         (player: Player): PlayerResponse => formatPlayerResponse(player),
     ),
-
-    gamemode: lobby.gamemodeId ?
-        await formatGamemodeResponse(await getGamemodeById(lobby.gamemodeId))
-        : undefined,
 });
 
 export const websocketLobbyUpdate = async (

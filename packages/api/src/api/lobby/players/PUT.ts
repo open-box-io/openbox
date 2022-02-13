@@ -1,4 +1,8 @@
-import { JoinLobbyAPIResponse, WebsocketActionType } from '@openbox/common';
+import {
+    JoinLobbyAPIResponse,
+    RequestDataLocation,
+    WebsocketActionType,
+} from '@openbox/common';
 import {
     addPlayerToLobby,
     formatLobbyResponse,
@@ -9,17 +13,32 @@ import {
     formatPlayerResponse,
     formatPlayerSecretResponse,
 } from '../../../helpers/player';
-import { getLobbyId, getPlayerName } from '../../../helpers/requestValidation';
 
 import { Request } from 'express';
+import { getRequestData } from '../../../helpers/requestValidation';
 
 export const putLobbyPlayers = async (
     request: Request,
 ): Promise<JoinLobbyAPIResponse> => {
     console.log(`PUT /lobby/player`, request);
 
-    const playerName = getPlayerName(request);
-    const lobbyId = getLobbyId(request);
+    const { lobbyId, playerName } = getRequestData<{
+        lobbyId: string;
+        playerName: string;
+    }>(request, [
+        {
+            location: RequestDataLocation.HEADERS,
+            name: `lobbyId`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.BODY,
+            name: `playerName`,
+            type: `string`,
+            required: true,
+        },
+    ]);
 
     console.log({ playerName, lobbyId });
 

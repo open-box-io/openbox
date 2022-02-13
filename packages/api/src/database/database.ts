@@ -7,8 +7,8 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 export const connectDB = async (): Promise<void> => {
-    console.log("Connecting to MongoDB");
-    
+    console.log(`Connecting to MongoDB`);
+
     await mongoose.connect(`mongodb+srv://${process.env.DB_HOST}/OpenBox-DB`, {
         user: process.env.DB_USER,
         pass: process.env.DB_PASS,

@@ -5,17 +5,12 @@ import { APIError } from '@openbox/common';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { deleteLobby } from './lobby/DELETE';
-import { deleteLobbyGame } from './lobby/game/DELETE';
 import { deleteLobbyPlayers } from './lobby/players/DELETE';
-import { getGamemode } from './gamemode/GET';
 import { getLobby } from './lobby/GET';
-import { getLobbyGame } from './lobby/game/GET';
-import { getLobbyHost } from './lobby/host/GET';
 import { getLobbyPlayers } from './lobby/players/GET';
 import { postLobby } from './lobby/POST';
-import { putLobbyGame } from './lobby/game/PUT';
-import { putLobbyHost } from './lobby/host/PUT';
 import { putLobbyPlayers } from './lobby/players/PUT';
+import { postGamemode } from './gamemode/POST';
 
 const app = express();
 
@@ -98,35 +93,6 @@ app.put(
     },
 );
 
-app.options(`/lobby/game`, cors(corsOptionsDelegate));
-
-app.delete(
-    `/lobby/game`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, deleteLobbyGame);
-    },
-);
-
-app.get(
-    `/lobby/game`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, getLobbyGame);
-    },
-);
-
-app.put(
-    `/lobby/game`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, putLobbyGame);
-    },
-);
-
 app.options(`/gamemode`, cors(corsOptionsDelegate));
 
 app.get(
@@ -134,27 +100,7 @@ app.get(
     cors(corsOptionsDelegate),
     jsonParser,
     (request, response) => {
-        apiResponseWrapper(request, response, getGamemode);
-    },
-);
-
-app.options(`/lobby/host`, cors(corsOptionsDelegate));
-
-app.get(
-    `/lobby/host`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, getLobbyHost);
-    },
-);
-
-app.put(
-    `/lobby/host`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, putLobbyHost);
+        apiResponseWrapper(request, response, postGamemode);
     },
 );
 

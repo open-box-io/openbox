@@ -1,3 +1,4 @@
+import { RequestDataLocation, WebsocketActionType } from '@openbox/common';
 import {
     formatPlayerResponse,
     getPlayer,
@@ -10,24 +11,45 @@ import {
     removePlayerFromLobby,
     websocketLobbyUpdate,
 } from '../../../helpers/lobby';
-import {
-    getLobbyId,
-    getPlayerId,
-    getPlayerSecret,
-    getTargetPlayerId,
-} from '../../../helpers/requestValidation';
 
 import { Request } from 'express';
-import { WebsocketActionType } from '@openbox/common';
 import { disconnectPlayer } from '../../../helpers/websocket';
+import { getRequestData } from '../../../helpers/requestValidation';
 
 export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
     console.log(`DELETE /lobby/players`, request);
 
-    const playerId = getPlayerId(request);
-    const playerSecret = getPlayerSecret(request);
-    const targetPlayerId = getTargetPlayerId(request);
-    const lobbyId = getLobbyId(request);
+    const { playerId, playerSecret, lobbyId, targetPlayerId } = getRequestData<{
+        playerId: string;
+        playerSecret: string;
+        lobbyId: string;
+        targetPlayerId: string;
+    }>(request, [
+        {
+            location: RequestDataLocation.HEADERS,
+            name: `playerId`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.HEADERS,
+            name: `playerSecret`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.HEADERS,
+            name: `lobbyId`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.BODY,
+            name: `targetPlayerId`,
+            type: `string`,
+            required: true,
+        },
+    ]);
 
     console.log({ playerId, playerSecret, targetPlayerId, lobbyId });
 

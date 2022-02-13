@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     getIdentiferName,
     getVariable,
@@ -166,7 +167,7 @@ const Identifier: NodeParser = (node, ...variables) => {
         };
 
     default:
-        getVariable(name, ...variables);
+        return getVariable(name, ...variables);
     }
 };
 
@@ -222,7 +223,7 @@ const Property: NodeParser = (node, ...variables) => ({
 });
 
 const UnaryExpression: NodeParser = (node, ...variables) => {
-    const { operator, prefix } = node;
+    const { operator } = node;
     const argument = parseNode(node.argument, ...variables);
 
     switch (operator) {
@@ -232,6 +233,8 @@ const UnaryExpression: NodeParser = (node, ...variables) => {
     default:
         reportGameError(`Unknown operator ${operator}`, node, ...variables);
     }
+
+    return argument;
 };
 
 const VariableDeclaration: NodeParser = (node, ...variables) => {
