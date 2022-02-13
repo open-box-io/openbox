@@ -19,28 +19,48 @@ provider:
           Resource:
               - 'arn:aws:execute-api:*:*:**/@connections/*'
 
+resources:
+    Resources:
+        ApiGatewayAuthorizer:
+            Type: AWS::ApiGateway::Authorizer
+            Properties:
+                Name: CognitoUserPool
+                Type: COGNITO_USER_POOLS
+                IdentitySource: method.request.header.Authorization
+                RestApiId:
+                    Ref: ApiGatewayRestApi
+                ProviderARNs:
+                    - arn:aws:cognito-idp:eu-central-1:462429920269:userpool/eu-central-1_aTUl5v60U
+
 functions:
     api:
         handler: lambda.api
         events:
-            - http: OPTIONS /lobby
-            - http: DELETE /lobby
-            - http: GET /lobby
-            - http: POST /lobby
+            - http: OPTIONS /gamemode
+            - http: POST /gamemode
+            - http:
+                  method: POST
+                  path: /gamemode
+                  authorizer:
+                      type: COGNITO_USER_POOLS
+                      authorizerId:
+                          Ref: ApiGatewayAuthorizer
+
             - http: OPTIONS /lobby/players
             - http: DELETE /lobby/players
             - http: GET /lobby/players
             - http: PUT /lobby/players
-            - http: OPTIONS /lobby/game
-            - http: DELETE /lobby/game
-            - http: GET /lobby/game
-            - http: PUT /lobby/game
-            - http: OPTIONS /gamemode
-            - http: GET /gamemode
-            - http: GET /game
-            - http: OPTIONS /lobby/host
-            - http: GET /lobby/host
-            - http: PUT /lobby/host
+
+            - http: OPTIONS /lobby
+            - http: DELETE /lobby
+            - http: GET /lobby
+            - http:
+                  method: POST
+                  path: /lobby
+                  authorizer:
+                      type: COGNITO_USER_POOLS
+                      authorizerId:
+                          Ref: ApiGatewayAuthorizer
 
     connectionHandler:
         handler: lambda.websocketConnection

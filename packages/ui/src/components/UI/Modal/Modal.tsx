@@ -5,11 +5,12 @@ import styles from './modal.module.scss';
 interface ModalProps {
     center?: boolean;
     spaceEvenly?: boolean;
-    children: JSX.Element;
+    children: JSX.Element | JSX.Element[];
+    className?: string;
 }
 
 const Modal = (props: ModalProps): JSX.Element => {
-    const styleArray = [styles.Modal];
+    const styleArray = [styles.Modal, props.className];
 
     if (props.center) {
         styleArray.push(styles.justifyContentCenter);

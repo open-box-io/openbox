@@ -1,4 +1,4 @@
-import { Gamemode, Phase } from '../types/gamemodeTypes';
+import { GamemodeVersion, Phase } from '../types/gamemodeTypes';
 
 import { PlayerResponse } from '../types/playerTypes';
 import { PlayerView } from '../types/componentTypes';
@@ -12,7 +12,7 @@ export interface InterpreterOutput {
 }
 
 export class GameInstance {
-    gamemode: Gamemode;
+    gamemode: GamemodeVersion;
     gameState: Record<string, unknown>;
     playerViews: PlayerView[];
     phaseName: string;
@@ -69,7 +69,7 @@ export class GameInstance {
         };
     }
 
-    constructor(players: PlayerResponse[], gamemode: Gamemode) {
+    constructor(players: PlayerResponse[], gamemode: GamemodeVersion) {
         this.gameState = gamemode.initialGameState ?
             JSON.parse(gamemode.initialGameState)
             : {};

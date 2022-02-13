@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import Players from '../../components/widgets/Players/Players';
 import React from 'react';
 import RoomCode from '../../components/UI/RoomCode/RoomCode';
+import SignInButton from '../../components/widgets/SignInButton/SignInButton';
 import styles from './lobby.module.scss';
 import { useParams } from 'react-router-dom';
 

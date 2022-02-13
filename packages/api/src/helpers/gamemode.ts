@@ -1,8 +1,4 @@
-import {
-    APIError,
-    Gamemode,
-    GamemodeResponse,
-} from '@openbox/common';
+import { APIError, Gamemode, GamemodeVersion, User } from '@openbox/common';
 
 import { gamemodeDB } from '../database/database';
 
@@ -16,9 +12,38 @@ export const getGamemodeById = async (id: string): Promise<Gamemode> => {
     return gamemode;
 };
 
-export const formatGamemodeResponse = (
-    gamemode: Gamemode,
-): GamemodeResponse => ({
-    _id: gamemode._id,
-    name: gamemode.name,
-});
+export const createNewGamemode = async (
+    name: string,
+    user: User,
+    gamemodeVersion: GamemodeVersion,
+): Promise<Gamemode> => {
+    const gamemode = {
+        name: name,
+        author: user,
+        versions: [gamemodeVersion],
+    };
+
+    const created = await gamemodeDB.create(gamemode);
+
+    if (!created) {
+        throw new APIError(500, `Could not create gamemode`);
+    }
+
+    return created;
+};
+
+export const addVersionToGamemode = async (
+    gamemodeId: string,
+    gamemodeVersion: GamemodeVersion,
+): Promise<Gamemode> => {
+    const oldGamemode = await gamemodeDB.findOneAndUpdate(
+        { _id: gamemodeId },
+        { $push: { versions: gamemodeVersion } },
+    );
+
+    if (!oldGamemode) {
+        throw new APIError(500, `Could not add player`);
+    }
+
+    return oldGamemode;
+};

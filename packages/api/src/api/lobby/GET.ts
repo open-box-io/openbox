@@ -1,13 +1,25 @@
+import {
+    LobbyAPIResponse,
+    RequestDataLocation,
+} from '../../../../common/src/types/endpointTypes';
 import { formatLobbyResponse, getLobbyById } from '../../helpers/lobby';
 
-import { LobbyAPIResponse } from '../../../../common/src/types/endpointTypes';
 import { Request } from 'express';
-import { getLobbyId } from '../../helpers/requestValidation';
+import { getRequestData } from '../../helpers/requestValidation';
 
 export const getLobby = async (request: Request): Promise<LobbyAPIResponse> => {
     console.log(`GET /lobby`, request);
 
-    const lobbyId = getLobbyId(request);
+    const { lobbyId } = getRequestData<{
+        lobbyId: string;
+    }>(request, [
+        {
+            location: RequestDataLocation.HEADERS,
+            name: `lobbyId`,
+            type: `string`,
+            required: true,
+        },
+    ]);
 
     console.log({ lobbyId });
 

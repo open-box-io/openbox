@@ -6,12 +6,14 @@ import {
 } from '../../common/src/types/websocketTypes';
 import { createLobby, joinLobby } from './api/lobby';
 
-import { GameInstance } from './game/game';
+import AuthProvider from './auth/authContext';
 import { JoinLobbyAPIResponse } from '../../common/src/types/endpointTypes';
 import Landing from './screens/Landing/Landing';
 import Lobby from './screens/Lobby/Lobby';
 import { LobbyResponse } from '../../common/src/types/lobbyTypes';
+import NewUserDetails from './screens/NewUserDetails/NewUserDetails';
 import { PlayerResponse } from '../../common/src/types/playerTypes';
+import SignIn from './screens/SignIn/SignIn';
 import { getHeaders } from './store/store';
 import styles from './app.module.scss';
 
@@ -20,7 +22,7 @@ const App = (): JSX.Element => {
 
     const [lobby, setLobby] = useState<LobbyResponse>();
     const [player, setPlayer] = useState<PlayerResponse>();
-    const [game, setGame] = useState<GameInstance>();
+    // const [game, setGame] = useState<GameInstance>();
 
     const connectToWebSocket = useCallback(
         (): Promise<void> =>
@@ -43,21 +45,21 @@ const App = (): JSX.Element => {
                         switch (data.action.type) {
                         case WebsocketActionType.PLAYER_LEFT:
                         case WebsocketActionType.PLAYER_REMOVED:
-                            game?.playerLeft(lobby?.players || [], data);
+                            // game?.playerLeft(lobby?.players || [], data);
                             setLobby(data.lobby);
                             break;
 
                         case WebsocketActionType.PLAYER_JOINED:
-                            game?.playerJoined(lobby?.players || [], data);
+                            // game?.playerJoined(lobby?.players || [], data);
                             setLobby(data.lobby);
                             break;
 
                         case WebsocketActionType.GAME_SUBMIT:
-                            game?.submit(lobby?.players || [], data);
+                            // game?.submit(lobby?.players || [], data);
                             break;
 
                         case WebsocketActionType.GAME_REQUEST:
-                            game?.request(data);
+                            // game?.request(data);
                             break;
                         }
                     },
@@ -95,27 +97,35 @@ const App = (): JSX.Element => {
     return (
         <>
             <div className={styles.App}>
-                <Switch>
-                    <Route
-                        path="/lobby/:id"
-                        render={(props) =>
-                            lobby ? (
-                                <Lobby
-                                    {...props}
-                                    connect={connect}
-                                    lobby={lobby}
-                                />
-                            ) : null
-                        }
-                    />
-                    <Route
-                        exact
-                        path="/"
-                        render={(props) => (
-                            <Landing {...props} connect={connect} />
-                        )}
-                    />
-                </Switch>
+                <AuthProvider>
+                    <Switch>
+                        <Route path="/signin" component={SignIn} />
+                        <Route
+                            path="/newuserdetails"
+                            component={NewUserDetails}
+                        />
+
+                        <Route
+                            path="/lobby/:id"
+                            render={(props) =>
+                                lobby ? (
+                                    <Lobby
+                                        {...props}
+                                        connect={connect}
+                                        lobby={lobby}
+                                    />
+                                ) : null
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/"
+                            render={(props) => (
+                                <Landing {...props} connect={connect} />
+                            )}
+                        />
+                    </Switch>
+                </AuthProvider>
             </div>
         </>
     );

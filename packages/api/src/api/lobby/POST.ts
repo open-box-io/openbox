@@ -1,16 +1,28 @@
+import { JoinLobbyAPIResponse, RequestDataLocation } from '@openbox/common';
 import { createLobby, formatLobbyResponse } from '../../helpers/lobby';
 import { createPlayer, formatPlayerSecretResponse } from '../../helpers/player';
 
-import { JoinLobbyAPIResponse } from '@openbox/common';
 import { Request } from 'express';
-import { getPlayerName } from '../../helpers/requestValidation';
+import { getRequestData } from '../../helpers/requestValidation';
 
 export const postLobby = async (
     request: Request,
 ): Promise<JoinLobbyAPIResponse> => {
     console.log(`POST /lobby`, request);
 
-    const playerName = getPlayerName(request);
+    const { playerName } = getRequestData<{
+        playerName: string;
+        authorization: string;
+    }>(request, [
+        {
+            location: RequestDataLocation.BODY,
+            name: `playerName`,
+            type: `string`,
+            required: true,
+            minLength: 3,
+            maxLength: 100,
+        },
+    ]);
 
     console.log({ playerName });
 

@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 
+import { AuthContext } from '../../../auth/authContext';
 import Button from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
 import { JoinLobbyAPIResponse } from '@openbox/common';
@@ -29,9 +30,15 @@ const Connect = ({
     connect,
     back,
 }: ConnectProps): JSX.Element => {
+    const authContext = useContext(AuthContext);
+
+    const nickname = authContext.attrInfo?.find(
+        (att) => att.Name === `nickname`,
+    );
+
     // [ Two user inputs, players name and lobby id  ]
     const [player, setPlayer] = useState<TextboxProps>({
-        value: ``,
+        value: nickname?.Value || ``,
         rules: {
             // [ Validation rules ]
             required: true,
@@ -109,11 +116,11 @@ const Connect = ({
                             ></Input>
                         )}
                     </form>
-                    <Button styling={`Default`} clicked={onSubmit}>
+                    <Button clicked={onSubmit}>
                         {connectionType.toUpperCase()}
                     </Button>
                     {!back ? null : (
-                        <Button styling={`Back`} clicked={back}>
+                        <Button text clicked={back}>
                             back
                         </Button>
                     )}

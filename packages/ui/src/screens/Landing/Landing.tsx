@@ -5,6 +5,7 @@ import Button from '../../components/UI/Button/Button';
 import Connect from '../../components/widgets/Connect/Connect';
 import { JoinLobbyAPIResponse } from '@openbox/common';
 import Modal from '../../components/UI/Modal/Modal';
+import SignInButton from '../../components/widgets/SignInButton/SignInButton';
 import styles from './landing.module.scss';
 
 interface LandingProps {
@@ -35,22 +36,16 @@ const Landing = ({ connect }: LandingProps): JSX.Element => {
         default:
             return (
                 <div className={styles.btnGroup}>
-                    <Button
-                        styling={`Default`}
-                        clicked={() => setShowModal(`host`)}
-                    >
+                    <Button clicked={() => setShowModal(`host`)}>
                             HOST
                     </Button>
                     <p className={styles.Or}>
                         <span>OR</span>
                     </p>
-                    <Button
-                        styling={`Default`}
-                        clicked={() => setShowModal(`join`)}
-                    >
+                    <Button clicked={() => setShowModal(`join`)}>
                             JOIN
                     </Button>
-                    <p className={styles.Login}>Login / Register</p>
+                    <SignInButton />
                 </div>
             );
         }

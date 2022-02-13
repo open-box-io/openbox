@@ -15,11 +15,14 @@ export {
     LobbyAPIResponse,
     LobbyHostAPIResponse,
     LobbyPlayersAPIResponse,
+    RequestDataLocation,
+    RequestDataSelector,
 } from './types/endpointTypes';
 export {
     Gamemode,
     GamemodeResponse,
     GamemodeScreen,
+    GamemodeVersion,
     Phase,
 } from './types/gamemodeTypes';
 export { Lobby, LobbyResponse } from './types/lobbyTypes';
@@ -28,6 +31,7 @@ export {
     PlayerResponse,
     PlayerSecretResponse,
 } from './types/playerTypes';
+export { User } from './types/userTypes';
 export {
     WebsocketAction,
     WebsocketActionType,

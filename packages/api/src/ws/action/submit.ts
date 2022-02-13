@@ -1,23 +1,49 @@
-import {
-    getLobbyIdWs,
-    getPlayerIdWs,
-    getPlayerSecretWs,
-    getWebsocketId,
-} from '../../helpers/requestValidation';
+import { RequestDataLocation, WebsocketActionType } from '@openbox/common';
 import { getPlayer, verifyPlayer } from '../../helpers/player';
 
-import { WebsocketActionType } from '@openbox/common';
 import { getLobbyById } from '../../helpers/lobby';
+import { getRequestData } from 'src/helpers/requestValidation';
 import { sendToPlayer } from 'src/helpers/websocket';
 
 export const submit = async (event: any): Promise<void> => {
     console.log(WebsocketActionType.GAME_SUBMIT);
 
-    const websocketId = getWebsocketId(event);
-
-    const lobbyId = getLobbyIdWs(event);
-    const playerId = getPlayerIdWs(event);
-    const playerSecret = getPlayerSecretWs(event);
+    const {
+        websocketId,
+        lobbyId,
+        playerId,
+        secret: playerSecret,
+    } = getRequestData<{
+        websocketId: string;
+        lobbyId: string;
+        playerId: string;
+        secret: string;
+    }>(event, [
+        {
+            location: RequestDataLocation.WEBSOCKET_CONTEXT,
+            name: `connectionId`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.WEBSOCKET,
+            name: `lobbyId`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.WEBSOCKET,
+            name: `playerId`,
+            type: `string`,
+            required: true,
+        },
+        {
+            location: RequestDataLocation.WEBSOCKET,
+            name: `secret`,
+            type: `string`,
+            required: true,
+        },
+    ]);
 
     console.log({ websocketId, lobbyId, playerId, playerSecret });
 
