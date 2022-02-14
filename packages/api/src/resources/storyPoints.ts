@@ -1,4 +1,3 @@
-import { GameVerificationState } from '../../../common/src/types/gamemodeTypes';
 import { Gamemode } from '@openbox/common';
 
 export const TEST_STORY_POINTS: Gamemode = {
@@ -9,16 +8,14 @@ export const TEST_STORY_POINTS: Gamemode = {
         nickname: `open-box`,
     },
 
-    versions: [
-        {
-            verified: GameVerificationState.ADMIN,
-            initialPhaseName: `VOTING`,
-            initialGameState: ``,
+    latestVersion: {
+        initialPhaseName: `VOTING`,
+        initialGameState: ``,
 
-            phases: [
-                {
-                    phaseName: `VOTING`,
-                    onInitialisation: `
+        phases: [
+            {
+                phaseName: `VOTING`,
+                onInitialisation: `
                 gameState.storyPoints = [];
 
                 const playerViews = [];
@@ -38,7 +35,7 @@ export const TEST_STORY_POINTS: Gamemode = {
 
                 return {gameState, playerViews};
             `,
-                    onSubmit: `
+                onSubmit: `
                 gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== player._id);
                 gameState.storyPoints.push({playerId: context.playerView.playerId, points: context.playerView.view[0].data});
 
@@ -49,18 +46,18 @@ export const TEST_STORY_POINTS: Gamemode = {
                     gameState: gameState
                 };
             `,
-                    onTimeout: ``,
-                    onPlayerJoined: ``,
-                    onPlayerLeft: `
+                onTimeout: ``,
+                onPlayerJoined: ``,
+                onPlayerLeft: `
                 gameState.prompts = gameState.prompts.filter(player => player._id !== context.action.player._id);
                 return {
                     gameState
                 }
             `,
-                },
-                {
-                    phaseName: `VIEW`,
-                    onInitialisation: `
+            },
+            {
+                phaseName: `VIEW`,
+                onInitialisation: `
                 const playerViews = [];
                 players.forEach(player => {
                     playerViews.push({
@@ -80,12 +77,11 @@ export const TEST_STORY_POINTS: Gamemode = {
 
                 return {gameState, playerViews};
             `,
-                    onSubmit: ``,
-                    onTimeout: ``,
-                    onPlayerJoined: ``,
-                    onPlayerLeft: ``,
-                },
-            ],
-        },
-    ],
+                onSubmit: ``,
+                onTimeout: ``,
+                onPlayerJoined: ``,
+                onPlayerLeft: ``,
+            },
+        ],
+    },
 };

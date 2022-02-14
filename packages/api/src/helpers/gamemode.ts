@@ -17,10 +17,10 @@ export const createNewGamemode = async (
     user: User,
     gamemodeVersion: GamemodeVersion,
 ): Promise<Gamemode> => {
-    const gamemode = {
+    const gamemode: Gamemode = {
         name: name,
         author: user,
-        versions: [gamemodeVersion],
+        latestVersion: gamemodeVersion,
     };
 
     const created = await gamemodeDB.create(gamemode);
@@ -32,17 +32,16 @@ export const createNewGamemode = async (
     return created;
 };
 
-export const addVersionToGamemode = async (
+export const updateGamemodeLatestVersion = async (
     gamemodeId: string,
     gamemodeVersion: GamemodeVersion,
 ): Promise<Gamemode> => {
-    const oldGamemode = await gamemodeDB.findOneAndUpdate(
-        { _id: gamemodeId },
-        { $push: { versions: gamemodeVersion } },
-    );
+    const oldGamemode = await gamemodeDB.findByIdAndUpdate(gamemodeId, {
+        $push: { versions: gamemodeVersion },
+    });
 
     if (!oldGamemode) {
-        throw new APIError(500, `Could not add player`);
+        throw new APIError(500, `Could not update gamemode`);
     }
 
     return oldGamemode;

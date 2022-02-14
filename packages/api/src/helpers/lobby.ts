@@ -58,10 +58,9 @@ export const addPlayerToLobby = async (
     lobbyId: string,
     player: Player,
 ): Promise<Lobby> => {
-    const oldLobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobbyId },
-        { $push: { players: player } },
-    );
+    const oldLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+        $push: { players: player },
+    });
 
     if (!oldLobby) {
         throw new APIError(500, `Could not add player`);
@@ -76,10 +75,9 @@ export const removePlayerFromLobby = async (
     lobbyId: string,
     targetPlayer: Player,
 ): Promise<Lobby> => {
-    const updatedLobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobbyId },
-        { $pull: { players: { _id: targetPlayer._id } } },
-    );
+    const updatedLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+        $pull: { players: { _id: targetPlayer._id } },
+    });
 
     if (!updatedLobby) {
         throw new APIError(500, `Could not remove player`);
@@ -92,10 +90,9 @@ export const promotePlayerToHost = async (
     lobbyId: string,
     targetPlayer: Player,
 ): Promise<Lobby> => {
-    const updatedLobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobbyId },
-        { host: targetPlayer },
-    );
+    const updatedLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+        host: targetPlayer,
+    });
 
     if (!updatedLobby) {
         throw new APIError(500, `Could not promote player`);
@@ -108,10 +105,9 @@ export const setLobbyGamemode = async (
     lobbyId: string,
     gamemodeId?: string,
 ): Promise<Lobby> => {
-    const lobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobbyId },
-        { gamemodeId: gamemodeId },
-    );
+    const lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+        gamemodeId: gamemodeId,
+    });
 
     if (!lobby) {
         throw new APIError(500, `Could not set game`);
@@ -124,19 +120,17 @@ export const updatePlayer = async (
     lobbyId: string,
     player: Player,
 ): Promise<Lobby> => {
-    let lobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobbyId },
-        { $pull: { players: { _id: player._id } } },
-    );
+    let lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+        $pull: { players: { _id: player._id } },
+    });
 
     if (!lobby) {
         throw new APIError(500, `Could not update player`);
     }
 
-    lobby = await lobbyDB.findOneAndUpdate(
-        { _id: lobbyId },
-        { $push: { players: player } },
-    );
+    lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+        $push: { players: player },
+    });
 
     if (!lobby) {
         throw new APIError(500, `Could not update player`);

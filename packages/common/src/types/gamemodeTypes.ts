@@ -24,8 +24,6 @@ export class Phase {
 }
 
 export class GamemodeVersion {
-    @prop() verified: GameVerificationState;
-
     @prop() initialPhaseName: string;
     @prop() initialGameState?: string;
 
@@ -37,7 +35,8 @@ export class Gamemode {
     @prop() name: string;
     @prop() author: User;
 
-    @prop() versions: GamemodeVersion[];
+    @prop() latestApprovedVersion?: GamemodeVersion;
+    @prop() latestVersion: GamemodeVersion;
 }
 
 export class GamemodeResponse {
