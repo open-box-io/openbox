@@ -1,7 +1,7 @@
 import { APIError, Phase, RequestDataLocation } from '@openbox/common';
 import {
-    addVersionToGamemode,
     createNewGamemode,
+    updateGamemodeLatestVersion,
 } from '../../helpers/gamemode';
 
 import { GameVerificationState } from '../../../../common/src/types/gamemodeTypes';
@@ -87,7 +87,7 @@ export const postGamemode = async (request: Request): Promise<void> => {
     };
 
     if (id) {
-        const gamemode = addVersionToGamemode(id, version);
+        const gamemode = updateGamemodeLatestVersion(id, version);
         console.log({ gamemode });
     } else if (name) {
         const gamemode = createNewGamemode(name, user, version);

@@ -24,14 +24,14 @@ export const updateServerDefaultVolume = async (
     await connectDB();
 
     await getServerById(_id);
-    await serverDB.findOneAndUpdate({ _id }, { defaultVolume });
+    await serverDB.findByIdAndUpdate(_id, { defaultVolume });
 };
 
 export const likeTrack = async (_id: string, track: string): Promise<void> => {
     await connectDB();
 
     await getServerById(_id);
-    await serverDB.findOneAndUpdate({ _id }, { $push: { playList: track } });
+    await serverDB.findByIdAndUpdate(_id, { $push: { playList: track } });
 };
 
 export const unlikeTrack = async (
@@ -41,5 +41,5 @@ export const unlikeTrack = async (
     await connectDB();
 
     await getServerById(_id);
-    await serverDB.findOneAndUpdate({ _id }, { $pull: { playList: track } });
+    await serverDB.findByIdAndUpdate(_id, { $pull: { playList: track } });
 };
