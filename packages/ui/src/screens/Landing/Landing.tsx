@@ -45,7 +45,7 @@ const Landing = ({ connect }: LandingProps): JSX.Element => {
                     <Button clicked={() => setShowModal(`join`)}>
                             JOIN
                     </Button>
-                    <SignInButton />
+                    <SignInButton small />
                 </div>
             );
         }

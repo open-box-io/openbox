@@ -1,6 +1,7 @@
 import OpenBoxIcon from '../../../assets/svgs/svgIconLogo/svgIconLogo';
 import OpenBoxText from '../../../assets/svgs/svgTextLogo/svgTextLogo';
 import React from 'react';
+import SignInButton from '../../widgets/SignInButton/SignInButton';
 import styles from './backdrop.module.scss';
 
 interface BackdropProps {
@@ -8,22 +9,24 @@ interface BackdropProps {
 }
 
 const Backdrop = ({ lobby }: BackdropProps): JSX.Element => {
-    let backdrop = (
+    const backdrop = (
         <>
-            <div className={styles.Backdrop}></div>
-            <OpenBoxText />
+            <div
+                className={lobby ? styles.BackdropLobby : styles.Backdrop}
+            ></div>
+            {lobby ? null : <OpenBoxText />}
+
             <OpenBoxIcon />
         </>
     );
 
-    if (lobby) {
-        backdrop = (
-            <div className={styles.BackdropLobby}>
-                <OpenBoxIcon />
+    return (
+        <>
+            <div className={styles.SignIn}>
+                <SignInButton />
             </div>
-        );
-    }
-
-    return <>{backdrop}</>;
+            {backdrop}
+        </>
+    );
 };
 export default Backdrop;
