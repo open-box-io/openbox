@@ -46,3 +46,7 @@ export const updateGamemodeLatestVersion = async (
 
     return oldGamemode;
 };
+
+export const deleteGamemode = async (id: string): Promise<void> => {
+    await gamemodeDB.findByIdAndDelete(id);
+};
