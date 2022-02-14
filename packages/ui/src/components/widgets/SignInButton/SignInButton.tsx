@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react';
 
 import { AuthContext } from '../../../auth/authContext';
 import Button from '../../UI/Button/Button';
-import styles from './SignInButton.module.scss';
+import styles from './signInButton.module.scss';
 import { useHistory } from 'react-router-dom';
 
 interface SignInButtonProps {
