@@ -1,0 +1,94 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+.AccountPill {
+    display: flex;
+
+    background-color: $Second-BackgroundColor;
+    color: darken($First-BackgroundColor, 25%);
+    box-shadow: inset 0px 3px 5px rgba(68, 68, 68, 0.5);
+
+    padding: 4px;
+    border-radius: 14px;
+
+    margin: 10px;
+}
+
+.AccountName {
+    display: none;
+
+    text-align: center;
+    font-family: $Second-FontType;
+    font-size: 1rem;
+
+    max-width: 200px;
+    padding-left: 4px;
+    padding-right: 12px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    margin: 0;
+}
+
+.AccountPill:hover .AccountName {
+    animation: sweep 0.5s ease-in-out;
+    display: block;
+}
+
+@keyframes sweep {
+    0% {
+        max-width: 0px;
+        padding: 0px;
+        overflow: hidden;
+        text-overflow: clip;
+    }
+    100% {
+        max-width: 200px;
+        padding-left: 4px;
+        padding-right: 12px;
+        overflow: hidden;
+        text-overflow: clip;
+    }
+}
+
+.AccountImage {
+    background-color: $First-BackgroundColor;
+    color: $Second-BackgroundColor;
+
+    text-align: center;
+    font-family: $Second-FontType;
+    font-size: 1rem;
+
+    margin: 0;
+
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+}
+
+.Default {
+    text-align: center;
+    text-decoration: none;
+    padding: 6px;
+    border: none;
+    box-shadow: inset 0px 3px 5px rgba(68, 68, 68, 0.5);
+    background-color: $First-BackgroundColor;
+    width: 170px;
+    margin: 10px;
+
+    &:focus {
+        outline: 0;
+    }
+
+    p {
+        margin: 0;
+        padding: 10px;
+        font-family: $Second-FontType;
+        font-size: 1rem;
+        color: darken($First-BackgroundColor, 25%);
+        box-shadow: 0px 3px 5px rgba(68, 68, 68, 0.5);
+        background-color: $Second-BackgroundColor;
+    }
+}

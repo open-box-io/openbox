@@ -24,6 +24,7 @@ export interface IAuth {
     };
     attrInfo?: CognitoUserAttribute[];
     authStatus: AuthStatus;
+    isSignedIn: () => boolean;
     completeNewPassword: (nickname: string, password: string) => Promise<void>;
     signInWithEmail: (username: string, password: string) => Promise<void>;
     // signUpWithEmail: any;
@@ -40,6 +41,7 @@ export interface IAuth {
 const defaultState: IAuth = {
     sessionInfo: {},
     authStatus: AuthStatus.Loading,
+    isSignedIn: () => false,
     signInWithEmail: async () => undefined,
     signOut: async () => undefined,
     getSession: async () => undefined,
@@ -87,6 +89,8 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
         };
         getSessionInfo();
     }, [setAuthStatus, authStatus]);
+
+    const isSignedIn = () => authStatus === AuthStatus.SignedIn;
 
     async function signInWithEmail(username: string, password: string) {
         try {
@@ -214,6 +218,7 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
         authStatus,
         sessionInfo,
         attrInfo,
+        isSignedIn,
         // signUpWithEmail,
         signInWithEmail,
         signOut,
