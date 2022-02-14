@@ -14,14 +14,14 @@ export const postGamemode = async (request: Request): Promise<void> => {
 
     const {
         authorization,
-        id,
+        gameId,
         name,
         initialPhaseName,
         initialGameState,
         phases,
     } = getRequestData<{
         authorization: string;
-        id?: string;
+        gameId?: string;
         name?: string;
         initialPhaseName: string;
         initialGameState?: string;
@@ -37,7 +37,7 @@ export const postGamemode = async (request: Request): Promise<void> => {
         },
         {
             location: RequestDataLocation.BODY,
-            name: `id`,
+            name: `gameId`,
             type: `string`,
         },
         {
@@ -70,7 +70,7 @@ export const postGamemode = async (request: Request): Promise<void> => {
 
     console.log({
         user,
-        id,
+        gameId,
         name,
         initialPhaseName,
         initialGameState,
@@ -86,8 +86,8 @@ export const postGamemode = async (request: Request): Promise<void> => {
         phases: phases,
     };
 
-    if (id) {
-        const gamemode = updateGamemodeLatestVersion(id, version);
+    if (gameId) {
+        const gamemode = updateGamemodeLatestVersion(gameId, version);
         console.log({ gamemode });
     } else if (name) {
         const gamemode = createNewGamemode(name, user, version);

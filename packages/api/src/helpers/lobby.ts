@@ -51,7 +51,7 @@ export const getLobbyByWebsocketId = async (id: string): Promise<Lobby> => {
 };
 
 export const deleteLobby = async (lobby: Lobby): Promise<void> => {
-    await lobbyDB.deleteOne({ _id: lobby._id });
+    await lobbyDB.findByIdAndDelete(lobby._id);
 };
 
 export const addPlayerToLobby = async (

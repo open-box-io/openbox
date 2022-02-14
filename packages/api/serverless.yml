@@ -37,9 +37,15 @@ functions:
         handler: lambda.api
         events:
             - http: OPTIONS /gamemode
-            - http: POST /gamemode
             - http:
                   method: POST
+                  path: /gamemode
+                  authorizer:
+                      type: COGNITO_USER_POOLS
+                      authorizerId:
+                          Ref: ApiGatewayAuthorizer
+            - http:
+                  method: DELETE
                   path: /gamemode
                   authorizer:
                       type: COGNITO_USER_POOLS
