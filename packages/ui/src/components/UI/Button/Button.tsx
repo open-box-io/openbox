@@ -1,9 +1,15 @@
 import React from 'react';
 import styles from './button.module.scss';
 
+export enum BUTTON_STYLE {
+    DEFAULT = `Default`,
+    WARNING = `Warning`,
+    TEXT = `Text`,
+}
+
 interface ButtonProps {
-    clicked: React.MouseEventHandler<HTMLButtonElement>;
-    text?: boolean;
+    onClick: React.MouseEventHandler<HTMLButtonElement>;
+    style?: BUTTON_STYLE;
     children: JSX.Element | string;
     submit?: boolean;
 }
@@ -11,11 +17,11 @@ interface ButtonProps {
 function Button(props: ButtonProps): JSX.Element {
     return (
         <button
-            onClick={props.clicked}
-            className={styles[props.text ? `Text` : `Default`]}
+            onClick={props.onClick}
+            className={styles[props.style || BUTTON_STYLE.DEFAULT]}
             type={`submit` || undefined}
         >
-            <p>{props.children}</p>
+            <div>{props.children}</div>
         </button>
     );
 }

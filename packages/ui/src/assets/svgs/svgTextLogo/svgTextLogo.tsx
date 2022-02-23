@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './svgTextLogo.module.scss';
 
-const svgTextLogo = (): JSX.Element => {
+export const TextLogoBackdrop = (): JSX.Element => {
     return (
         <svg
             className={styles.OpenBoxTxt}
@@ -20,5 +20,3 @@ const svgTextLogo = (): JSX.Element => {
         </svg>
     );
 };
-
-export default svgTextLogo;

@@ -1,45 +1,20 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 
 import { AuthContext } from '../../../auth/authContext';
-import Button from '../../UI/Button/Button';
+import Button, { BUTTON_STYLE } from '../../UI/Button/Button';
+import { cssCombine } from '../../../shared/SCSS/scssHelpers';
 import styles from './signInButton.module.scss';
 import { useHistory } from 'react-router-dom';
 
-interface SignInButtonProps {
-    small?: boolean;
-}
-
-const SignInButton = (props: SignInButtonProps): JSX.Element | null => {
+const SignInButton = (): JSX.Element => {
     const history = useHistory();
-
-    const authContext = useContext(AuthContext);
-
-    const signedIn = authContext.isSignedIn();
-
-    const nickname = authContext.attrInfo?.find(
-        (att) => att.Name === `nickname`,
-    );
 
     const onClick = useCallback(async () => {
         history.push(`signin`);
     }, []);
 
-    const renderAccountButton = () => (
-        <div className={styles.AccountPill}>
-            <p className={styles.AccountName}>sammieaurelia</p>
-
-            <p className={styles.AccountImage}>
-                {nickname?.Value.charAt(0).toUpperCase() || ``}
-            </p>
-        </div>
-    );
-
-    return signedIn ? (
-        props.small ? null : (
-            renderAccountButton()
-        )
-    ) : (
-        <Button text={props.small} clicked={onClick}>
+    return (
+        <Button style={BUTTON_STYLE.TEXT} onClick={onClick}>
             Sign In
         </Button>
     );

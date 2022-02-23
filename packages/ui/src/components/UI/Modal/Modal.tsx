@@ -1,4 +1,4 @@
-import OpenBoxIcon from '../../../assets/svgs/svgIconLogo/svgIconLogo';
+import { IconLogoBackdrop } from '../../../assets/svgs/svgIconLogo/svgIconLogo';
 import React from 'react';
 import styles from './modal.module.scss';
 
@@ -21,7 +21,7 @@ const Modal = (props: ModalProps): JSX.Element => {
     return (
         <div className={[...styleArray].join(` `)}>
             {props.children}
-            <OpenBoxIcon modal />
+            <IconLogoBackdrop modal />
         </div>
     );
 };
