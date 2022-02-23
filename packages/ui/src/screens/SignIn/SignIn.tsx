@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { AuthContext } from '../../auth/authContext';
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
-import Button from '../../components/UI/Button/Button';
+import Button, { BUTTON_STYLE } from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import Modal from '../../components/UI/Modal/Modal';
 import styles from './signIn.module.scss';
@@ -60,14 +60,14 @@ const SignIn = (): JSX.Element => {
                         value={password}
                         onChange={onPasswordChange}
                     />
-                    <Button text clicked={() => undefined}>
+                    <Button style={BUTTON_STYLE.TEXT} onClick={() => undefined}>
                         Forgot Password
                     </Button>
                 </form>
 
                 <div className={styles.btnGroup}>
-                    <Button clicked={signInClicked}>Sign In</Button>
-                    <Button text clicked={back}>
+                    <Button onClick={signInClicked}>Sign In</Button>
+                    <Button style={BUTTON_STYLE.TEXT} onClick={back}>
                         Back
                     </Button>
                 </div>

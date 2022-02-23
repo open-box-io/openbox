@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { AuthContext } from '../../auth/authContext';
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
-import Button from '../../components/UI/Button/Button';
+import Button, { BUTTON_STYLE } from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import Modal from '../../components/UI/Modal/Modal';
 import styles from './newUserDetails.module.scss';
@@ -62,10 +62,10 @@ const NewUserDetails = (): JSX.Element => {
                     />
                 </form>
                 <div className={styles.btnGroup}>
-                    <Button clicked={changePasswordClicked}>
+                    <Button onClick={changePasswordClicked}>
                         Change Password
                     </Button>
-                    <Button text clicked={back}>
+                    <Button style={BUTTON_STYLE.TEXT} onClick={back}>
                         Back
                     </Button>
                 </div>

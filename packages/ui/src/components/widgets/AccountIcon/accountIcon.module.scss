@@ -1,0 +1,17 @@
+@import '../../../shared/SCSS/_breakpoints.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+@import '../../../shared/SCSS/_font.module.scss';
+
+.AccountIcon {
+    height: 50px;
+    width: 50px;
+
+    display: flex;
+    align-items: center;
+
+    background-color: $First-BackgroundColor;
+
+    padding: 5px;
+
+    border-radius: 50%;
+}

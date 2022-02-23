@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../../../auth/authContext';
-import Button from '../../UI/Button/Button';
+import Button, { BUTTON_STYLE } from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
 import { JoinLobbyAPIResponse } from '@openbox/common';
 import styles from './connect.module.scss';
@@ -116,11 +116,11 @@ const Connect = ({
                             ></Input>
                         )}
                     </form>
-                    <Button clicked={onSubmit}>
+                    <Button onClick={onSubmit}>
                         {connectionType.toUpperCase()}
                     </Button>
                     {!back ? null : (
-                        <Button text clicked={back}>
+                        <Button style={BUTTON_STYLE.TEXT} onClick={back}>
                             back
                         </Button>
                     )}
