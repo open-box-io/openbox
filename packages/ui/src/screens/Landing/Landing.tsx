@@ -10,6 +10,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import SignInButton from '../../components/widgets/SignInButton/SignInButton';
 import styles from './landing.module.scss';
 import AccountIcon from '../../components/widgets/AccountIcon/AccountIcon';
+import { useHistory } from 'react-router';
 
 enum LANDING_SCREEN {
     LANDING,
@@ -23,6 +24,8 @@ interface LandingProps {
 }
 
 const Landing = ({ connect }: LandingProps): JSX.Element => {
+    const history = useHistory();
+
     const authContext = useContext(AuthContext);
     const signedIn = authContext.isSignedIn();
 
@@ -30,9 +33,15 @@ const Landing = ({ connect }: LandingProps): JSX.Element => {
         LANDING_SCREEN.LANDING,
     );
 
+    const back = () => setShowModal(LANDING_SCREEN.LANDING);
+
     const signOut = () => {
         authContext.signOut();
         setShowModal(LANDING_SCREEN.LANDING);
+    };
+
+    const navigateToAccountPage = () => {
+        history.push(`/account`);
     };
 
     const switchModal = useCallback(() => {
@@ -68,7 +77,7 @@ const Landing = ({ connect }: LandingProps): JSX.Element => {
             return (
                 <Connect
                     connectionType={`join`}
-                    back={() => setShowModal(LANDING_SCREEN.LANDING)}
+                    back={back}
                     connect={connect}
                 />
             );
@@ -76,7 +85,7 @@ const Landing = ({ connect }: LandingProps): JSX.Element => {
             return (
                 <Connect
                     connectionType={`host`}
-                    back={() => setShowModal(LANDING_SCREEN.LANDING)}
+                    back={back}
                     connect={connect}
                 />
             );
@@ -84,16 +93,14 @@ const Landing = ({ connect }: LandingProps): JSX.Element => {
         case LANDING_SCREEN.ACCOUNT:
             return (
                 <div className={styles.modalContent}>
-                    <AccountButton
-                        onClick={() => setShowModal(LANDING_SCREEN.LANDING)}
-                    />
+                    <AccountButton onClick={back} />
+                    <Button onClick={navigateToAccountPage}>
+                            Account Settings
+                    </Button>
                     <Button style={BUTTON_STYLE.WARNING} onClick={signOut}>
                             Sign out
                     </Button>
-                    <Button
-                        style={BUTTON_STYLE.TEXT}
-                        onClick={() => setShowModal(LANDING_SCREEN.LANDING)}
-                    >
+                    <Button style={BUTTON_STYLE.TEXT} onClick={back}>
                             back
                     </Button>
                 </div>

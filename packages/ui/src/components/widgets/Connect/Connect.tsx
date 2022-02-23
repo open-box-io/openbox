@@ -68,7 +68,6 @@ const Connect = ({
         = (setState: React.Dispatch<React.SetStateAction<TextboxProps>>) =>
             (event: React.ChangeEvent<HTMLInputElement>) => {
                 setState((prevState) => {
-                    console.log(`changedState`, prevState, event.target.value);
                     return {
                         value: event.target.value,
                         rules: {
@@ -102,14 +101,12 @@ const Connect = ({
                 <>
                     <form onSubmit={onSubmit}>
                         <Input
-                            type="text"
                             label="Nickname"
                             value={player.value}
                             onChange={onChangeHandler(setPlayer)}
                         ></Input>
                         {lobbyIdentifier || connectionType === `host` ? null : (
                             <Input
-                                type="text"
                                 label="Room Code"
                                 value={lobbyId.value}
                                 onChange={onChangeHandler(setLobbyId)}

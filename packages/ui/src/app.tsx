@@ -16,6 +16,7 @@ import { PlayerResponse } from '../../common/src/types/playerTypes';
 import SignIn from './screens/SignIn/SignIn';
 import { getHeaders } from './store/store';
 import styles from './app.module.scss';
+import Account from './screens/Account/Account';
 
 const App = (): JSX.Element => {
     const [webSocket, setWebSocket] = useState<WebSocket>();
@@ -100,6 +101,7 @@ const App = (): JSX.Element => {
                 <AuthProvider>
                     <Switch>
                         <Route path="/signin" component={SignIn} />
+                        <Route path="/account" component={Account} />
                         <Route
                             path="/newuserdetails"
                             component={NewUserDetails}

@@ -43,7 +43,6 @@ const NewUserDetails = (): JSX.Element => {
                 <h1>Enter new details</h1>
                 <form onSubmit={changePasswordClicked}>
                     <Input
-                        type="text"
                         label="Username"
                         value={nickname}
                         onChange={onChange(setNickname)}

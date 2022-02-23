@@ -49,7 +49,6 @@ const SignIn = (): JSX.Element => {
             <Modal>
                 <form onSubmit={signInClicked}>
                     <Input
-                        type="text"
                         label="Email"
                         value={email}
                         onChange={onEmailChange}
