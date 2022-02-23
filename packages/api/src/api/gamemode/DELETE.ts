@@ -5,7 +5,7 @@ import {
 } from '../../helpers/gamemode';
 
 import { Request } from 'express';
-import { getAuthorizedUserData } from 'src/helpers/auth';
+import { getAuthorizedUserData } from '../../helpers/auth';
 import { getRequestData } from '../../helpers/requestValidation';
 
 export const deleteGamemode = async (request: Request): Promise<void> => {
