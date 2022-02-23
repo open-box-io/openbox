@@ -17,11 +17,7 @@ const app = express();
 
 const jsonParser = bodyParser.json();
 
-const allowlist = [
-    `https://www.open-box.io`,
-    `http://localhost:3001`,
-    `http://localhost:3000`,
-];
+const allowlist = [`https://www.open-box.io`, `http://localhost:3000`];
 
 const corsOptionsDelegate = (req: any, callback: any) => {
     let corsOptions;
