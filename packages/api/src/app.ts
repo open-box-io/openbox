@@ -1,4 +1,2 @@
-import { connectionHandler } from './ws/ws';
-import { getAPI } from './api/api';
-
-export { getAPI, connectionHandler };
+export { connectionHandler, actionHandler } from './ws/ws';
+export { getAPI } from './api/api';

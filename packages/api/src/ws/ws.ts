@@ -1,6 +1,7 @@
-import { WebsocketActionType, WebsocketMessage } from '@openbox/common';
 import { connectDB, disconnectDB } from '../database/database';
 
+import { WebsocketMessage } from '@openbox/common';
+import { action } from './action/action';
 import { connect } from './connection/connect';
 import { disconnect } from './connection/disconnect';
 import dotenv from 'dotenv';
@@ -27,11 +28,9 @@ export const actionHandler = async (
     context: any,
     callback: (a: null, response: unknown) => Promise<unknown>,
 ): Promise<void> => {
-    switch (event.data.action.type) {
-    case WebsocketActionType.GAME_SUBMIT:
-        connect(event);
-        break;
-    }
+    await connectDB();
+    await action(event);
+    await disconnectDB();
 };
 
 export const wsResponseWrapper = async (

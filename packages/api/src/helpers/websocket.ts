@@ -30,10 +30,10 @@ export const sendToPlayer = async (
         .postToConnection(params)
         .promise()
         .then(() => {
-            console.log(`updated player: ${player._id}`);
+            console.log(`sent message to player: ${player._id}`);
         })
         .catch((error) => {
-            console.log(`failed to update player`, { player, error });
+            console.log(`failed to send message to player`, { player, error });
         });
 };
 

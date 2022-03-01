@@ -1,4 +1,8 @@
-import { APIError, RequestDataSelector } from '@openbox/common';
+import {
+    APIError,
+    RequestDataLocation,
+    RequestDataSelector,
+} from '@openbox/common';
 
 export const getRequestData = <T extends Record<string, unknown>>(
     request: any,
@@ -7,10 +11,14 @@ export const getRequestData = <T extends Record<string, unknown>>(
     const allData: Record<string, unknown> = {};
 
     selectors.forEach((selector) => {
-        const data = request[selector.location]?.[selector.name];
+        const name
+            = selector.location === RequestDataLocation.HEADERS ?
+                selector.name.toLowerCase()
+                : selector.name;
+        const data = request[selector.location]?.[name];
 
         if (!data && selector.required) {
-            throw new APIError(400, `No ${selector.name} provided.`);
+            throw new APIError(400, `No ${name} provided.`);
         }
 
         if (!data && !selector.required) {
@@ -42,7 +50,7 @@ export const getRequestData = <T extends Record<string, unknown>>(
         ) {
             throw new APIError(
                 400,
-                `${selector.name} must be fewer than ${selector.maxLength} characters long.`,
+                `${name} must be fewer than ${selector.maxLength} characters long.`,
             );
         }
 

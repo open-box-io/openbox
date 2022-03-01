@@ -8,12 +8,12 @@ export const connect = async (event: any): Promise<string> => {
     console.log(`CONNECT`, event);
 
     const {
-        websocketId,
+        connectionId,
         lobbyId,
         playerId,
         secret: playerSecret,
     } = getRequestData<{
-        websocketId: string;
+        connectionId: string;
         lobbyId: string;
         playerId: string;
         secret: string;
@@ -44,11 +44,11 @@ export const connect = async (event: any): Promise<string> => {
         },
     ]);
 
-    console.log({ websocketId, lobbyId, playerId, playerSecret });
+    console.log({ connectionId, lobbyId, playerId, playerSecret });
 
     const lobby = await getLobbyById(lobbyId);
     const player = getPlayer(lobby, playerId);
-    player.websocketId = websocketId;
+    player.websocketId = connectionId;
 
     console.log({ lobby, player });
 
