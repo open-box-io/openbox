@@ -12,10 +12,27 @@ export interface InterpreterOutput {
 }
 
 export class GameInstance {
+    onPlayerViewsChanged: (playerViews: PlayerView[]) => void;
+
     gamemode: GamemodeVersion;
     gameState: Record<string, unknown>;
+
     playerViews: PlayerView[];
     phaseName: string;
+
+    constructor(
+        players: PlayerResponse[],
+        gamemode: GamemodeVersion,
+        onPlayerViewsChanged: (playerViews: PlayerView[]) => void,
+    ) {
+        this.onPlayerViewsChanged = onPlayerViewsChanged;
+        this.playerViews = [];
+        this.gameState = gamemode.initialGameState ?
+            JSON.parse(gamemode.initialGameState)
+            : {};
+        this.gamemode = gamemode;
+        this.setPhase(players, gamemode.initialPhaseName);
+    }
 
     getPhase(phaseName: string): Phase | undefined {
         return this.gamemode.phases.find(
@@ -27,23 +44,30 @@ export class GameInstance {
         return this.getPhase(this.phaseName);
     }
 
-    execute(players: PlayerResponse[], code: string, context?: string): void {
-        const executable
-            // eslint-disable-next-line prefer-template
-            = `const players = ${JSON.stringify(players)}; `
-            + `const gameState = ${JSON.stringify(this.gameState)}; `
-            + `const context = ${context};`
-            + code;
-
-        console.log(`executing game code: `, {
-            players,
+    execute(
+        players: PlayerResponse[],
+        code: string,
+        context?: WebsocketMessage,
+    ): void {
+        console.log(`executing game code`, {
+            phaseName: this.phaseName,
             gameState: this.gameState,
+
+            players,
+            playerViews: this.playerViews,
+
             context,
             code,
         });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result: InterpreterOutput = interpret(executable);
+        const result: InterpreterOutput = interpret(
+            code,
+            players,
+            this.gameState,
+            this.phaseName,
+            context,
+        );
 
         console.log(`execution result`, { result: result });
 
@@ -51,11 +75,11 @@ export class GameInstance {
         const uneditedPlayerViews = this.playerViews.filter(
             (view) =>
                 !editedPlayerViews.find(
-                    (editedView) => view.playerId === editedView.playerId,
+                    (editedView) => view.player._id === editedView.player._id,
                 ),
         );
 
-        // TODO send updates to players with new views
+        this.onPlayerViewsChanged(editedPlayerViews);
         this.playerViews = [...uneditedPlayerViews, ...editedPlayerViews];
 
         const newPhaseName = result.phaseName;
@@ -67,14 +91,12 @@ export class GameInstance {
             ...result.gameState,
             ...this.gameState,
         };
-    }
 
-    constructor(players: PlayerResponse[], gamemode: GamemodeVersion) {
-        this.gameState = gamemode.initialGameState ?
-            JSON.parse(gamemode.initialGameState)
-            : {};
-        this.gamemode = gamemode;
-        this.setPhase(players, gamemode.initialPhaseName);
+        console.log(`new game state`, {
+            phaseName: this.phaseName,
+            gameState: this.gameState,
+            playerViews: this.playerViews,
+        });
     }
 
     setPhase(players: PlayerResponse[], newPhaseName: string): void {
@@ -84,27 +106,27 @@ export class GameInstance {
             throw new Error(`No phase found with name ${newPhaseName}`);
         }
 
-        this.execute(players, newPhase.onInitialisation);
-
         this.phaseName = newPhaseName;
+
+        this.execute(players, newPhase.onInitialisation);
     }
 
     submit(players: PlayerResponse[], message: WebsocketMessage): void {
         const code = this.getCurrentPhase()?.onSubmit || ``;
 
-        this.execute(players, code, JSON.stringify(message));
+        this.execute(players, code, message);
     }
 
     playerJoined(players: PlayerResponse[], message: WebsocketMessage): void {
         const code = this.getCurrentPhase()?.onPlayerJoined || ``;
 
-        this.execute(players, code, JSON.stringify(message));
+        this.execute(players, code, message);
     }
 
     playerLeft(players: PlayerResponse[], message: WebsocketMessage): void {
         const code = this.getCurrentPhase()?.onPlayerLeft || ``;
 
-        this.execute(players, code, JSON.stringify(message));
+        this.execute(players, code, message);
     }
 
     request(message: WebsocketMessage): void {

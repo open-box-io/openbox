@@ -9,7 +9,6 @@ import { JoinLobbyAPIResponse } from '@openbox/common';
 import Modal from '../../components/UI/Modal/Modal';
 import SignInButton from '../../components/widgets/SignInButton/SignInButton';
 import styles from './landing.module.scss';
-import AccountIcon from '../../components/widgets/AccountIcon/AccountIcon';
 
 enum LANDING_SCREEN {
     LANDING,

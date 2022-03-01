@@ -1,0 +1,20 @@
+{
+    "_id": "",
+    "name": "",
+    "description": "",
+    "author": "",
+
+    "resource": {
+        "deck": [
+            {
+                "a": "hello"
+            },
+            "goodbye"
+        ],
+
+        "secondDeck": [
+            "example"
+        ]
+    }
+
+}
