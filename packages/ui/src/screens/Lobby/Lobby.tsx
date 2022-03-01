@@ -1,34 +1,64 @@
-import { JoinLobbyAPIResponse, LobbyResponse } from '@openbox/common';
+import {
+    GameInstance,
+    JoinLobbyAPIResponse,
+    LobbyResponse,
+    PlayerResponse,
+    PlayerView,
+} from '@openbox/common';
 
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
+import Button from '../../components/UI/Button/Button';
 import Connect from '../../components/widgets/Connect/Connect';
 import Modal from '../../components/UI/Modal/Modal';
 import Players from '../../components/widgets/Players/Players';
 import React from 'react';
 import RoomCode from '../../components/UI/RoomCode/RoomCode';
+import { TEST_STORY_POINTS } from '@openbox/common/src/resources/storyPoints';
 import styles from './lobby.module.scss';
 import { useParams } from 'react-router-dom';
 
 interface LobbyProps {
     lobby: LobbyResponse;
+    player: PlayerResponse;
+    setGame: (game: GameInstance) => void;
     connect: (player: string, lobby: string) => Promise<JoinLobbyAPIResponse>;
+    onPlayerViewsChanged: (playerViews: PlayerView[]) => void;
 }
 
 interface LobbyParams {
     id: string;
 }
 
-const Lobby = ({ lobby, connect }: LobbyProps): JSX.Element => {
+const Lobby = ({
+    lobby,
+    player,
+    setGame,
+    connect,
+    onPlayerViewsChanged,
+}: LobbyProps): JSX.Element => {
     const { id } = useParams<LobbyParams>(); // Lobby id from URL params.
+
+    const isHost = player && lobby && player._id === lobby.host._id;
+
+    const onGameStart = () => {
+        lobby
+            && setGame(
+                new GameInstance(
+                    lobby.players,
+                    TEST_STORY_POINTS.latestVersion,
+                    onPlayerViewsChanged,
+                ),
+            );
+    };
 
     return (
         <>
-            {lobby ? null : (
+            {lobby || player ? null : (
                 <>
                     <Modal>
                         <Connect
                             lobbyIdentifier={id}
-                            connectionType="host"
+                            connectionType={`join`}
                             connect={connect}
                         ></Connect>
                     </Modal>
@@ -41,6 +71,11 @@ const Lobby = ({ lobby, connect }: LobbyProps): JSX.Element => {
                 ) : null}
                 <RoomCode lobbyId={id} />
             </div>
+            {isHost ? (
+                <div>
+                    <Button onClick={onGameStart}>Start Game</Button>
+                </div>
+            ) : null}
             <Backdrop lobby />
         </>
     );

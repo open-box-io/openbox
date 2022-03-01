@@ -1,15 +1,19 @@
+import { GamemodeDetailsResponse, GamemodeResponse } from './gamemodeTypes';
 import { PlayerResponse, PlayerSecretResponse } from './playerTypes';
 
-import { GamemodeResponse } from './gamemodeTypes';
 import { LobbyResponse } from './lobbyTypes';
-import { PlayerViewResponse } from './componentTypes';
+import { PlayerView } from './componentTypes';
 
 export interface GameAPIResponse {
-    playerView: PlayerViewResponse;
+    playerView: PlayerView;
 }
 
 export interface GamemodeAPIResponse {
-    gamemode: GamemodeResponse;
+    gamemode: GamemodeDetailsResponse;
+}
+
+export interface GamemodeSearchAPIResponse {
+    gamemodes: GamemodeResponse[];
 }
 export interface LobbyHostAPIResponse {
     host: PlayerResponse;
@@ -34,6 +38,7 @@ export enum RequestDataLocation {
     HEADERS = `headers`,
     WEBSOCKET = `queryStringParameters`,
     WEBSOCKET_CONTEXT = `requestContext`,
+    WEBSOCKET_BODY = `body`,
 }
 
 export interface RequestDataSelector {

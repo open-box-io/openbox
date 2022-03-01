@@ -21,7 +21,7 @@ export const TEST_STORY_POINTS: Gamemode = {
                 const playerViews = [];
                 players.forEach(player => {
                     playerViews.push({
-                        playerId: player._id,
+                        player,
                         view: [
                             {
                                 type: "TEXT_BOX"
@@ -32,8 +32,6 @@ export const TEST_STORY_POINTS: Gamemode = {
                         ]
                     })
                 });
-
-                return {gameState, playerViews};
             `,
                 onSubmit: `
                 gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== player._id);
@@ -41,18 +39,14 @@ export const TEST_STORY_POINTS: Gamemode = {
 
                 const phaseEnd = gameState.storyPoints.length === players.length;
 
-                return {
-                    phaseName: phaseEnd ? "VIEW": undefined,
-                    gameState: gameState
-                };
+                if (phaseEnd) {
+                    phaseName = "VIEW"
+                }
             `,
                 onTimeout: ``,
                 onPlayerJoined: ``,
                 onPlayerLeft: `
                 gameState.prompts = gameState.prompts.filter(player => player._id !== context.action.player._id);
-                return {
-                    gameState
-                }
             `,
             },
             {
@@ -61,7 +55,7 @@ export const TEST_STORY_POINTS: Gamemode = {
                 const playerViews = [];
                 players.forEach(player => {
                     playerViews.push({
-                        playerId: player._id,
+                        player,
                         view: [
                             {
                                 type: "CARD_LIST",
@@ -74,8 +68,6 @@ export const TEST_STORY_POINTS: Gamemode = {
                         ]
                     })
                 });
-
-                return {gameState, playerViews};
             `,
                 onSubmit: ``,
                 onTimeout: ``,
