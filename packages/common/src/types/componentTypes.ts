@@ -1,5 +1,4 @@
-import { APIError } from './errorTypes';
-import { prop } from '@typegoose/typegoose';
+import { Player } from './playerTypes';
 
 export enum ComponentTypes {
     SUBMIT_BUTTON = `SUBMIT_BUTTON`,
@@ -9,64 +8,36 @@ export enum ComponentTypes {
 }
 
 export class Component {
-    @prop() type: string;
+    type: ComponentTypes;
 
-    @prop() data?: unknown;
+    data?: unknown;
 }
 
 export class SubmitButtonComponent extends Component {
-    @prop() type = ComponentTypes.SUBMIT_BUTTON;
+    type = ComponentTypes.SUBMIT_BUTTON;
 
-    @prop() data?: string;
+    data?: string;
 }
 
 export class TextBoxComponent extends Component {
-    @prop() type = ComponentTypes.TEXT_BOX;
+    type = ComponentTypes.TEXT_BOX;
 
-    @prop() data?: string;
+    data?: string;
 }
 
 export class CardComponent extends Component {
-    @prop() type = ComponentTypes.CARD;
+    type = ComponentTypes.CARD;
 
-    @prop() data?: string;
+    data?: string;
 }
 
 export class CardListComponent extends Component {
-    @prop() type = ComponentTypes.CARD_LIST;
+    type = ComponentTypes.CARD_LIST;
 
-    @prop() data?: string[];
+    data?: string[];
 }
 
 export class PlayerView {
-    @prop() playerId: string;
-    @prop() state: string;
-    @prop() view: Component[];
-}
-
-export class PlayerViewResponse {
-    playerId: string;
+    player: Player;
     view: Component[];
 }
-
-export const getComponent = (input: any): Component => {
-    if (!input.type) {
-        throw new APIError(400, `invalid component type`);
-    }
-
-    switch (input.type) {
-    case ComponentTypes.SUBMIT_BUTTON:
-        return {
-            type: input.type,
-            data: undefined,
-        };
-
-    case ComponentTypes.TEXT_BOX:
-    case ComponentTypes.CARD:
-    default:
-        return {
-            type: input.type,
-            data: input.data,
-        };
-    }
-};

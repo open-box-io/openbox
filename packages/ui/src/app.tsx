@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
 import {
+    GameInstance,
+    PlayerView,
     WebsocketActionType,
     WebsocketMessage,
-} from '../../common/src/types/websocketTypes';
+} from '@openbox/common';
+import React, { useCallback, useState } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { createLobby, joinLobby } from './api/lobby';
 
 import AuthProvider from './auth/authContext';
+import Game from './screens/Game/Game';
 import { JoinLobbyAPIResponse } from '../../common/src/types/endpointTypes';
 import Landing from './screens/Landing/Landing';
 import Lobby from './screens/Lobby/Lobby';
@@ -22,7 +25,34 @@ const App = (): JSX.Element => {
 
     const [lobby, setLobby] = useState<LobbyResponse>();
     const [player, setPlayer] = useState<PlayerResponse>();
-    // const [game, setGame] = useState<GameInstance>();
+    const [game, setGame] = useState<GameInstance>();
+
+    const [playerView, setPlayerView] = useState<PlayerView>();
+
+    const onPlayerViewsChanged = (playerViews: PlayerView[]) => {
+        const headers = getHeaders();
+
+        playerViews.forEach((view) => {
+            if (view.player._id === player?._id) {
+                setPlayerView(view);
+            } else {
+                webSocket?.send(
+                    JSON.stringify({
+                        lobbyId: headers.lobbyId,
+                        playerId: headers.playerId,
+                        secret: headers.secret,
+                        recipientId: view.player._id,
+                        message: {
+                            action: {
+                                type: WebsocketActionType.PLAYER_VIEW,
+                            },
+                            playerView: view,
+                        },
+                    }),
+                );
+            }
+        });
+    };
 
     const connectToWebSocket = useCallback(
         (): Promise<void> =>
@@ -42,6 +72,8 @@ const App = (): JSX.Element => {
                     (event: MessageEvent<string>) => {
                         const data: WebsocketMessage = JSON.parse(event.data);
 
+                        console.log(`websocket message: `, data);
+
                         switch (data.action.type) {
                         case WebsocketActionType.PLAYER_LEFT:
                         case WebsocketActionType.PLAYER_REMOVED:
@@ -54,12 +86,8 @@ const App = (): JSX.Element => {
                             setLobby(data.lobby);
                             break;
 
-                        case WebsocketActionType.GAME_SUBMIT:
-                            // game?.submit(lobby?.players || [], data);
-                            break;
-
-                        case WebsocketActionType.GAME_REQUEST:
-                            // game?.request(data);
+                        case WebsocketActionType.PLAYER_VIEW:
+                            setPlayerView(data.playerView);
                             break;
                         }
                     },
@@ -70,15 +98,16 @@ const App = (): JSX.Element => {
         [],
     );
 
-    const createOnSubmit = async (player: string) => await createLobby(player);
-
-    const joinOnSubmit = async (player: string, lobby: string) =>
-        await joinLobby(player, lobby);
-
     const connect = useCallback(
-        async (player: string, lobby?: string): Promise<JoinLobbyAPIResponse> =>
+        async (
+            playerName: string,
+            lobbyId?: string,
+        ): Promise<JoinLobbyAPIResponse> =>
             new Promise((resolve, reject) => {
-                (lobby ? joinOnSubmit(player, lobby) : createOnSubmit(player))
+                (lobbyId ?
+                    joinLobby(playerName, lobbyId)
+                    : createLobby(playerName)
+                )
                     .then((response) => {
                         setLobby(response.lobby);
                         setPlayer(response.player);
@@ -108,13 +137,25 @@ const App = (): JSX.Element => {
                         <Route
                             path="/lobby/:id"
                             render={(props) =>
-                                lobby ? (
+                                playerView ? (
+                                    <Game
+                                        lobby={lobby as LobbyResponse}
+                                        player={player as PlayerResponse}
+                                        playerView={playerView}
+                                        webSocket={webSocket as WebSocket}
+                                    />
+                                ) : (
                                     <Lobby
                                         {...props}
                                         connect={connect}
-                                        lobby={lobby}
+                                        lobby={lobby as LobbyResponse}
+                                        player={player as PlayerResponse}
+                                        setGame={setGame}
+                                        onPlayerViewsChanged={
+                                            onPlayerViewsChanged
+                                        }
                                     />
-                                ) : null
+                                )
                             }
                         />
                         <Route
