@@ -1,21 +1,21 @@
-import {
-    GameInstance,
-    PlayerView,
-    WebsocketActionType,
-    WebsocketMessage,
-} from '../../common';
 import React, { useCallback, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import {
+    WebsocketActionType,
+    WebsocketMessage,
+} from '../../common/src/types/websocketTypes';
 import { createLobby, joinLobby } from './api/lobby';
 
 import AuthProvider from './auth/authContext';
 import Game from './screens/Game/Game';
+import { GameInstance } from '../../common/src/interpreter/game';
 import { JoinLobbyAPIResponse } from '../../common/src/types/endpointTypes';
 import Landing from './screens/Landing/Landing';
 import Lobby from './screens/Lobby/Lobby';
 import { LobbyResponse } from '../../common/src/types/lobbyTypes';
 import NewUserDetails from './screens/NewUserDetails/NewUserDetails';
 import { PlayerResponse } from '../../common/src/types/playerTypes';
+import { PlayerView } from '../../common/src/types/componentTypes';
 import SignIn from './screens/SignIn/SignIn';
 import { getHeaders } from './store/store';
 import styles from './app.module.scss';
