@@ -42,14 +42,4 @@ export class Gamemode {
 export class GamemodeResponse {
     _id: string;
     name: string;
-    author: User;
-}
-
-export class GamemodeDetailsResponse {
-    _id: string;
-    name: string;
-    author: User;
-
-    latestApprovedVersion?: GamemodeVersion;
-    latestVersion: GamemodeVersion;
 }

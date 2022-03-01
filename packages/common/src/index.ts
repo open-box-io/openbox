@@ -3,8 +3,10 @@ export {
     Component,
     ComponentTypes,
     PlayerView,
+    PlayerViewResponse,
     SubmitButtonComponent,
     TextBoxComponent,
+    getComponent,
 } from './types/componentTypes';
 export {
     GameAPIResponse,
@@ -41,4 +43,3 @@ export { ValidationHeaders } from './types/storageTypes';
 export { APIError } from './types/errorTypes';
 
 export { interpret } from './interpreter/interpreter';
-export { GameInstance } from './interpreter/game';

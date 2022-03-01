@@ -1,6 +1,6 @@
 import { LobbyResponse } from './lobbyTypes';
 import { PlayerResponse } from './playerTypes';
-import { PlayerView } from './componentTypes';
+import { PlayerViewResponse } from './componentTypes';
 
 export enum WebsocketActionType {
     LOBBY_CREATED = `LOBBY_CREATED`,
@@ -16,10 +16,8 @@ export enum WebsocketActionType {
     HOST_CHANGED = `HOST_PROMOTION`,
 
     GAME_SUBMIT = `GAME_SUBMIT`,
+    GAME_UPDATE = `GAME_UPDATE`,
     GAME_REQUEST = `GAME_REQUEST`,
-
-    PLAYER_VIEW = `PLAYER_VIEW`,
-    PLAYER_VIEW_REQUEST = `PLAYER_VIEW_REQUEST`,
 }
 
 export class WebsocketAction {
@@ -30,5 +28,5 @@ export class WebsocketAction {
 export class WebsocketMessage {
     action: WebsocketAction;
     lobby?: LobbyResponse;
-    playerView?: PlayerView;
+    playerView?: PlayerViewResponse;
 }
