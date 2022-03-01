@@ -68,6 +68,7 @@ const Connect = ({
         = (setState: React.Dispatch<React.SetStateAction<TextboxProps>>) =>
             (event: React.ChangeEvent<HTMLInputElement>) => {
                 setState((prevState) => {
+                    console.log(`changedState`, prevState, event.target.value);
                     return {
                         value: event.target.value,
                         rules: {

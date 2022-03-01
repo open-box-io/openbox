@@ -33,7 +33,6 @@ const config = {
     output: {
         path: path.resolve(__dirname, `build`),
         filename: `bundle.js`,
-        publicPath: `/`,
     },
     devServer: {
         // static: path.join(__dirname, `build`),
@@ -43,7 +42,6 @@ const config = {
         compress: true,
         hot: true,
         publicPath: `/`,
-        historyApiFallback: true,
     },
     plugins: [
         new ForkTsCheckerWebpackPlugin({

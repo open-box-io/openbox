@@ -134,12 +134,6 @@ const BinaryExpression: NodeParser = (node, ...variables) => {
     }
 };
 
-const BlockStatement: NodeParser = (node, ...variables) => {
-    (node.body as Node[]).forEach((statement) =>
-        parseNode(statement, ...variables),
-    );
-};
-
 const CallExpression: NodeParser = (node, ...variables) => {
     const callee = parseNode(node.callee, ...variables);
     const args = node.arguments.map((arg) => parseNode(arg, ...variables));
@@ -263,7 +257,6 @@ export const nodeParsers: { [key: string]: NodeParser } = {
     ArrowFunctionExpression,
     AssignmentExpression,
     BinaryExpression,
-    BlockStatement,
     CallExpression,
     ConditionalExpression,
     ExpressionStatement,
