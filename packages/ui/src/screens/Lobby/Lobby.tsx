@@ -1,15 +1,12 @@
-import {
-    GameInstance,
-    JoinLobbyAPIResponse,
-    LobbyResponse,
-    PlayerResponse,
-    PlayerView,
-} from '@openbox/common';
-
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
 import Button from '../../components/UI/Button/Button';
 import Connect from '../../components/widgets/Connect/Connect';
+import { GameInstance } from '@openbox/common/src/interpreter/game';
+import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
+import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import Modal from '../../components/UI/Modal/Modal';
+import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
+import { PlayerView } from '@openbox/common/src/types/componentTypes';
 import Players from '../../components/widgets/Players/Players';
 import React from 'react';
 import RoomCode from '../../components/UI/RoomCode/RoomCode';

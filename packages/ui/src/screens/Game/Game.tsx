@@ -1,12 +1,12 @@
 import {
     Component,
     ComponentTypes,
-    LobbyResponse,
-    PlayerResponse,
     PlayerView,
-} from '@openbox/common';
+} from '@openbox/common/src/types/componentTypes';
 import React, { useState } from 'react';
 
+import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
+import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import SubmitButton from './Components/SubmitButton/SubmitButton';
 import TextBox from './Components/TextBox/TextBox';
 
