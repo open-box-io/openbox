@@ -36,6 +36,9 @@ functions:
     api:
         handler: lambda.api
         events:
+            - http: OPTIONS /gamemode/search
+            - http: GET /gamemode/search
+
             - http: OPTIONS /gamemode
             - http:
                   method: POST
@@ -51,6 +54,7 @@ functions:
                       type: COGNITO_USER_POOLS
                       authorizerId:
                           Ref: ApiGatewayAuthorizer
+            - http: GET /gamemode
 
             - http: OPTIONS /lobby/players
             - http: DELETE /lobby/players

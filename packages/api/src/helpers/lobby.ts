@@ -101,21 +101,6 @@ export const promotePlayerToHost = async (
     return updatedLobby;
 };
 
-export const setLobbyGamemode = async (
-    lobbyId: string,
-    gamemodeId?: string,
-): Promise<Lobby> => {
-    const lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
-        gamemodeId: gamemodeId,
-    });
-
-    if (!lobby) {
-        throw new APIError(500, `Could not set game`);
-    }
-
-    return await getLobbyById(lobbyId);
-};
-
 export const updatePlayer = async (
     lobbyId: string,
     player: Player,

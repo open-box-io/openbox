@@ -1,4 +1,11 @@
-import { APIError, Gamemode, GamemodeVersion, User } from '@openbox/common';
+import {
+    APIError,
+    Gamemode,
+    GamemodeResponse,
+    GamemodeVersion,
+    User,
+} from '@openbox/common';
+import { GamemodeDetailsResponse } from '@openbox/common/src/types/gamemodeTypes';
 
 import { gamemodeDB } from '../database/database';
 
@@ -49,4 +56,21 @@ export const updateGamemodeLatestVersion = async (
 
 export const deleteGamemode = async (id: string): Promise<void> => {
     await gamemodeDB.findByIdAndDelete(id);
+};
+
+export const formatGamemodeResponse = (
+    gamemode: Gamemode,
+): GamemodeDetailsResponse => ({
+    ...gamemode,
+    _id: gamemode._id as string,
+});
+
+export const formatGamemodeSearchResponse = (
+    gamemodes: Gamemode[],
+): GamemodeResponse[] => {
+    return gamemodes.map((gamemode) => ({
+        _id: gamemode._id as string,
+        name: gamemode.name,
+        author: gamemode.author,
+    }));
 };

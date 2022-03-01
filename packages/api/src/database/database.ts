@@ -20,7 +20,14 @@ export const connectDB = async (): Promise<void> => {
 
     const db = mongoose.connection;
     db.on(`error`, () => {
-        throw new APIError(500, `Could not connect to database`);
+        console.log(`Could not connect to mongoDB`);
+        throw new APIError(500, `Could not connect to mongoDB`);
+    });
+    db.on(`connected`, () => {
+        console.log(`Connected to mongoDB`);
+    });
+    db.on(`disconnected`, () => {
+        console.log(`Disconnected from mongoDB`);
     });
 };
 
