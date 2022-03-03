@@ -30,12 +30,12 @@ const App = (): JSX.Element => {
     const [playerView, setPlayerView] = useState<PlayerView>();
 
     const onPlayerViewsChanged = (playerViews: PlayerView[]) => {
-        const headers = getHeaders();
-
         playerViews.forEach((view) => {
             if (view.player._id === player?._id) {
                 setPlayerView(view);
             } else {
+                const headers = getHeaders();
+
                 webSocket?.send(
                     JSON.stringify({
                         lobbyId: headers.lobbyId,
@@ -88,6 +88,11 @@ const App = (): JSX.Element => {
 
                         case WebsocketActionType.PLAYER_VIEW:
                             setPlayerView(data.playerView);
+                            break;
+                        case WebsocketActionType.GAME_SUBMIT:
+                            lobby
+                                    && game
+                                    && game.submit(lobby?.players, data);
                             break;
                         }
                     },

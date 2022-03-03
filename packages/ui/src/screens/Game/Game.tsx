@@ -9,6 +9,8 @@ import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import SubmitButton from './Components/SubmitButton/SubmitButton';
 import TextBox from './Components/TextBox/TextBox';
+import { WebsocketActionType } from '@openbox/common';
+import { getHeaders } from '../../store/store';
 
 const GameComponents = {
     [ComponentTypes.SUBMIT_BUTTON]: SubmitButton,
@@ -24,14 +26,34 @@ interface GameProps {
     webSocket: WebSocket;
 }
 
-const Game = ({ lobby, player, playerView }: GameProps): JSX.Element => {
+const Game = ({
+    lobby,
+    player,
+    playerView,
+    webSocket,
+}: GameProps): JSX.Element => {
     const [viewProps, setViewProps] = useState(playerView.view);
 
     const isHost = player && lobby && player._id === lobby.host._id;
 
     const onPropChange = (index: number) => (prop: Component) => {
         if (prop.type === ComponentTypes.SUBMIT_BUTTON) {
-            console.log(`submit`);
+            const headers = getHeaders();
+
+            webSocket?.send(
+                JSON.stringify({
+                    lobbyId: headers.lobbyId,
+                    playerId: headers.playerId,
+                    secret: headers.secret,
+                    recipientId: lobby.host._id,
+                    message: {
+                        action: {
+                            type: WebsocketActionType.GAME_SUBMIT,
+                        },
+                        playerView: view,
+                    },
+                }),
+            );
         } else {
             setViewProps((viewProps) => {
                 viewProps[index] = prop;

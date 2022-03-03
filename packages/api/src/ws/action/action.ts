@@ -7,7 +7,7 @@ import { getRequestData } from '../../helpers/requestValidation';
 
 export const action = async (event: any): Promise<void> => {
     event.body = JSON.parse(event.body);
-    console.log(event);
+    console.log(`ACTION`, event);
 
     const {
         lobbyId,
