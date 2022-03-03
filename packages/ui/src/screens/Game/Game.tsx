@@ -9,7 +9,7 @@ import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import SubmitButton from './Components/SubmitButton/SubmitButton';
 import TextBox from './Components/TextBox/TextBox';
-import { WebsocketActionType } from '@openbox/common';
+import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
 import { getHeaders } from '../../store/store';
 
 const GameComponents = {
