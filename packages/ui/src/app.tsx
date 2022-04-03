@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import {
     WebsocketActionType,
@@ -54,54 +54,50 @@ const App = (): JSX.Element => {
         });
     };
 
-    const connectToWebSocket = useCallback(
-        (): Promise<void> =>
-            new Promise((resolve) => {
-                const headers = getHeaders();
+    useEffect(() => {
+        if (webSocket) {
+            webSocket.onmessage = event;
+        }
+    }, [lobby, game, setLobby, setGame]);
 
-                const newWebSocket = new WebSocket(
-                    `wss://ws.open-box.io?lobbyId=${headers.lobbyId}&playerId=${headers.playerId}&secret=${headers.secret}`,
-                );
+    const event = useCallback(
+        (event: MessageEvent<string>) => {
+            const data: WebsocketMessage = JSON.parse(event.data);
 
-                newWebSocket.addEventListener(`open`, () => {
-                    resolve();
-                });
+            console.log(`websocket message: `, data);
 
-                newWebSocket.addEventListener(
-                    `message`,
-                    (event: MessageEvent<string>) => {
-                        const data: WebsocketMessage = JSON.parse(event.data);
+            switch (data.action.type) {
+            case WebsocketActionType.PLAYER_LEFT:
+            case WebsocketActionType.PLAYER_REMOVED:
+                // game?.playerLeft(lobby?.players || [], data);
+                setLobby(data.lobby);
+                break;
 
-                        console.log(`websocket message: `, data);
+            case WebsocketActionType.PLAYER_JOINED:
+                // game?.playerJoined(lobby?.players || [], data);
+                setLobby(data.lobby);
+                break;
 
-                        switch (data.action.type) {
-                        case WebsocketActionType.PLAYER_LEFT:
-                        case WebsocketActionType.PLAYER_REMOVED:
-                            // game?.playerLeft(lobby?.players || [], data);
-                            setLobby(data.lobby);
-                            break;
-
-                        case WebsocketActionType.PLAYER_JOINED:
-                            // game?.playerJoined(lobby?.players || [], data);
-                            setLobby(data.lobby);
-                            break;
-
-                        case WebsocketActionType.PLAYER_VIEW:
-                            setPlayerView(data.playerView);
-                            break;
-                        case WebsocketActionType.GAME_SUBMIT:
-                            lobby
-                                    && game
-                                    && game.submit(lobby?.players, data);
-                            break;
-                        }
-                    },
-                );
-
-                setWebSocket(newWebSocket);
-            }),
-        [],
+            case WebsocketActionType.PLAYER_VIEW:
+                setPlayerView(data.playerView);
+                break;
+            case WebsocketActionType.GAME_SUBMIT:
+                lobby && game && game.submit(lobby.players, data);
+                break;
+            }
+        },
+        [lobby, game, setLobby, setGame],
     );
+
+    const connectToWebSocket = useCallback((): void => {
+        const headers = getHeaders();
+
+        const newWebSocket = new WebSocket(
+            `wss://ws.open-box.io?lobbyId=${headers.lobbyId}&playerId=${headers.playerId}&secret=${headers.secret}`,
+        );
+
+        setWebSocket(newWebSocket);
+    }, []);
 
     const connect = useCallback(
         async (
@@ -117,11 +113,9 @@ const App = (): JSX.Element => {
                         setLobby(response.lobby);
                         setPlayer(response.player);
 
-                        connectToWebSocket()
-                            .then(() => {
-                                resolve(response);
-                            })
-                            .catch(reject);
+                        connectToWebSocket();
+
+                        resolve(response);
                     })
                     .catch(reject);
             }),

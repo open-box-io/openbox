@@ -16,9 +16,11 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VOTING`,
                 onInitialisation: `
-                gameState.storyPoints = [];
+                gameState.storyPoints = []
+                
+                console.debug();
 
-                const playerViews = [];
+                playerViews = [];
                 players.forEach(player => {
                     playerViews.push({
                         player,
@@ -35,10 +37,11 @@ export const TEST_STORY_POINTS: Gamemode = {
             `,
                 onSubmit: `
                 gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== player._id);
-                gameState.storyPoints.push({playerId: context.playerView.playerId, points: context.playerView.view[0].data});
+                gameState.storyPoints.push({playerId: context.playerId, points: context.playerView.view[0].data});
+                
+                console.debug();
 
                 const phaseEnd = gameState.storyPoints.length === players.length;
-
                 if (phaseEnd) {
                     phaseName = "VIEW"
                 }
@@ -52,7 +55,7 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VIEW`,
                 onInitialisation: `
-                const playerViews = [];
+                playerViews = [];
                 players.forEach(player => {
                     playerViews.push({
                         player,

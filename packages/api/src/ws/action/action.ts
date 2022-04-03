@@ -63,6 +63,8 @@ export const action = async (event: any): Promise<void> => {
 
     verifyPlayer(player, playerSecret);
 
+    message.playerId = player._id;
+
     if (recipientId) {
         const recipient = getPlayer(lobby, recipientId);
         console.log(`sending to`, { recipient });

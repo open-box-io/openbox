@@ -29,6 +29,7 @@ export class WebsocketAction {
 
 export class WebsocketMessage {
     action: WebsocketAction;
+    playerId: string;
     lobby?: LobbyResponse;
     playerView?: PlayerView;
 }

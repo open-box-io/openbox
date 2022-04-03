@@ -73,7 +73,7 @@ functions:
                           Ref: ApiGatewayAuthorizer
 
     websocket:
-        handler: lambda.websocketConnection
+        handler: lambda.websocket
         events:
             - websocket:
                   route: $connect

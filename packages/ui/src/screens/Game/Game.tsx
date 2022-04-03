@@ -50,7 +50,10 @@ const Game = ({
                         action: {
                             type: WebsocketActionType.GAME_SUBMIT,
                         },
-                        playerView: view,
+                        playerView: {
+                            playerId: headers.playerId,
+                            view,
+                        },
                     },
                 }),
             );
