@@ -1,5 +1,6 @@
 export {
     CardComponent,
+    CardListComponent,
     Component,
     ComponentTypes,
     PlayerView,

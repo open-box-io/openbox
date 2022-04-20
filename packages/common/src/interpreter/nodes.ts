@@ -166,8 +166,12 @@ const Identifier: NodeParser = (node, ...variables) => {
     switch (name) {
     case `console`:
         return {
-            log: console.log,
-            debug: () => console.log(`Variables: `, variables),
+            log: (message: any) => console.log(`GAME CODE - `, message),
+            debug: (label?: any) =>
+                console.log(
+                    `GAME CODE - console.debug(${label}): `,
+                    variables,
+                ),
         };
 
     case `JSON`:

@@ -3,8 +3,10 @@ import {
     ComponentTypes,
     PlayerView,
 } from '@openbox/common/src/types/componentTypes';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import Card from './Components/Card/Card';
+import CardList from './Components/CardList/CardList';
 import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import SubmitButton from './Components/SubmitButton/SubmitButton';
@@ -15,8 +17,8 @@ import { getHeaders } from '../../store/store';
 const GameComponents = {
     [ComponentTypes.SUBMIT_BUTTON]: SubmitButton,
     [ComponentTypes.TEXT_BOX]: TextBox,
-    [ComponentTypes.CARD]: TextBox,
-    [ComponentTypes.CARD_LIST]: TextBox,
+    [ComponentTypes.CARD]: Card,
+    [ComponentTypes.CARD_LIST]: CardList,
 };
 
 interface GameProps {
@@ -34,6 +36,8 @@ const Game = ({
 }: GameProps): JSX.Element => {
     const [viewProps, setViewProps] = useState(playerView.view);
 
+    useEffect(() => setViewProps(playerView.view), [playerView.view]);
+
     const isHost = player && lobby && player._id === lobby.host._id;
 
     const onPropChange = (index: number) => (prop: Component) => {
@@ -50,10 +54,7 @@ const Game = ({
                         action: {
                             type: WebsocketActionType.GAME_SUBMIT,
                         },
-                        playerView: {
-                            playerId: headers.playerId,
-                            view,
-                        },
+                        playerView,
                     },
                 }),
             );

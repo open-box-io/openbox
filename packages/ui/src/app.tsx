@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import {
     WebsocketActionType,
@@ -29,42 +29,42 @@ const App = (): JSX.Element => {
 
     const [playerView, setPlayerView] = useState<PlayerView>();
 
-    const onPlayerViewsChanged = (playerViews: PlayerView[]) => {
-        playerViews.forEach((view) => {
-            if (view.player._id === player?._id) {
-                setPlayerView(view);
-            } else {
-                const headers = getHeaders();
+    const onPlayerViewsChanged = useCallback(
+        (playerViews: PlayerView[]) => {
+            playerViews.forEach((view) => {
+                if (view.player._id === player?._id) {
+                    setPlayerView(view);
+                } else {
+                    const headers = getHeaders();
 
-                webSocket?.send(
-                    JSON.stringify({
-                        lobbyId: headers.lobbyId,
-                        playerId: headers.playerId,
-                        secret: headers.secret,
-                        recipientId: view.player._id,
-                        message: {
-                            action: {
-                                type: WebsocketActionType.PLAYER_VIEW,
+                    webSocket?.send(
+                        JSON.stringify({
+                            lobbyId: headers.lobbyId,
+                            playerId: headers.playerId,
+                            secret: headers.secret,
+                            recipientId: view.player._id,
+                            message: {
+                                action: {
+                                    type: WebsocketActionType.PLAYER_VIEW,
+                                },
+                                playerView: {
+                                    playerId: headers.playerId,
+                                    view,
+                                },
                             },
-                            playerView: view,
-                        },
-                    }),
-                );
-            }
-        });
-    };
-
-    useEffect(() => {
-        if (webSocket) {
-            webSocket.onmessage = event;
-        }
-    }, [lobby, game, setLobby, setGame]);
+                        }),
+                    );
+                }
+            });
+        },
+        [player?._id, webSocket, setPlayerView],
+    );
 
     const event = useCallback(
         (event: MessageEvent<string>) => {
             const data: WebsocketMessage = JSON.parse(event.data);
 
-            console.log(`websocket message: `, data);
+            console.log(`WEBSOCKET - Recieved: `, event);
 
             switch (data.action.type) {
             case WebsocketActionType.PLAYER_LEFT:
@@ -81,13 +81,20 @@ const App = (): JSX.Element => {
             case WebsocketActionType.PLAYER_VIEW:
                 setPlayerView(data.playerView);
                 break;
+
             case WebsocketActionType.GAME_SUBMIT:
                 lobby && game && game.submit(lobby.players, data);
                 break;
             }
         },
-        [lobby, game, setLobby, setGame],
+        [lobby, game, setLobby],
     );
+
+    useEffect(() => {
+        if (webSocket) {
+            webSocket.onmessage = event;
+        }
+    }, [lobby, game, setLobby, setGame, webSocket, event]);
 
     const connectToWebSocket = useCallback((): void => {
         const headers = getHeaders();
@@ -119,7 +126,7 @@ const App = (): JSX.Element => {
                     })
                     .catch(reject);
             }),
-        [setLobby, setPlayer],
+        [connectToWebSocket],
     );
 
     return (

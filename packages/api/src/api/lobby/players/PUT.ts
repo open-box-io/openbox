@@ -50,6 +50,7 @@ export const putLobbyPlayers = async (
     await websocketLobbyUpdate(lobby, lobby, {
         type: WebsocketActionType.PLAYER_JOINED,
         player: formatPlayerResponse(player),
+        sender: formatPlayerResponse(player),
     });
 
     return {

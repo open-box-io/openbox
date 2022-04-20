@@ -24,12 +24,12 @@ export enum WebsocketActionType {
 
 export class WebsocketAction {
     type: WebsocketActionType;
+    sender: PlayerResponse;
     player?: PlayerResponse;
 }
 
 export class WebsocketMessage {
     action: WebsocketAction;
-    playerId: string;
     lobby?: LobbyResponse;
     playerView?: PlayerView;
 }

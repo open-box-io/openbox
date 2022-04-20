@@ -49,7 +49,7 @@ export class GameInstance {
         code: string,
         context?: WebsocketMessage,
     ): void {
-        console.log(`executing game code`, {
+        console.log(`GAME CONTROLLER - Executing game code`, {
             phaseName: this.phaseName,
             gameState: this.gameState,
 
@@ -69,7 +69,7 @@ export class GameInstance {
             context,
         );
 
-        console.log(`execution result`, { result: result });
+        console.log(`GAME CONTROLLER - Execution result`, { result: result });
 
         const editedPlayerViews = result.playerViews;
         const uneditedPlayerViews = this.playerViews.filter(
@@ -82,21 +82,21 @@ export class GameInstance {
         this.onPlayerViewsChanged(editedPlayerViews);
         this.playerViews = [...uneditedPlayerViews, ...editedPlayerViews];
 
-        const newPhaseName = result.phaseName;
-        if (newPhaseName && this.phaseName !== newPhaseName) {
-            this.setPhase(players, newPhaseName);
-        }
-
         this.gameState = {
-            ...result.gameState,
             ...this.gameState,
+            ...result.gameState,
         };
 
-        console.log(`new game state`, {
+        console.log(`GAME CONTROLLER - New game state`, {
             phaseName: this.phaseName,
             gameState: this.gameState,
             playerViews: this.playerViews,
         });
+
+        const newPhaseName = result.phaseName;
+        if (newPhaseName && this.phaseName !== newPhaseName) {
+            this.setPhase(players, newPhaseName);
+        }
     }
 
     setPhase(players: PlayerResponse[], newPhaseName: string): void {
@@ -106,12 +106,14 @@ export class GameInstance {
             throw new Error(`No phase found with name ${newPhaseName}`);
         }
 
+        console.log(`GAME CONTROLLER - New phase`, { newPhase });
         this.phaseName = newPhaseName;
 
         this.execute(players, newPhase.onInitialisation);
     }
 
     submit(players: PlayerResponse[], message: WebsocketMessage): void {
+        console.log(`GAME CONTROLLER - Player submitted`, { message });
         const code = this.getCurrentPhase()?.onSubmit || ``;
 
         this.execute(players, code, message);
