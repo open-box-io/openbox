@@ -10,14 +10,14 @@ interface CardListProps {
 
 const CardList = ({ component }: CardListProps): JSX.Element => {
     return (
-        <>
+        <div className={styles.cardList}>
             {component.data?.map((item, index) => (
                 <Card
                     key={index}
                     component={{ type: ComponentTypes.CARD, data: item }}
                 />
             ))}
-        </>
+        </div>
     );
 };
 
