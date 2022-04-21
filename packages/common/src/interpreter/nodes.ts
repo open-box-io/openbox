@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     getIdentiferName,
+    getIdentifierContext,
     getVariable,
     parseNode,
     reportGameError,
@@ -67,12 +68,13 @@ const ArrowFunctionExpression: NodeParser = (node, ...variables) => {
 
 const AssignmentExpression: NodeParser = (node, ...variables) => {
     const operator = node.operator;
+    const leftContext = getIdentifierContext(node.left, ...variables);
     const left = getIdentiferName(node.left, ...variables);
     const right = parseNode(node.right, ...variables);
 
     switch (operator) {
     case `=`:
-        variables[0][left] = right;
+        leftContext[left] = right;
         break;
 
     default:
@@ -164,7 +166,12 @@ const Identifier: NodeParser = (node, ...variables) => {
     switch (name) {
     case `console`:
         return {
-            log: console.log,
+            log: (message: any) => console.log(`GAME CODE - `, message),
+            debug: (label?: any) =>
+                console.log(
+                    `GAME CODE - console.debug(${label}): `,
+                    variables,
+                ),
         };
 
     case `JSON`:
@@ -174,6 +181,16 @@ const Identifier: NodeParser = (node, ...variables) => {
 
     default:
         return getVariable(name, ...variables);
+    }
+};
+
+const IfStatement: NodeParser = (node, ...variables) => {
+    const test = parseNode(node.test, ...variables);
+
+    if (test) {
+        return parseNode(node.consequent, ...variables);
+    } else {
+        return parseNode(node.alternate, ...variables);
     }
 };
 
@@ -268,6 +285,7 @@ export const nodeParsers: { [key: string]: NodeParser } = {
     ConditionalExpression,
     ExpressionStatement,
     Identifier,
+    IfStatement,
     Literal,
     LogicalExpression,
     MemberExpression,

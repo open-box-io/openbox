@@ -16,9 +16,9 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VOTING`,
                 onInitialisation: `
-                gameState.storyPoints = [];
-
-                const playerViews = [];
+                gameState.storyPoints = []
+                
+                playerViews = [];
                 players.forEach(player => {
                     playerViews.push({
                         player,
@@ -35,10 +35,9 @@ export const TEST_STORY_POINTS: Gamemode = {
             `,
                 onSubmit: `
                 gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== player._id);
-                gameState.storyPoints.push({playerId: context.playerView.playerId, points: context.playerView.view[0].data});
-
+                gameState.storyPoints.push({player: context.action.sender, points: context.playerView.view[0].data});
+                
                 const phaseEnd = gameState.storyPoints.length === players.length;
-
                 if (phaseEnd) {
                     phaseName = "VIEW"
                 }
@@ -52,22 +51,19 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VIEW`,
                 onInitialisation: `
-                const playerViews = [];
-                players.forEach(player => {
-                    playerViews.push({
-                        player,
-                        view: [
-                            {
-                                type: "CARD_LIST",
-                                data: gameState.storyPoints.map(points => points.playerId + ": " + points.points)
-                            },
-                            {
-                                type: "SUBMIT_BUTTON",
-                                data: "restart"
-                            }
-                        ]
-                    })
-                });
+                playerViews = players.map(player => ({
+                    player,
+                    view: [
+                        {
+                            type: "CARD_LIST",
+                            data: gameState.storyPoints.map(points => points.player.name + ": " + points.points)
+                        },
+                        {
+                            type: "SUBMIT_BUTTON",
+                            data: "restart"
+                        }
+                    ]
+                }));
             `,
                 onSubmit: ``,
                 onTimeout: ``,

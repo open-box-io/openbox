@@ -1,6 +1,5 @@
 import { connectDB, disconnectDB } from '../database/database';
 
-import { WebsocketMessage } from '@openbox/common';
 import { action } from './action/action';
 import { connect } from './connection/connect';
 import { disconnect } from './connection/disconnect';
@@ -8,7 +7,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const connectionHandler = async (
+export const websocket = async (
     event: any,
     context: any,
     callback: (a: null, response: unknown) => Promise<unknown>,
@@ -20,17 +19,13 @@ export const connectionHandler = async (
     case `DISCONNECT`:
         await wsResponseWrapper(event, callback, disconnect);
         break;
-    }
-};
 
-export const actionHandler = async (
-    event: MessageEvent<WebsocketMessage>,
-    context: any,
-    callback: (a: null, response: unknown) => Promise<unknown>,
-): Promise<void> => {
-    await connectDB();
-    await action(event);
-    await disconnectDB();
+    default:
+        await connectDB();
+        await action(event);
+        await disconnectDB();
+        break;
+    }
 };
 
 export const wsResponseWrapper = async (

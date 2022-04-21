@@ -77,6 +77,7 @@ export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
     await websocketLobbyUpdate(lobby, updatedLobby, {
         type: actionType,
         player: formatPlayerResponse(targetPlayer),
+        sender: formatPlayerResponse(player),
     });
 
     await disconnectPlayer(targetPlayer);

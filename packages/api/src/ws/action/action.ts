@@ -1,5 +1,9 @@
 import { RequestDataLocation, WebsocketMessage } from '@openbox/common';
-import { getPlayer, verifyPlayer } from '../../helpers/player';
+import {
+    formatPlayerResponse,
+    getPlayer,
+    verifyPlayer,
+} from '../../helpers/player';
 import { sendToLobby, sendToPlayer } from '../../helpers/websocket';
 
 import { getLobbyById } from '../../helpers/lobby';
@@ -7,7 +11,7 @@ import { getRequestData } from '../../helpers/requestValidation';
 
 export const action = async (event: any): Promise<void> => {
     event.body = JSON.parse(event.body);
-    console.log(event);
+    console.log(`ACTION`, event);
 
     const {
         lobbyId,
@@ -63,13 +67,15 @@ export const action = async (event: any): Promise<void> => {
 
     verifyPlayer(player, playerSecret);
 
+    message.action.sender = formatPlayerResponse(player);
+
     if (recipientId) {
         const recipient = getPlayer(lobby, recipientId);
-        console.log(`sending to`, { recipient });
+        console.log(`sending to`, { recipient, message });
 
         await sendToPlayer(recipient, message);
     } else {
-        console.log(`sending to`, { players: lobby.players });
+        console.log(`sending to`, { players: lobby.players, message });
         await sendToLobby(lobby, message);
     }
 };

@@ -4,6 +4,7 @@ import {
     getLobbyById,
 } from '../../helpers/lobby';
 import {
+    formatPlayerResponse,
     getPlayer,
     verifyPlayer,
     verifyPlayerHost,
@@ -54,6 +55,9 @@ export const deleteLobby = async (request: Request): Promise<void> => {
     await deleteLobbyFunction(lobby);
 
     sendToLobby(lobby, {
-        action: { type: WebsocketActionType.LOBBY_DELETED },
+        action: {
+            type: WebsocketActionType.LOBBY_DELETED,
+            sender: formatPlayerResponse(player),
+        },
     });
 };

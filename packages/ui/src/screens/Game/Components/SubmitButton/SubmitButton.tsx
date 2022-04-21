@@ -4,12 +4,15 @@ import Button from '../../../../components/UI/Button/Button';
 import React from 'react';
 import styles from './submitButton.module.scss';
 
-interface TextBoxProps {
+interface SubmitButtonProps {
     component: TextBoxComponent;
     onChange: (prop: Component) => void;
 }
 
-const SubmitButton = ({ component, onChange }: TextBoxProps): JSX.Element => {
+const SubmitButton = ({
+    component,
+    onChange,
+}: SubmitButtonProps): JSX.Element => {
     return (
         <Button onClick={() => onChange(component)}>
             {component.data || `Submit`}

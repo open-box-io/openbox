@@ -274,18 +274,14 @@ export const changePassword = async (
     oldPassword: string,
     newPassword: string,
 ): Promise<void> => {
-    console.log(`changing`);
-    console.log(currentUser);
     return new Promise<void>((resolve, reject) => {
         currentUser?.changePassword(
             oldPassword,
             newPassword,
             (err: unknown) => {
                 if (err) {
-                    console.log(`err`, err);
                     reject(err);
                 } else {
-                    console.log(`res`);
                     resolve();
                 }
             },

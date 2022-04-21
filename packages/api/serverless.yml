@@ -72,16 +72,12 @@ functions:
                       authorizerId:
                           Ref: ApiGatewayAuthorizer
 
-    connectionHandler:
-        handler: lambda.websocketConnection
+    websocket:
+        handler: lambda.websocket
         events:
             - websocket:
                   route: $connect
             - websocket:
                   route: $disconnect
-
-    actionHandler:
-        handler: lambda.websocketAction
-        events:
             - websocket:
                   route: $default

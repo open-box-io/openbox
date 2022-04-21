@@ -24,6 +24,7 @@ export enum WebsocketActionType {
 
 export class WebsocketAction {
     type: WebsocketActionType;
+    sender: PlayerResponse;
     player?: PlayerResponse;
 }
 

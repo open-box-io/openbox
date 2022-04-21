@@ -19,18 +19,19 @@ const app = express();
 
 const jsonParser = bodyParser.json();
 
-const allowlist = [`https://www.open-box.io`, `http://localhost:3000`];
-
 const corsOptionsDelegate = (req: any, callback: any) => {
     let corsOptions;
-    console.log(`origin`, req.header(`Origin`));
-    if (allowlist.indexOf(req.header(`Origin`)) !== -1) {
+    const origin = req.header(`Origin`);
+    console.log(`origin`, origin);
+
+    if (origin === `http://localhost:3000` || origin.endsWith(`.open-box.io`)) {
         corsOptions = { origin: true };
         console.log(`cors accepted`);
     } else {
         corsOptions = { origin: false };
         console.log(`cors rejected`);
     }
+
     callback(null, corsOptions);
 };
 

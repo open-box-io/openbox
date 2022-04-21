@@ -26,7 +26,29 @@ export const reportGameError = (
 };
 
 export const getIdentiferName: NodeParser = (node, ...variables) => {
-    if (node.type == `Identifier`) return node.name;
+    if (node.type == `Identifier`) {
+        return node.name;
+    }
+
+    if (node.type == `MemberExpression`) {
+        const property = getIdentiferName(node.property, ...variables);
+
+        return property;
+    }
+
+    return parseNode(node, ...variables);
+};
+
+export const getIdentifierContext: NodeParser = (node, ...variables) => {
+    if (node.type == `Identifier`) {
+        return variables[0];
+    }
+
+    if (node.type == `MemberExpression`) {
+        const object = parseNode(node.object, ...variables);
+
+        return object;
+    }
 
     return parseNode(node, ...variables);
 };
