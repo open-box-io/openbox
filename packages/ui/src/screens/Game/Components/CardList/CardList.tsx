@@ -1,4 +1,7 @@
-import { CardListComponent, ComponentTypes } from '@openbox/common';
+import {
+    CardListComponent,
+    ComponentTypes,
+} from '@openbox/common/src/types/componentTypes';
 
 import Card from '../Card/Card';
 import React from 'react';
