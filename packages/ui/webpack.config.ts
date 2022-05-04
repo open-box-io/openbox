@@ -46,12 +46,6 @@ const config = {
         historyApiFallback: true,
     },
     plugins: [
-        new ForkTsCheckerWebpackPlugin({
-            async: false,
-            eslint: {
-                files: `./src/**/*.{ts,tsx,js,jsx}`,
-            },
-        }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, `src`, `index.html`),
         }),
