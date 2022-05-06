@@ -47,10 +47,7 @@ const App = (): JSX.Element => {
                                 action: {
                                     type: WebsocketActionType.PLAYER_VIEW,
                                 },
-                                playerView: {
-                                    playerId: headers.playerId,
-                                    view,
-                                },
+                                playerView: view,
                             },
                         }),
                     );

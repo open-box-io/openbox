@@ -34,7 +34,7 @@ export const TEST_STORY_POINTS: Gamemode = {
                 });
             `,
                 onSubmit: `
-                gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== player._id);
+                gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== context.playerView.player._id);
                 gameState.storyPoints.push({player: context.action.sender, points: context.playerView.view[0].data});
                 
                 const phaseEnd = gameState.storyPoints.length === players.length;
@@ -44,9 +44,7 @@ export const TEST_STORY_POINTS: Gamemode = {
             `,
                 onTimeout: ``,
                 onPlayerJoined: ``,
-                onPlayerLeft: `
-                gameState.prompts = gameState.prompts.filter(player => player._id !== context.action.player._id);
-            `,
+                onPlayerLeft: ``,
             },
             {
                 phaseName: `VIEW`,
