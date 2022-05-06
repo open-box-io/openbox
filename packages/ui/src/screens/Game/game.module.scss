@@ -1,0 +1,12 @@
+@import '../../../shared/SCSS/_font.module.scss';
+
+.game {
+    font-family: $First-FontType;
+
+    margin: 10%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
