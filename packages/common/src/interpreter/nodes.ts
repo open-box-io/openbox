@@ -166,11 +166,13 @@ const Identifier: NodeParser = (node, ...variables) => {
     switch (name) {
     case `console`:
         return {
-            log: (message: any) => console.log(`GAME CODE - `, message),
-            debug: (label?: any) =>
+            log: (...message: any) =>
+                console.log(`GAME CODE - `, ...message),
+            debug: (label?: any, ...other: any[]) =>
                 console.log(
                     `GAME CODE - console.debug(${label}): `,
                     variables,
+                    ...other,
                 ),
         };
 
@@ -190,7 +192,7 @@ const IfStatement: NodeParser = (node, ...variables) => {
     if (test) {
         return parseNode(node.consequent, ...variables);
     } else {
-        return parseNode(node.alternate, ...variables);
+        return node.alternate ? parseNode(node.alternate, ...variables) : null;
     }
 };
 

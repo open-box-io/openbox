@@ -81,6 +81,7 @@ export const programNode = (
 
     // parse code
     const body = <Node[]>node.body;
+
     body.forEach((subNode) => {
         parseNode(subNode, programVariables);
     });
