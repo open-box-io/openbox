@@ -13,6 +13,7 @@ import SubmitButton from './Components/SubmitButton/SubmitButton';
 import TextBox from './Components/TextBox/TextBox';
 import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
 import { getHeaders } from '../../store/store';
+import styles from './game.module.scss';
 
 const GameComponents = {
     [ComponentTypes.SUBMIT_BUTTON]: SubmitButton,
@@ -73,7 +74,7 @@ const Game = ({
         }),
     );
 
-    return <>{view}</>;
+    return <section className={styles.game}>{view}</section>;
 };
 
 export default Game;

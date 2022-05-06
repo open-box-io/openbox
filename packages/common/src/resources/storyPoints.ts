@@ -16,32 +16,32 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VOTING`,
                 onInitialisation: `
-                gameState.storyPoints = []
-                
-                playerViews = [];
-                players.forEach(player => {
-                    playerViews.push({
-                        player,
-                        view: [
-                            {
-                                type: "TEXT_BOX"
-                            },
-                            {
-                                type: "SUBMIT_BUTTON"
-                            }
-                        ]
-                    })
-                });
-            `,
+                    gameState.storyPoints = []
+                    
+                    playerViews = [];
+                    players.forEach(player => {
+                        playerViews.push({
+                            player,
+                            view: [
+                                {
+                                    type: "TEXT_BOX"
+                                },
+                                {
+                                    type: "SUBMIT_BUTTON"
+                                }
+                            ]
+                        })
+                    });
+                `,
                 onSubmit: `
-                gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== context.playerView.player._id);
-                gameState.storyPoints.push({player: context.action.sender, points: context.playerView.view[0].data});
-                
-                const phaseEnd = gameState.storyPoints.length === players.length;
-                if (phaseEnd) {
-                    phaseName = "VIEW"
-                }
-            `,
+                    gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== context.playerView.player._id);
+                    gameState.storyPoints.push({player: context.action.sender, points: context.playerView.view[0].data});
+                    
+                    const phaseEnd = gameState.storyPoints.length === players.length;
+                    if (phaseEnd) {
+                        phaseName = "VIEW"
+                    }
+                `,
                 onTimeout: ``,
                 onPlayerJoined: ``,
                 onPlayerLeft: ``,
@@ -49,21 +49,23 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VIEW`,
                 onInitialisation: `
-                playerViews = players.map(player => ({
-                    player,
-                    view: [
-                        {
-                            type: "CARD_LIST",
-                            data: gameState.storyPoints.map(points => points.player.name + ": " + points.points)
-                        },
-                        {
-                            type: "SUBMIT_BUTTON",
-                            data: "restart"
-                        }
-                    ]
-                }));
-            `,
-                onSubmit: ``,
+                    playerViews = players.map(player => ({
+                        player,
+                        view: [
+                            {
+                                type: "CARD_LIST",
+                                data: gameState.storyPoints.map(points => points.player.name + ": " + points.points)
+                            },
+                            {
+                                type: "SUBMIT_BUTTON",
+                                data: "restart"
+                            }
+                        ]
+                    }));
+                `,
+                onSubmit: `
+                    phaseName = "VOTING"
+                `,
                 onTimeout: ``,
                 onPlayerJoined: ``,
                 onPlayerLeft: ``,

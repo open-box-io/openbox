@@ -7,7 +7,11 @@ interface CardProps {
 }
 
 const Card = ({ component }: CardProps): JSX.Element => {
-    return <div className={styles.card}>{component.data}</div>;
+    return (
+        <div className={styles.card}>
+            <div>{component.data}</div>
+        </div>
+    );
 };
 
 export default Card;
