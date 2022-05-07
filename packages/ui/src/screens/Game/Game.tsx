@@ -41,40 +41,54 @@ const Game = ({
 
     const isHost = player && lobby && player._id === lobby.host._id;
 
-    const onPropChange = (index: number) => (prop: Component) => {
-        if (prop.type === ComponentTypes.SUBMIT_BUTTON) {
-            const headers = getHeaders();
+    const onPropSubmit = (index: number) => (prop: Component) => {
+        const newProps = [...viewProps];
+        newProps[index] = prop;
 
-            webSocket?.send(
-                JSON.stringify({
-                    lobbyId: headers.lobbyId,
-                    playerId: headers.playerId,
-                    secret: headers.secret,
-                    recipientId: lobby.host._id,
-                    message: {
-                        action: {
-                            type: WebsocketActionType.GAME_SUBMIT,
-                        },
-                        playerView,
+        setViewProps(newProps);
+
+        const headers = getHeaders();
+
+        webSocket?.send(
+            JSON.stringify({
+                lobbyId: headers.lobbyId,
+                playerId: headers.playerId,
+                secret: headers.secret,
+                recipientId: lobby.host._id,
+                message: {
+                    action: {
+                        type: WebsocketActionType.GAME_SUBMIT,
                     },
-                }),
-            );
-        } else {
-            setViewProps((viewProps) => {
-                viewProps[index] = prop;
-                return viewProps;
-            });
-        }
+                    component: index,
+                    playerView: {
+                        ...playerView,
+                        view: newProps,
+                    },
+                },
+            }),
+        );
     };
 
-    const view = viewProps.map((prop, index) =>
-        GameComponents[prop.type]({
-            component: prop as any,
-            onChange: onPropChange(index),
-        }),
-    );
+    const onPropChange = (index: number) => (prop: Component) => {
+        setViewProps((viewProps) => {
+            const newProps = [...viewProps];
+            newProps[index] = prop;
 
-    return <section className={styles.game}>{view}</section>;
+            return newProps;
+        });
+    };
+
+    return (
+        <section className={styles.game}>
+            {viewProps.map((prop, index) =>
+                GameComponents[prop.type]({
+                    component: prop as any,
+                    onChange: onPropChange(index),
+                    onSubmit: onPropSubmit(index),
+                }),
+            )}
+        </section>
+    );
 };
 
 export default Game;

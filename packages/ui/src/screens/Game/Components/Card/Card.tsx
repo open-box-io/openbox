@@ -1,15 +1,32 @@
-import { CardComponent } from '@openbox/common';
+import { CardComponent, Component } from '@openbox/common';
+
 import React from 'react';
+import { cssCombine } from '../../../../shared/SCSS/scssHelpers';
 import styles from './card.module.scss';
 
 interface CardProps {
     component: CardComponent;
+    onSubmit: (prop: Component) => void;
 }
 
-const Card = ({ component }: CardProps): JSX.Element => {
+const Card = ({ component, onSubmit }: CardProps): JSX.Element => {
     return (
-        <div className={styles.card}>
-            <div>{component.data}</div>
+        <div
+            className={cssCombine(
+                styles.card,
+                component.data.selected && styles.selected,
+            )}
+            onClick={() => {
+                onSubmit({
+                    ...component,
+                    data: {
+                        ...component.data,
+                        selected: !component.data.selected,
+                    },
+                });
+            }}
+        >
+            <div className={styles.content}>{component.data.text}</div>
         </div>
     );
 };

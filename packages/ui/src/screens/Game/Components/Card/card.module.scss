@@ -3,12 +3,24 @@
 .card {
     background-color: $Second-BackgroundColor;
     border-radius: 10px;
-    width: 70px;
-    height: 100px;
+    min-width: 70px;
+    min-height: 100px;
     
     margin: 10px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    white-space: pre-line;
+}
+
+.selected {
+    margin: 7px;
+    border: 3px solid $Selected-Color
+}
+
+.content {
+    margin: 10px;
+    text-align: center;
 }

@@ -18,11 +18,10 @@ export const reportGameError = (
     node: Node,
     ...variables: { [key: string]: unknown }[]
 ): void => {
-    console.log(
-        `GAME ERROR: ${message}.\nVariables: ${JSON.stringify(
-            variables,
-        )}\nNode: ${JSON.stringify(node)}`,
-    );
+    console.log(`GAME ERROR: ${message}.`, {
+        Variables: variables,
+        Node: node,
+    });
 };
 
 export const getIdentiferName: NodeParser = (node, ...variables) => {
@@ -39,9 +38,16 @@ export const getIdentiferName: NodeParser = (node, ...variables) => {
     return parseNode(node, ...variables);
 };
 
-export const getIdentifierContext: NodeParser = (node, ...variables) => {
+export const getIdentifierContext = (
+    variableName: string,
+    node: Node,
+    ...variables: { [key: string]: unknown }[]
+): any => {
     if (node.type == `Identifier`) {
-        return variables[0];
+        const variableGroup = variables.find(
+            (variableGroup) => variableGroup[variableName] !== undefined,
+        );
+        return variableGroup || variables[variables.length - 1];
     }
 
     if (node.type == `MemberExpression`) {
@@ -88,3 +94,12 @@ export const programNode = (
 
     return programVariables;
 };
+
+export class ReturnException extends Error {
+    value: unknown;
+
+    constructor(value: unknown) {
+        super();
+        this.value = value;
+    }
+}

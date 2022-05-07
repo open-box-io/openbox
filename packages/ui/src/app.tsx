@@ -61,7 +61,8 @@ const App = (): JSX.Element => {
         (event: MessageEvent<string>) => {
             const data: WebsocketMessage = JSON.parse(event.data);
 
-            console.log(`WEBSOCKET - Recieved: `, event);
+            console.log(`WEBSOCKET - Recieved: `, data);
+            if (data.message === `Internal server error`) return;
 
             switch (data.action.type) {
             case WebsocketActionType.PLAYER_LEFT:

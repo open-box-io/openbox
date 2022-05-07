@@ -46,9 +46,11 @@ export class GameInstance {
 
     execute(
         players: PlayerResponse[],
-        code: string,
+        phaseCode: string,
         context?: WebsocketMessage,
     ): void {
+        const code = this.gamemode.sharedCode + phaseCode;
+
         console.log(`GAME CONTROLLER - Executing game code`, {
             phaseName: this.phaseName,
             gameState: this.gameState,
@@ -61,13 +63,14 @@ export class GameInstance {
         });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result: InterpreterOutput = interpret(
+        const result: InterpreterOutput | undefined = interpret(
             code,
             players,
             this.gameState,
             this.phaseName,
             context,
         );
+        if (!result) return;
 
         console.log(`GAME CONTROLLER - Execution result`, { result: result });
 

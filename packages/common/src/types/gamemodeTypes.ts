@@ -27,6 +27,7 @@ export class GamemodeVersion {
     @prop() initialPhaseName: string;
     @prop() initialGameState?: string;
 
+    @prop() sharedCode?: string;
     @prop() phases: Phase[];
 }
 
