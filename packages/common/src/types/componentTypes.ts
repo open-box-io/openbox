@@ -11,6 +11,7 @@ export class Component {
     type: ComponentTypes;
 
     data?: unknown;
+    settings?: unknown;
 }
 
 export class SubmitButtonComponent extends Component {
@@ -28,13 +29,22 @@ export class TextBoxComponent extends Component {
 export class CardComponent extends Component {
     type = ComponentTypes.CARD;
 
-    data?: string;
+    data: {
+        text: string;
+        selected?: boolean;
+    };
 }
 
 export class CardListComponent extends Component {
     type = ComponentTypes.CARD_LIST;
 
-    data?: string[];
+    data: {
+        text: string;
+        selected?: boolean;
+    }[];
+    settings?: {
+        maxSelectable?: number;
+    };
 }
 
 export class PlayerView {

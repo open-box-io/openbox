@@ -5,6 +5,7 @@ import {
     getVariable,
     parseNode,
     reportGameError,
+    ReturnException,
 } from './helpers';
 
 export interface Node {
@@ -60,7 +61,9 @@ const ArrowFunctionExpression: NodeParser = (node, ...variables) => {
             params[paramName] = args[i];
         });
 
-        return parseNode(<Node>node.body, params, ...variables);
+        const value = parseNode(<Node>node.body, params, ...variables);
+
+        return value;
     };
 
     return fn;
@@ -68,8 +71,8 @@ const ArrowFunctionExpression: NodeParser = (node, ...variables) => {
 
 const AssignmentExpression: NodeParser = (node, ...variables) => {
     const operator = node.operator;
-    const leftContext = getIdentifierContext(node.left, ...variables);
     const left = getIdentiferName(node.left, ...variables);
+    const leftContext = getIdentifierContext(left, node.left, ...variables);
     const right = parseNode(node.right, ...variables);
 
     switch (operator) {
@@ -137,9 +140,19 @@ const BinaryExpression: NodeParser = (node, ...variables) => {
 };
 
 const BlockStatement: NodeParser = (node, ...variables) => {
-    (node.body as Node[]).forEach((statement) =>
-        parseNode(statement, ...variables),
-    );
+    const body = node.body as Node[];
+
+    for (let i = 0; i < body.length; i++) {
+        const statement = body[i];
+
+        try {
+            parseNode(statement, ...variables);
+        } catch (err) {
+            if (err instanceof ReturnException) {
+                return err.value;
+            }
+        }
+    }
 };
 
 const CallExpression: NodeParser = (node, ...variables) => {
@@ -247,6 +260,12 @@ const Property: NodeParser = (node, ...variables) => ({
     ),
 });
 
+const ReturnStatement: NodeParser = (node, ...variables) => {
+    const returnValue = parseNode(node.argument, ...variables);
+
+    throw new ReturnException(returnValue);
+};
+
 const UnaryExpression: NodeParser = (node, ...variables) => {
     const { operator } = node;
     const argument = parseNode(node.argument, ...variables);
@@ -293,6 +312,7 @@ export const nodeParsers: { [key: string]: NodeParser } = {
     MemberExpression,
     ObjectExpression,
     Property,
+    ReturnStatement,
     UnaryExpression,
     VariableDeclaration,
     VariableDeclarator,

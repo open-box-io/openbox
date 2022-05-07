@@ -6,15 +6,15 @@ import styles from './submitButton.module.scss';
 
 interface SubmitButtonProps {
     component: TextBoxComponent;
-    onChange: (prop: Component) => void;
+    onSubmit: (prop: Component) => void;
 }
 
 const SubmitButton = ({
     component,
-    onChange,
+    onSubmit,
 }: SubmitButtonProps): JSX.Element => {
     return (
-        <Button onClick={() => onChange(component)}>
+        <Button onClick={() => onSubmit(component)}>
             {component.data || `Submit`}
         </Button>
     );

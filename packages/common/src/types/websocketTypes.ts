@@ -26,9 +26,12 @@ export class WebsocketAction {
     type: WebsocketActionType;
     sender: PlayerResponse;
     player?: PlayerResponse;
+    component?: number;
 }
 
 export class WebsocketMessage {
+    message?: string; //returned if there is an error
+
     action: WebsocketAction;
     lobby?: LobbyResponse;
     playerView?: PlayerView;

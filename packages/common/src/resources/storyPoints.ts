@@ -12,34 +12,69 @@ export const TEST_STORY_POINTS: Gamemode = {
         initialPhaseName: `VOTING`,
         initialGameState: ``,
 
+        sharedCode: `
+            const options = ["hidden", 1, 2, 3, 5, 8, 13];
+
+            const recalculateAllViews = (voting) => {
+                playerViews = players.map(player => ({
+                    player,
+                    view: [
+                        {
+                            type: "CARD_LIST",
+                            data: gameState.storyPoints
+                                .filter(points => points.points !== "hidden")
+                                .map(points => ({
+                                    text: (voting? "?": points.points) + "\\n" + points.player.name,
+                                    selected: !points.points
+                                }))
+                        },
+                        {
+                            type: "CARD_LIST",
+                            data: options.map(option => {
+                                const points = gameState.storyPoints.find(points => points.player._id === player._id)
+                                const isSelected = points && points.points === option
+
+                                return {
+                                    text: option,
+                                    selected: isSelected,
+                                }
+                            }),
+                            settings: {
+                                maxSelectable: 1
+                            }
+                        },
+                        {
+                            type: "SUBMIT_BUTTON",
+                            data: "view"
+                        }
+                    ]
+                }));
+            }
+        `,
+
         phases: [
             {
                 phaseName: `VOTING`,
                 onInitialisation: `
-                    gameState.storyPoints = []
-                    
-                    playerViews = [];
-                    players.forEach(player => {
-                        playerViews.push({
-                            player,
-                            view: [
-                                {
-                                    type: "TEXT_BOX"
-                                },
-                                {
-                                    type: "SUBMIT_BUTTON"
-                                }
-                            ]
-                        })
-                    });
+                    gameState.storyPoints = players.map(player => ({
+                        player
+                    }))
+
+                    recalculateAllViews(true);
                 `,
                 onSubmit: `
-                    gameState.storyPoints = gameState.storyPoints.filter(points => points.playerId !== context.playerView.player._id);
-                    gameState.storyPoints.push({player: context.action.sender, points: context.playerView.view[0].data});
-                    
-                    const phaseEnd = gameState.storyPoints.length === players.length;
-                    if (phaseEnd) {
+                    if (context.component === 2) {
                         phaseName = "VIEW"
+                    } else {
+                        gameState.storyPoints = gameState.storyPoints.filter(points => points.player._id !== context.playerView.player._id);
+                    
+                        const newPoints = context.playerView.view[1].data.find(card => card.selected);
+
+                        if (newPoints) {
+                            gameState.storyPoints.push({player: context.action.sender, points: newPoints.text});
+                        }
+
+                        recalculateAllViews(true);
                     }
                 `,
                 onTimeout: ``,
@@ -49,22 +84,22 @@ export const TEST_STORY_POINTS: Gamemode = {
             {
                 phaseName: `VIEW`,
                 onInitialisation: `
-                    playerViews = players.map(player => ({
-                        player,
-                        view: [
-                            {
-                                type: "CARD_LIST",
-                                data: gameState.storyPoints.map(points => points.player.name + ": " + points.points)
-                            },
-                            {
-                                type: "SUBMIT_BUTTON",
-                                data: "restart"
-                            }
-                        ]
-                    }));
+                    recalculateAllViews(false);
                 `,
                 onSubmit: `
-                    phaseName = "VOTING"
+                    if (context.component === 2) {
+                        phaseName = "VOTING"
+                    } else {
+                        gameState.storyPoints = gameState.storyPoints.filter(points => points.player._id !== context.playerView.player._id);
+                    
+                        const newPoints = context.playerView.view[1].data.find(card => card.selected);
+
+                        if (newPoints) {
+                            gameState.storyPoints.push({player: context.action.sender, points: newPoints.text});
+                        }
+                        
+                        recalculateAllViews(false);
+                    }
                 `,
                 onTimeout: ``,
                 onPlayerJoined: ``,

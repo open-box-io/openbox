@@ -24,7 +24,10 @@ export const IconLogoBackdrop = (props: LogoProps): JSX.Element => {
 
     return (
         <svg
-            className={cssCombine(...styleArray)}
+            className={cssCombine(
+                styles.OpenBoxIcon,
+                props.modal && styles.Modal,
+            )}
             viewBox="0 0 683 596"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
