@@ -45,7 +45,7 @@ export const TEST_STORY_POINTS: Gamemode = {
                         },
                         {
                             type: "SUBMIT_BUTTON",
-                            data: "view"
+                            data: voting? "view": "restart"
                         }
                     ]
                 }));
