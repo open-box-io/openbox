@@ -11,6 +11,14 @@ export interface InterpreterOutput {
     phaseName: string;
 }
 
+export enum ACTION {
+    ON_INITIALISATION = `onInitialisation`,
+    ON_SUBMIT = `onSubmit`,
+    ON_TIMEOUT = `onTimeout`,
+    ON_PLAYER_JOINED = `onPlayerJoined`,
+    ON_PLAYER_LEFT = `onPlayerLeft`,
+}
+
 export class GameInstance {
     onPlayerViewsChanged: (playerViews: PlayerView[]) => void;
 
@@ -47,9 +55,12 @@ export class GameInstance {
     execute(
         players: PlayerResponse[],
         phaseCode: string,
+        action: ACTION,
         context?: WebsocketMessage,
     ): void {
-        const code = this.gamemode.sharedCode + phaseCode;
+        const code = `${this.gamemode.sharedCode}
+            ${phaseCode}
+            ${action}()`;
 
         console.log(`GAME CONTROLLER - Executing game code`, {
             phaseName: this.phaseName,
@@ -112,26 +123,26 @@ export class GameInstance {
         console.log(`GAME CONTROLLER - New phase`, { newPhase });
         this.phaseName = newPhaseName;
 
-        this.execute(players, newPhase.onInitialisation);
+        this.execute(players, newPhase.code, ACTION.ON_INITIALISATION);
     }
 
     submit(players: PlayerResponse[], message: WebsocketMessage): void {
         console.log(`GAME CONTROLLER - Player submitted`, { message });
-        const code = this.getCurrentPhase()?.onSubmit || ``;
+        const code = this.getCurrentPhase()?.code || ``;
 
-        this.execute(players, code, message);
+        this.execute(players, code, ACTION.ON_SUBMIT, message);
     }
 
     playerJoined(players: PlayerResponse[], message: WebsocketMessage): void {
-        const code = this.getCurrentPhase()?.onPlayerJoined || ``;
+        const code = this.getCurrentPhase()?.code || ``;
 
-        this.execute(players, code, message);
+        this.execute(players, code, ACTION.ON_PLAYER_JOINED, message);
     }
 
     playerLeft(players: PlayerResponse[], message: WebsocketMessage): void {
-        const code = this.getCurrentPhase()?.onPlayerLeft || ``;
+        const code = this.getCurrentPhase()?.code || ``;
 
-        this.execute(players, code, message);
+        this.execute(players, code, ACTION.ON_PLAYER_LEFT, message);
     }
 
     request(message: WebsocketMessage): void {

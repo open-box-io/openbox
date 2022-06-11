@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-const instance = axios.create({
+export const openbox = axios.create({
     baseURL: `https://api.open-box.io`,
 });
 
-export default instance;
+export const githubRaw = axios.create({
+    baseURL: `https://raw.githubusercontent.com`,
+});
+
+export const githubApi = axios.create({
+    baseURL: `https://api.github.com`,
+});

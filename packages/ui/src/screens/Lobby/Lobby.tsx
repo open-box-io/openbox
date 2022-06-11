@@ -10,7 +10,7 @@ import { PlayerView } from '@openbox/common/src/types/componentTypes';
 import Players from '../../components/widgets/Players/Players';
 import React from 'react';
 import RoomCode from '../../components/UI/RoomCode/RoomCode';
-import { TEST_STORY_POINTS } from '@openbox/common/src/resources/storyPoints';
+import { getGamemode } from '../../api/game';
 import styles from './lobby.module.scss';
 import { useParams } from 'react-router-dom';
 
@@ -37,12 +37,16 @@ const Lobby = ({
 
     const isHost = player && lobby && player._id === lobby.host._id;
 
-    const onGameStart = () => {
+    const onGameStart = async () => {
         lobby
             && setGame(
                 new GameInstance(
                     lobby.players,
-                    TEST_STORY_POINTS.latestVersion,
+                    await getGamemode(
+                        `open-box-io`,
+                        `story-points`,
+                        `d591ad5b081b9f5dcf4e70a4b540e98d771e0806`,
+                    ),
                     onPlayerViewsChanged,
                 ),
             );

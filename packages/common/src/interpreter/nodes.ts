@@ -20,6 +20,7 @@ export interface Node {
     declarations: Node[];
     elements: Node[];
     expression: Node;
+    expressions: Node[];
     id: Node;
     init: Node;
     key: Node;
@@ -32,9 +33,10 @@ export interface Node {
     prefix: boolean;
     properties: Node[];
     property: Node;
+    quasis: Node[];
     right: Node;
     test: Node;
-    value: string | number | boolean | Node;
+    value: string | number | boolean | Node | { raw: string; cooked: string };
 }
 
 export type NodeParser = (
@@ -266,6 +268,21 @@ const ReturnStatement: NodeParser = (node, ...variables) => {
     throw new ReturnException(returnValue);
 };
 
+const TemplateElement: NodeParser = (node, ...variables) =>
+    (<{ raw: string; cooked: string }>node.value).cooked;
+
+const TemplateLiteral: NodeParser = (node, ...variables) => {
+    let str = ``;
+
+    for (let i = 0; i < node.expressions.length; i++) {
+        str += parseNode(node.quasis[i], ...variables);
+        str += parseNode(node.expressions[i], ...variables);
+    }
+    str += parseNode(node.quasis[node.quasis.length - 1], ...variables);
+
+    return str;
+};
+
 const UnaryExpression: NodeParser = (node, ...variables) => {
     const { operator } = node;
     const argument = parseNode(node.argument, ...variables);
@@ -313,6 +330,8 @@ export const nodeParsers: { [key: string]: NodeParser } = {
     ObjectExpression,
     Property,
     ReturnStatement,
+    TemplateElement,
+    TemplateLiteral,
     UnaryExpression,
     VariableDeclaration,
     VariableDeclarator,

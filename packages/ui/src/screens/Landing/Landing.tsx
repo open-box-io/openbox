@@ -1,9 +1,9 @@
+import Button, { BUTTON_STYLE } from '../../components/UI/Button/Button';
 import React, { useCallback, useContext, useState } from 'react';
 
 import AccountButton from '../../components/widgets/AccountButton/AccountButton';
 import { AuthContext } from '../../auth/authContext';
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
-import Button, { BUTTON_STYLE } from '../../components/UI/Button/Button';
 import Connect from '../../components/widgets/Connect/Connect';
 import { JoinLobbyAPIResponse } from '@openbox/common';
 import Modal from '../../components/UI/Modal/Modal';
