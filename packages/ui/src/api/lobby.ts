@@ -1,8 +1,8 @@
 import { getHeaders, setHeaders } from '../store/store';
 
 import { JoinLobbyAPIResponse } from '@openbox/common';
-import axios from '../shared/axios';
 import { getSession } from '../auth/cognito';
+import { openbox } from '../shared/axios';
 
 export const createLobby = async (
     playerName: string,
@@ -16,7 +16,7 @@ export const createLobby = async (
                 },
             };
 
-            axios
+            openbox
                 .post<JoinLobbyAPIResponse>(`/lobby`, { playerName }, config)
                 .then((response) => {
                     setHeaders({
@@ -44,7 +44,7 @@ export const joinLobby = async (
             },
         };
 
-        axios
+        openbox
             .put<JoinLobbyAPIResponse>(`lobby/players`, { playerName }, config)
             .then((response) => {
                 setHeaders({
@@ -61,7 +61,7 @@ export const joinLobby = async (
 export const removePlayer = async (playerId: string): Promise<void> => {
     const headers = getHeaders();
 
-    await axios.delete<void>(`/lobby/players`, {
+    await openbox.delete<void>(`/lobby/players`, {
         headers: headers,
         data: { playerId },
     });
