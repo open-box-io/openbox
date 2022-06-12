@@ -4,6 +4,7 @@ import {
 } from '@openbox/common';
 import {
     formatGamemodeResponse,
+    getGamemodeById,
     searchGamemode,
 } from '../../../helpers/gamemode';
 
@@ -22,11 +23,16 @@ export const getSearchGamemode = async (
             location: RequestDataLocation.HEADERS,
             name: `searchText`,
             type: `string`,
-            required: true,
         },
     ]);
 
-    const gamemodes = await searchGamemode(searchText);
+    let gamemodes;
+
+    if (searchText) {
+        gamemodes = await searchGamemode(searchText);
+    } else {
+        gamemodes = [await getGamemodeById(`STORY_POINTS`)];
+    }
 
     console.log({ gamemodes });
 
