@@ -1,6 +1,6 @@
-import { GamemodeDetailsResponse, GamemodeResponse } from './gamemodeTypes';
 import { PlayerResponse, PlayerSecretResponse } from './playerTypes';
 
+import { GamemodeResponse } from './gamemodeTypes';
 import { LobbyResponse } from './lobbyTypes';
 import { PlayerView } from './componentTypes';
 
@@ -9,7 +9,7 @@ export interface GameAPIResponse {
 }
 
 export interface GamemodeAPIResponse {
-    gamemode: GamemodeDetailsResponse;
+    gamemode: GamemodeResponse;
 }
 
 export interface GamemodeSearchAPIResponse {

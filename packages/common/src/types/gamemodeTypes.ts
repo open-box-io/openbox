@@ -12,39 +12,46 @@ export class GamemodeScreen {
 }
 
 export class Phase {
-    @prop() phaseName: string;
+    phaseName: string;
 
-    @prop() code: string;
+    code: string;
 }
 
 export class GamemodeVersion {
-    @prop() initialPhaseName: string;
-    @prop() initialGameState?: string;
+    initialPhaseName: string;
+    initialGameState?: string;
 
-    @prop() sharedCode?: string;
-    @prop() phases: Phase[];
+    sharedCode?: string;
+    phases: Phase[];
 }
 
 export class Gamemode {
-    @prop() _id?: string;
-    @prop() name: string;
-    @prop() author: User;
+    details: GamemodeDetails;
 
-    @prop() latestApprovedVersion?: GamemodeVersion;
-    @prop() latestVersion: GamemodeVersion;
+    gamemode: GamemodeVersion;
+}
+
+export class GamemodeDetails {
+    @prop() _id?: string;
+
+    @prop() name: string;
+    @prop() description: string;
+    @prop() author: string;
+
+    @prop() githubUser: string;
+    @prop() githubRepo: string;
+
+    @prop() approvedVersion?: string;
 }
 
 export class GamemodeResponse {
     _id: string;
     name: string;
-    author: User;
-}
-
-export class GamemodeDetailsResponse {
-    _id: string;
-    name: string;
+    description: string;
     author: User;
 
-    latestApprovedVersion?: GamemodeVersion;
-    latestVersion: GamemodeVersion;
+    githubUser: string;
+    githubRepo: string;
+
+    approvedVersion?: string;
 }

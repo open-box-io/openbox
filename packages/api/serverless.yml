@@ -16,8 +16,10 @@ provider:
           Action:
               - 'execute-api:ManageConnections'
               - 'execute-api:Invoke'
+              - 'cognito-idp:ListUsers'
           Resource:
               - 'arn:aws:execute-api:*:*:**/@connections/*'
+              - 'arn:aws:cognito-idp:eu-central-1:462429920269:userpool/eu-central-1_aTUl5v60U'
 
 resources:
     Resources:
@@ -42,6 +44,13 @@ functions:
             - http: OPTIONS /gamemode
             - http:
                   method: POST
+                  path: /gamemode
+                  authorizer:
+                      type: COGNITO_USER_POOLS
+                      authorizerId:
+                          Ref: ApiGatewayAuthorizer
+            - http:
+                  method: PUT
                   path: /gamemode
                   authorizer:
                       type: COGNITO_USER_POOLS

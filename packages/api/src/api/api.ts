@@ -13,7 +13,8 @@ import { putLobbyPlayers } from './lobby/players/PUT';
 import { postGamemode } from './gamemode/POST';
 import { deleteGamemode } from './gamemode/DELETE';
 import { getGamemode } from './gamemode/GET';
-import { searchGamemode } from './gamemode/search/GET';
+import { getSearchGamemode } from './gamemode/search/GET';
+import { putGamemode } from './gamemode/PUT';
 
 const app = express();
 
@@ -113,6 +114,15 @@ app.post(
     },
 );
 
+app.put(
+    `/gamemode`,
+    cors(corsOptionsDelegate),
+    jsonParser,
+    (request, response) => {
+        apiResponseWrapper(request, response, putGamemode);
+    },
+);
+
 app.delete(
     `/gamemode`,
     cors(corsOptionsDelegate),
@@ -129,7 +139,7 @@ app.get(
     cors(corsOptionsDelegate),
     jsonParser,
     (request, response) => {
-        apiResponseWrapper(request, response, searchGamemode);
+        apiResponseWrapper(request, response, getSearchGamemode);
     },
 );
 

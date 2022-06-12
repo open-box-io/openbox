@@ -10,6 +10,7 @@ export {
 export {
     GameAPIResponse,
     GamemodeAPIResponse,
+    GamemodeSearchAPIResponse,
     JoinLobbyAPIResponse,
     LobbyAPIResponse,
     LobbyHostAPIResponse,
@@ -19,9 +20,11 @@ export {
 } from './types/endpointTypes';
 export {
     Gamemode,
+    GamemodeDetails,
     GamemodeResponse,
     GamemodeScreen,
     GamemodeVersion,
+    GameVerificationState,
     Phase,
 } from './types/gamemodeTypes';
 export { Lobby, LobbyResponse } from './types/lobbyTypes';
