@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import {
     WebsocketActionType,
     WebsocketMessage,
 } from '@openbox/common/src/types/websocketTypes';
-import { createLobby, joinLobby } from './api/lobby';
+import { createLobby, getLobby, joinLobby } from './api/lobby';
 
 import AuthProvider from './auth/authContext';
 import Game from './screens/Game/Game';
@@ -21,10 +21,12 @@ import { getHeaders } from './store/store';
 import styles from './app.module.scss';
 
 const App = (): JSX.Element => {
+    const history = useHistory();
+
     const [webSocket, setWebSocket] = useState<WebSocket>();
 
     const [lobby, setLobby] = useState<LobbyResponse>();
-    const [player, setPlayer] = useState<PlayerResponse>();
+    const [player, setPlayer] = useState<PlayerResponse | undefined>();
     const [game, setGame] = useState<GameInstance>();
 
     const [playerView, setPlayerView] = useState<PlayerView>();
@@ -69,6 +71,15 @@ const App = (): JSX.Element => {
             case WebsocketActionType.PLAYER_REMOVED:
                 // game?.playerLeft(lobby?.players || [], data);
                 setLobby(data.lobby);
+                if (data.action.player?._id === player?._id) {
+                    setWebSocket(undefined);
+                    setLobby(undefined);
+                    setPlayer(undefined);
+                    setGame(undefined);
+                    setPlayerView(undefined);
+
+                    history.push(``);
+                }
                 break;
 
             case WebsocketActionType.PLAYER_JOINED:
@@ -127,6 +138,22 @@ const App = (): JSX.Element => {
         [connectToWebSocket],
     );
 
+    const reconnect = useCallback(
+        async (playerId: string, lobbyId: string): Promise<void> => {
+            getLobby(lobbyId).then((response) => {
+                setPlayer({
+                    _id: playerId,
+                    name:
+                        response.lobby.players.find((p) => p._id === playerId)
+                            ?.name || ``,
+                });
+
+                setLobby(response.lobby);
+            });
+        },
+        [],
+    );
+
     return (
         <>
             <div className={styles.App}>
@@ -152,6 +179,7 @@ const App = (): JSX.Element => {
                                     <Lobby
                                         {...props}
                                         connect={connect}
+                                        reconnect={reconnect}
                                         lobby={lobby as LobbyResponse}
                                         player={player as PlayerResponse}
                                         setGame={setGame}

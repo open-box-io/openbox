@@ -19,9 +19,9 @@ import { getRequestData } from '../../../helpers/requestValidation';
 export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
     console.log(`DELETE /lobby/players`, request);
 
-    const { playerId, playerSecret, lobbyId, targetPlayerId } = getRequestData<{
+    const { playerId, secret, lobbyId, targetPlayerId } = getRequestData<{
         playerId: string;
-        playerSecret: string;
+        secret: string;
         lobbyId: string;
         targetPlayerId: string;
     }>(request, [
@@ -33,7 +33,7 @@ export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
         },
         {
             location: RequestDataLocation.HEADERS,
-            name: `playerSecret`,
+            name: `secret`,
             type: `string`,
             required: true,
         },
@@ -51,7 +51,7 @@ export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
         },
     ]);
 
-    console.log({ playerId, playerSecret, targetPlayerId, lobbyId });
+    console.log({ playerId, secret, targetPlayerId, lobbyId });
 
     const lobby = await getLobbyById(lobbyId);
     const player = getPlayer(lobby, playerId);
@@ -59,7 +59,7 @@ export const deleteLobbyPlayers = async (request: Request): Promise<void> => {
 
     console.log({ lobby, player, targetPlayer });
 
-    verifyPlayer(player, playerSecret);
+    verifyPlayer(player, secret);
     if (player._id !== targetPlayer._id) {
         verifyPlayerHost(lobby, player);
     }

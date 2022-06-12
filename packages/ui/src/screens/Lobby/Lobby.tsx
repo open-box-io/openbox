@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
 import Connect from '../../components/widgets/Connect/Connect';
 import { GameInstance } from '@openbox/common/src/interpreter/game';
@@ -9,8 +11,9 @@ import Modal from '../../components/UI/Modal/Modal';
 import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import { PlayerView } from '@openbox/common/src/types/componentTypes';
 import Players from '../../components/widgets/Players/Players';
-import React from 'react';
 import RoomCode from '../../components/UI/RoomCode/RoomCode';
+import Throbber from '../../components/UI/Throbber/Throbber';
+import { getHeaders } from '../../store/store';
 import styles from './lobby.module.scss';
 import { useParams } from 'react-router-dom';
 
@@ -19,6 +22,7 @@ interface LobbyProps {
     player: PlayerResponse;
     setGame: (game: GameInstance) => void;
     connect: (player: string, lobby: string) => Promise<JoinLobbyAPIResponse>;
+    reconnect: (player: string, lobby: string) => Promise<void>;
     onPlayerViewsChanged: (playerViews: PlayerView[]) => void;
 }
 
@@ -31,9 +35,23 @@ const Lobby = ({
     player,
     setGame,
     connect,
+    reconnect,
     onPlayerViewsChanged,
 }: LobbyProps): JSX.Element => {
     const { id } = useParams<LobbyParams>(); // Lobby id from URL params.
+    const [connecting, setConnecting] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (lobby || player) return;
+
+        const headers = getHeaders();
+        if (!headers.playerId) return;
+        if (!headers.lobbyId) return;
+        if (headers.lobbyId !== id) return;
+
+        setConnecting(true);
+        reconnect(headers.playerId, id);
+    }, [id, lobby, player, reconnect]);
 
     const isHost = player && lobby && player._id === lobby.host._id;
 
@@ -57,11 +75,15 @@ const Lobby = ({
             {lobby || player ? null : (
                 <>
                     <Modal>
-                        <Connect
-                            lobbyIdentifier={id}
-                            connectionType={`join`}
-                            connect={connect}
-                        ></Connect>
+                        {connecting ? (
+                            <Throbber />
+                        ) : (
+                            <Connect
+                                lobbyIdentifier={id}
+                                connectionType={`join`}
+                                connect={connect}
+                            />
+                        )}
                     </Modal>
                     <Backdrop />
                 </>

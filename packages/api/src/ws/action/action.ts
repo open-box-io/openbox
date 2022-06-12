@@ -13,13 +13,7 @@ export const action = async (event: any): Promise<void> => {
     event.body = JSON.parse(event.body);
     console.log(`ACTION`, event);
 
-    const {
-        lobbyId,
-        playerId,
-        secret: playerSecret,
-        recipientId,
-        message,
-    } = getRequestData<{
+    const { lobbyId, playerId, secret, recipientId, message } = getRequestData<{
         lobbyId: string;
         playerId: string;
         secret: string;
@@ -58,14 +52,14 @@ export const action = async (event: any): Promise<void> => {
         },
     ]);
 
-    console.log({ lobbyId, playerId, playerSecret, recipientId, message });
+    console.log({ lobbyId, playerId, secret, recipientId, message });
 
     const lobby = await getLobbyById(lobbyId);
     const player = getPlayer(lobby, playerId);
 
     console.log({ lobby, player });
 
-    verifyPlayer(player, playerSecret);
+    verifyPlayer(player, secret);
 
     message.action.sender = formatPlayerResponse(player);
 

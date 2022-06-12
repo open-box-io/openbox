@@ -17,9 +17,9 @@ import { sendToLobby } from '../../helpers/websocket';
 export const deleteLobby = async (request: Request): Promise<void> => {
     console.log(`DELETE /lobby`, request);
 
-    const { playerId, playerSecret, lobbyId } = getRequestData<{
+    const { playerId, secret, lobbyId } = getRequestData<{
         playerId: string;
-        playerSecret: string;
+        secret: string;
         lobbyId: string;
     }>(request, [
         {
@@ -30,7 +30,7 @@ export const deleteLobby = async (request: Request): Promise<void> => {
         },
         {
             location: RequestDataLocation.HEADERS,
-            name: `playerSecret`,
+            name: `secret`,
             type: `string`,
             required: true,
         },
@@ -42,14 +42,14 @@ export const deleteLobby = async (request: Request): Promise<void> => {
         },
     ]);
 
-    console.log({ playerId, playerSecret, lobbyId });
+    console.log({ playerId, secret, lobbyId });
 
     const lobby = await getLobbyById(lobbyId);
     const player = getPlayer(lobby, playerId);
 
     console.log({ lobby, player });
 
-    verifyPlayer(player, playerSecret);
+    verifyPlayer(player, secret);
     verifyPlayerHost(lobby, player);
 
     await deleteLobbyFunction(lobby);
