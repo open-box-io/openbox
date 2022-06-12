@@ -50,7 +50,7 @@ function GamemodeDetailsView({
             selectedResourceName,
         ).then((response) => {
             setSelectedResource(response);
-            console.log(response);
+            x;
         });
     }, [game, selectedResourceName]);
 
@@ -77,7 +77,6 @@ function GamemodeDetailsView({
                         name="Resource"
                         onChange={(event) => {
                             setSelectedResourceName(event.target.value);
-                            console.log(event.target.value);
                         }}
                     >
                         {resourceNames.map((resource) => (
@@ -89,7 +88,6 @@ function GamemodeDetailsView({
                 ) : null}
                 <Button
                     onClick={() => {
-                        console.log(`selected resource`, selectedResource);
                         onSelected(selectedResource);
                     }}
                 >
