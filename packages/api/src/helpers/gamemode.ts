@@ -1,15 +1,9 @@
-import {
-    APIError,
-    Gamemode,
-    GamemodeResponse,
-    GamemodeVersion,
-    User,
-} from '@openbox/common';
-import { GamemodeDetailsResponse } from '@openbox/common/src/types/gamemodeTypes';
+import { APIError, GamemodeDetails, GamemodeResponse } from '@openbox/common';
 
 import { gamemodeDB } from '../database/database';
+import { getUserById } from './user';
 
-export const getGamemodeById = async (id: string): Promise<Gamemode> => {
+export const getGamemodeById = async (id: string): Promise<GamemodeDetails> => {
     const gamemode = await gamemodeDB.findById(id);
 
     if (!gamemode) {
@@ -19,17 +13,36 @@ export const getGamemodeById = async (id: string): Promise<Gamemode> => {
     return gamemode;
 };
 
-export const createNewGamemode = async (
-    name: string,
-    user: User,
-    gamemodeVersion: GamemodeVersion,
-): Promise<Gamemode> => {
-    const gamemode: Gamemode = {
-        name: name,
-        author: user,
-        latestVersion: gamemodeVersion,
-    };
+export const searchGamemode = async (
+    text: string,
+): Promise<GamemodeDetails[]> => {
+    const gamemodes = await gamemodeDB.aggregate([
+        {
+            $search: {
+                index: `searchGamemodeDetails`,
+                text: {
+                    query: text,
+                    path: {
+                        wildcard: `*`,
+                    },
+                },
+            },
+        },
+        // {
+        //     $limit: 5,
+        // },
+    ]);
 
+    if (!gamemodes) {
+        throw new APIError(404, `No gamemodes found`);
+    }
+
+    return gamemodes;
+};
+
+export const createGamemode = async (
+    gamemode: GamemodeDetails,
+): Promise<GamemodeDetails> => {
     const created = await gamemodeDB.create(gamemode);
 
     if (!created) {
@@ -39,38 +52,32 @@ export const createNewGamemode = async (
     return created;
 };
 
-export const updateGamemodeLatestVersion = async (
-    gamemodeId: string,
-    gamemodeVersion: GamemodeVersion,
-): Promise<Gamemode> => {
-    const oldGamemode = await gamemodeDB.findByIdAndUpdate(gamemodeId, {
-        $push: { versions: gamemodeVersion },
+export const updateGamemode = async (
+    gamemode: Partial<GamemodeDetails>,
+): Promise<GamemodeDetails> => {
+    const created = await gamemodeDB.findByIdAndUpdate(gamemode._id, {
+        gamemode,
     });
 
-    if (!oldGamemode) {
+    if (!created) {
         throw new APIError(500, `Could not update gamemode`);
     }
 
-    return oldGamemode;
+    return created;
 };
 
 export const deleteGamemode = async (id: string): Promise<void> => {
     await gamemodeDB.findByIdAndDelete(id);
 };
 
-export const formatGamemodeResponse = (
-    gamemode: Gamemode,
-): GamemodeDetailsResponse => ({
-    ...gamemode,
-    _id: gamemode._id as string,
-});
+export const formatGamemodeResponse = async (
+    gamemode: GamemodeDetails,
+): Promise<GamemodeResponse> => {
+    const user = await getUserById(gamemode.author);
 
-export const formatGamemodeSearchResponse = (
-    gamemodes: Gamemode[],
-): GamemodeResponse[] => {
-    return gamemodes.map((gamemode) => ({
+    return {
+        ...gamemode,
+        author: user,
         _id: gamemode._id as string,
-        name: gamemode.name,
-        author: gamemode.author,
-    }));
+    };
 };

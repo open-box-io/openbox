@@ -1,16 +1,13 @@
-import {
-    APIError,
-    GamemodeDetails,
-    RequestDataLocation,
-} from '@openbox/common';
-import { getGamemodeById, updateGamemode } from '../../helpers/gamemode';
+import { GamemodeDetails, RequestDataLocation } from '@openbox/common';
 
 import { Request } from 'express';
+import { createGamemode } from '../../helpers/gamemode';
 import { getAuthorizedUserData } from '../../helpers/auth';
 import { getRequestData } from '../../helpers/requestValidation';
+import uuid from 'uuid-random';
 
-export const postGamemode = async (request: Request): Promise<void> => {
-    console.log(`POST /gamemode`, request);
+export const putGamemode = async (request: Request): Promise<void> => {
+    console.log(`PUT /gamemode`, request);
 
     const {
         authorization,
@@ -22,11 +19,11 @@ export const postGamemode = async (request: Request): Promise<void> => {
         approvedVersion,
     } = getRequestData<{
         authorization: string;
-        id: string;
-        name?: string;
-        description?: string;
-        githubUser?: string;
-        githubRepo?: string;
+        id?: string;
+        name: string;
+        description: string;
+        githubUser: string;
+        githubRepo: string;
         approvedVersion?: string;
     }>(request, [
         {
@@ -41,12 +38,12 @@ export const postGamemode = async (request: Request): Promise<void> => {
             location: RequestDataLocation.BODY,
             name: `id`,
             type: `string`,
-            required: true,
         },
         {
             location: RequestDataLocation.BODY,
             name: `name`,
             type: `string`,
+            required: true,
             minLength: 3,
             maxLength: 100,
         },
@@ -54,16 +51,19 @@ export const postGamemode = async (request: Request): Promise<void> => {
             location: RequestDataLocation.BODY,
             name: `description`,
             type: `string`,
+            required: true,
         },
         {
             location: RequestDataLocation.BODY,
             name: `githubUser`,
             type: `string`,
+            required: true,
         },
         {
             location: RequestDataLocation.BODY,
             name: `githubRepo`,
             type: `string`,
+            required: true,
         },
         {
             location: RequestDataLocation.BODY,
@@ -84,20 +84,15 @@ export const postGamemode = async (request: Request): Promise<void> => {
         approvedVersion,
     });
 
-    const gamemode = await getGamemodeById(id);
+    const gamemode: GamemodeDetails = {
+        _id: uuid(),
 
-    if (gamemode.author !== user._id) {
-        throw new APIError(403, `Only the author can edit a gamemode`);
-    }
-
-    const gamemodeUpdates: Partial<GamemodeDetails> = {
-        _id: id,
-
-        ...(name && { name }),
-        ...(description && { description }),
-        ...(githubUser && { githubUser }),
-        ...(githubRepo && { githubRepo }),
+        name: name,
+        description: description,
+        author: user._id,
+        githubUser: githubUser,
+        githubRepo: githubRepo,
     };
 
-    await updateGamemode(gamemodeUpdates);
+    await createGamemode(gamemode);
 };

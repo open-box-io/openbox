@@ -1,4 +1,4 @@
-import { APIError, Gamemode, Lobby } from '@openbox/common';
+import { APIError, GamemodeDetails, Lobby } from '@openbox/common';
 
 import dotenv from 'dotenv';
 import { getModelForClass } from '@typegoose/typegoose';
@@ -36,6 +36,6 @@ export const disconnectDB = async (): Promise<void> => {
 };
 
 export const lobbyDB = getModelForClass(Lobby);
-export const gamemodeDB = getModelForClass(Gamemode);
+export const gamemodeDB = getModelForClass(GamemodeDetails);
 
 connectDB();

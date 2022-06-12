@@ -12,24 +12,24 @@ export const getGamemode = async (
 ): Promise<GamemodeAPIResponse> => {
     console.log(`GET /gamemode`, request);
 
-    const { gamemodeId } = getRequestData<{
-        gamemodeId: string;
+    const { id } = getRequestData<{
+        id: string;
     }>(request, [
         {
             location: RequestDataLocation.HEADERS,
-            name: `gamemodeId`,
+            name: `id`,
             type: `string`,
             required: true,
         },
     ]);
 
-    console.log({ gamemodeId });
+    console.log({ id });
 
-    const gamemode = await getGamemodeById(gamemodeId);
+    const gamemode = await getGamemodeById(id);
 
     console.log({ gamemode });
 
     return {
-        gamemode: formatGamemodeResponse(gamemode),
+        gamemode: await formatGamemodeResponse(gamemode),
     };
 };
