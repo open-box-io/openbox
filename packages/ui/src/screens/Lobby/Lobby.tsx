@@ -1,7 +1,8 @@
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
-import Button from '../../components/UI/Button/Button';
 import Connect from '../../components/widgets/Connect/Connect';
 import { GameInstance } from '@openbox/common/src/interpreter/game';
+import GamePicker from '../../components/widgets/GamePicker/GamePicker';
+import { GamemodeVersion } from '@openbox/common';
 import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import Modal from '../../components/UI/Modal/Modal';
@@ -10,7 +11,6 @@ import { PlayerView } from '@openbox/common/src/types/componentTypes';
 import Players from '../../components/widgets/Players/Players';
 import React from 'react';
 import RoomCode from '../../components/UI/RoomCode/RoomCode';
-import { getGamemode } from '../../api/game';
 import styles from './lobby.module.scss';
 import { useParams } from 'react-router-dom';
 
@@ -37,16 +37,16 @@ const Lobby = ({
 
     const isHost = player && lobby && player._id === lobby.host._id;
 
-    const onGameStart = async () => {
+    const onGameStart = async (
+        gamemode: GamemodeVersion,
+        resources: string,
+    ) => {
         lobby
             && setGame(
                 new GameInstance(
                     lobby.players,
-                    await getGamemode(
-                        `open-box-io`,
-                        `story-points`,
-                        `d591ad5b081b9f5dcf4e70a4b540e98d771e0806`,
-                    ),
+                    gamemode,
+                    resources,
                     onPlayerViewsChanged,
                 ),
             );
@@ -66,17 +66,21 @@ const Lobby = ({
                     <Backdrop />
                 </>
             )}
-            <div className={styles.Lobby}>
-                {lobby ? (
-                    <Players players={lobby.players} host={lobby.host} />
-                ) : null}
-                <RoomCode lobbyId={id} />
-            </div>
-            {isHost ? (
-                <div>
-                    <Button onClick={onGameStart}>Start Game</Button>
+            <div className={styles.Content}>
+                <div className={styles.Lobby}>
+                    {lobby ? (
+                        <Players players={lobby.players} host={lobby.host} />
+                    ) : null}
+                    <RoomCode lobbyId={id} />
                 </div>
-            ) : null}
+                {isHost ? (
+                    <GamePicker
+                        selectGame={async (game, resourceName) => {
+                            await onGameStart(game, resourceName);
+                        }}
+                    />
+                ) : null}
+            </div>
             <Backdrop lobby />
         </>
     );

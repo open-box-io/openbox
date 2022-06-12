@@ -76,8 +76,15 @@ export const formatGamemodeResponse = async (
     const user = await getUserById(gamemode.author);
 
     return {
-        ...gamemode,
-        author: user,
         _id: gamemode._id as string,
+
+        name: gamemode.name,
+        description: gamemode.description,
+        author: user,
+
+        githubUser: gamemode.githubUser,
+        githubRepo: gamemode.githubRepo,
+
+        approvedVersion: gamemode.approvedVersion,
     };
 };

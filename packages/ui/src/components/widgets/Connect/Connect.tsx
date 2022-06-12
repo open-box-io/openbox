@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import Button, { BUTTON_STYLE } from '../../UI/Button/Button';
+import React, { useCallback, useContext, useState } from 'react';
 
 import { AuthContext } from '../../../auth/authContext';
-import Button, { BUTTON_STYLE } from '../../UI/Button/Button';
 import Input from '../../UI/Input/Input';
 import { JoinLobbyAPIResponse } from '@openbox/common';
 import styles from './connect.module.scss';
@@ -79,8 +79,6 @@ const Connect = ({
 
     const onSubmit = useCallback(async () => {
         setLoading(true);
-
-        console.log(player, lobbyId);
 
         connect(player.value, lobbyId.value)
             .then((response) => {

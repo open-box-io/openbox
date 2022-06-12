@@ -14,7 +14,7 @@ interface ButtonProps {
     submit?: boolean;
 }
 
-function Button(props: ButtonProps): JSX.Element {
+const Button = (props: ButtonProps): JSX.Element => {
     return (
         <button
             onClick={props.onClick}
@@ -24,5 +24,6 @@ function Button(props: ButtonProps): JSX.Element {
             <div>{props.children}</div>
         </button>
     );
-}
+};
+
 export default Button;

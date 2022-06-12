@@ -46,6 +46,7 @@ export class GamemodeDetails {
 
 export class GamemodeResponse {
     _id: string;
+
     name: string;
     description: string;
     author: User;

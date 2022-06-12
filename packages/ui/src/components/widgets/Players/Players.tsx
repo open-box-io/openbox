@@ -11,7 +11,6 @@ interface PlayerProps {
 const Players = ({ players, host }: PlayerProps): JSX.Element => {
     const renderPlayerList = () => {
         const playerRows = [];
-        console.log(players);
 
         players.forEach((player) =>
             playerRows.push(

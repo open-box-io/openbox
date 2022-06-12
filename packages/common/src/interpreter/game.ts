@@ -23,6 +23,7 @@ export class GameInstance {
     onPlayerViewsChanged: (playerViews: PlayerView[]) => void;
 
     gamemode: GamemodeVersion;
+    resources: string;
     gameState: Record<string, unknown>;
 
     playerViews: PlayerView[];
@@ -31,6 +32,7 @@ export class GameInstance {
     constructor(
         players: PlayerResponse[],
         gamemode: GamemodeVersion,
+        resources: string,
         onPlayerViewsChanged: (playerViews: PlayerView[]) => void,
     ) {
         this.onPlayerViewsChanged = onPlayerViewsChanged;
@@ -39,6 +41,7 @@ export class GameInstance {
             JSON.parse(gamemode.initialGameState)
             : {};
         this.gamemode = gamemode;
+        this.resources = resources;
         this.setPhase(players, gamemode.initialPhaseName);
     }
 
@@ -58,7 +61,8 @@ export class GameInstance {
         action: ACTION,
         context?: WebsocketMessage,
     ): void {
-        const code = `${this.gamemode.sharedCode}
+        const code = `const resources = ${this.resources}
+            ${this.gamemode.sharedCode}
             ${phaseCode}
             ${action}()`;
 

@@ -1,3 +1,4 @@
+import { GamemodeVersion, Phase } from '@openbox/common';
 import { githubApi, githubRaw } from '../shared/axios';
 
 const getGithubFile = async (
@@ -5,7 +6,7 @@ const getGithubFile = async (
     githubRepo: string,
     version: string,
     file: string,
-): Promise<any> =>
+): Promise<{ data: string }> =>
     await githubRaw.get(`/${githubUser}/${githubRepo}/${version}/${file}`);
 
 const getGithubGamemodeDetails = async (
@@ -22,6 +23,23 @@ const getGithubLibFile = async (
 ): Promise<any> =>
     await getGithubFile(githubUser, githubRepo, version, `src/lib.js`);
 
+export const getGithubResourceFile = async (
+    githubUser: string,
+    githubRepo: string,
+    version: string,
+    resource: string,
+): Promise<string> =>
+    JSON.stringify(
+        (
+            await getGithubFile(
+                githubUser,
+                githubRepo,
+                version,
+                `src/resources/${resource}.JSON`,
+            )
+        ).data,
+    );
+
 const getGithubFileStructure = async (
     githubUser: string,
     githubRepo: string,
@@ -31,21 +49,29 @@ const getGithubFileStructure = async (
         `/repos/${githubUser}/${githubRepo}/git/trees/${version}?recursive=1`,
     );
 
-export const getGamemodeDetails = async () => ({
-    name: `Story Points`,
-    description: `A voting system for agile story points`,
-    githubUser: `open-box-io`,
-    githubRepo: `story-points`,
-    latestVersion: `b27f95858b2f06dec8170bd83452b0209a5bada3`,
-    latestVerifiedVersion: undefined,
-});
+export const getGithubResourceList = async (
+    githubUser: string,
+    githubRepo: string,
+    version: string,
+): Promise<string[]> => {
+    const files = await getGithubFileStructure(githubUser, githubRepo, version);
+
+    const resourceList = files.data.tree
+        .map((file) => file.path)
+        .filter((path) => path.startsWith(`src/resources/`))
+        .map((path) => {
+            const name = path.match(/src\/resources\/(.*)\.JSON/);
+            return name ? name[1] : ``;
+        });
+
+    return resourceList;
+};
 
 export const getGamemode = async (
     githubUser: string,
     githubRepo: string,
     version: string,
-): Promise<any> => {
-    console.log(`here`);
+): Promise<GamemodeVersion> => {
     const filesPromise = getGithubFileStructure(
         githubUser,
         githubRepo,
@@ -76,10 +102,10 @@ export const getGamemode = async (
     const lib = (await libPromise).data;
     const phasesCode = await phasesCodePromise;
 
-    const phases = phasePaths.map((path, i) => {
+    const phases: Phase[] = phasePaths.map((path, i) => {
         const name = path.match(/src\/phases\/(.*)\.js/);
         return {
-            phaseName: name ? name[1] : undefined,
+            phaseName: name ? name[1] : ``,
             code: phasesCode[i].data,
         };
     });
@@ -89,8 +115,6 @@ export const getGamemode = async (
         sharedCode: lib,
         phases,
     };
-
-    console.log(`GAME`, game);
 
     return game;
 };
