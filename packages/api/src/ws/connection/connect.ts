@@ -7,12 +7,7 @@ import { getRequestData } from '../../helpers/requestValidation';
 export const connect = async (event: any): Promise<string> => {
     console.log(`CONNECT`, event);
 
-    const {
-        connectionId,
-        lobbyId,
-        playerId,
-        secret: playerSecret,
-    } = getRequestData<{
+    const { connectionId, lobbyId, playerId, secret } = getRequestData<{
         connectionId: string;
         lobbyId: string;
         playerId: string;
@@ -44,7 +39,7 @@ export const connect = async (event: any): Promise<string> => {
         },
     ]);
 
-    console.log({ connectionId, lobbyId, playerId, playerSecret });
+    console.log({ connectionId, lobbyId, playerId, secret });
 
     const lobby = await getLobbyById(lobbyId);
     const player = getPlayer(lobby, playerId);
@@ -52,7 +47,7 @@ export const connect = async (event: any): Promise<string> => {
 
     console.log({ lobby, player });
 
-    verifyPlayer(player, playerSecret);
+    verifyPlayer(player, secret);
 
     await updatePlayer(lobbyId, player);
 
