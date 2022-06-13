@@ -50,7 +50,6 @@ function GamemodeDetailsView({
             selectedResourceName,
         ).then((response) => {
             setSelectedResource(response);
-            x;
         });
     }, [game, selectedResourceName]);
 
