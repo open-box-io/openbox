@@ -65,7 +65,7 @@ function GamemodeDetailsView({
             <div
                 className={cssCombine(
                     styles.Description,
-                    open ? styles.DescriptionShown : styles.DescriptionHidden,
+                    !open && styles.DescriptionHidden,
                 )}
             >
                 {game.description}
