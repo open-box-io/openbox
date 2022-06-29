@@ -1,0 +1,45 @@
+@import '../../../shared/SCSS/_color.module.scss';
+
+.Throbber {
+    width: 40px;
+    height: 40px;
+
+    animation-name: spin;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    border-radius: 50%;
+    display:flex;
+
+    padding: 10px;
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+.White {
+    svg {
+        path {
+            fill: $Second-FontColor
+        }
+    }
+
+    background-color: $First-BackgroundColor
+}
+
+.Blue {
+    svg {
+        path {
+            fill: $Third-FontColor
+        }
+    }
+
+    background-color: $Second-BackgroundColor
+}

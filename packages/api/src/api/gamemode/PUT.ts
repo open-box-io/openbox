@@ -1,9 +1,9 @@
-import { GamemodeDetails, RequestDataLocation } from '@openbox/common';
-
+import { GamemodeDetails } from '@openbox/common/src/types/gamemodeTypes';
 import { Request } from 'express';
-import { createGamemode } from '../../helpers/gamemode';
-import { getAuthorizedUserData } from '../../helpers/auth';
-import { getRequestData } from '../../helpers/requestValidation';
+import { RequestDataLocation } from '@openbox/common/src/types/endpointTypes';
+import { createGamemode } from '@openbox/common/src/helpers/gamemode';
+import { getAuthorizedUserData } from '@openbox/common/src/helpers/auth';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 import uuid from 'uuid-random';
 
 export const putGamemode = async (request: Request): Promise<void> => {

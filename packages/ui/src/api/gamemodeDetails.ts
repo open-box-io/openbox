@@ -1,4 +1,4 @@
-import { GamemodeSearchAPIResponse } from '@openbox/common';
+import { GamemodeSearchAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import { openbox } from '../shared/axios';
 
 export const searchGamemodeDetails = (

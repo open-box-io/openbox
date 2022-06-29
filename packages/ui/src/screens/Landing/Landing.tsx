@@ -5,7 +5,7 @@ import AccountButton from '../../components/widgets/AccountButton/AccountButton'
 import { AuthContext } from '../../auth/authContext';
 import Backdrop from '../../components/UI/Backdrop/Backdrop';
 import Connect from '../../components/widgets/Connect/Connect';
-import { JoinLobbyAPIResponse } from '@openbox/common';
+import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import Modal from '../../components/UI/Modal/Modal';
 import SignInButton from '../../components/widgets/SignInButton/SignInButton';
 import styles from './landing.module.scss';

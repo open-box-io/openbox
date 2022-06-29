@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { AuthContext } from '../../../auth/authContext';
 import Input from '../../UI/Input/Input';
-import { JoinLobbyAPIResponse } from '@openbox/common';
+import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import styles from './connect.module.scss';
 import { useHistory } from 'react-router-dom';
 

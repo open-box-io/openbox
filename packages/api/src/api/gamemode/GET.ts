@@ -1,11 +1,14 @@
-import { GamemodeAPIResponse, RequestDataLocation } from '@openbox/common';
+import {
+    GamemodeAPIResponse,
+    RequestDataLocation,
+} from '@openbox/common/src/types/endpointTypes';
 import {
     formatGamemodeResponse,
     getGamemodeById,
-} from '../../helpers/gamemode';
+} from '@openbox/common/src/helpers/gamemode';
 
 import { Request } from 'express';
-import { getRequestData } from '../../helpers/requestValidation';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const getGamemode = async (
     request: Request,

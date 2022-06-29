@@ -80,13 +80,3 @@ functions:
                       type: COGNITO_USER_POOLS
                       authorizerId:
                           Ref: ApiGatewayAuthorizer
-
-    websocket:
-        handler: lambda.websocket
-        events:
-            - websocket:
-                  route: $connect
-            - websocket:
-                  route: $disconnect
-            - websocket:
-                  route: $default

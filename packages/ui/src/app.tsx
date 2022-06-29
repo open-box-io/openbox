@@ -71,6 +71,7 @@ const App = (): JSX.Element => {
             case WebsocketActionType.PLAYER_REMOVED:
                 // game?.playerLeft(lobby?.players || [], data);
                 setLobby(data.lobby);
+
                 if (data.action.player?._id === player?._id) {
                     setWebSocket(undefined);
                     setLobby(undefined);
@@ -96,7 +97,7 @@ const App = (): JSX.Element => {
                 break;
             }
         },
-        [lobby, game, setLobby],
+        [player, lobby, game, history],
     );
 
     useEffect(() => {

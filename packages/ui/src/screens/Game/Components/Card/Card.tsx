@@ -1,4 +1,7 @@
-import { CardComponent, Component } from '@openbox/common';
+import {
+    CardComponent,
+    Component,
+} from '@openbox/common/src/types/componentTypes';
 
 import React from 'react';
 import { cssCombine } from '../../../../shared/SCSS/scssHelpers';

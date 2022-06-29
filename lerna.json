@@ -1,6 +1,6 @@
 {
     "private": true,
-    "packages": ["packages/common", "packages/ui", "packages/api"],
+    "packages": ["packages/common", "packages/ui", "packages/api", "packages/ws"],
     "version": "independent",
     "npmClient": "yarn",
     "useWorkspaces": true

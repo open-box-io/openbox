@@ -1,4 +1,7 @@
-import { JoinLobbyAPIResponse, LobbyAPIResponse } from '@openbox/common';
+import {
+    JoinLobbyAPIResponse,
+    LobbyAPIResponse,
+} from '@openbox/common/src/types/endpointTypes';
 import { getHeaders, setHeaders } from '../store/store';
 
 import { getSession } from '../auth/cognito';

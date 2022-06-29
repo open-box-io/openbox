@@ -5,11 +5,13 @@
     "workspaces": [
         "packages/common",
         "packages/ui",
-        "packages/api"
+        "packages/api",
+        "packages/ws"
     ],
     "scripts": {
         "build": "lerna run build",
-        "deploy": "lerna run deploy"
+        "build-api": "docker build -f Dockerfile.api -t sammieaurelia/open-box.api .",
+        "build-ws": "docker build -f Dockerfile.ws -t sammieaurelia/open-box.ws ."
     },
     "dependencies": {
         "eslint": "^7.32.0",

@@ -1,4 +1,7 @@
-import { Component, TextBoxComponent } from '@openbox/common';
+import {
+    Component,
+    TextBoxComponent,
+} from '@openbox/common/src/types/componentTypes';
 
 import Button from '../../../../components/UI/Button/Button';
 import React from 'react';

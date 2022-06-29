@@ -2,10 +2,13 @@ import {
     LobbyAPIResponse,
     RequestDataLocation,
 } from '../../../../common/src/types/endpointTypes';
-import { formatLobbyResponse, getLobbyById } from '../../helpers/lobby';
+import {
+    formatLobbyResponse,
+    getLobbyById,
+} from '@openbox/common/src/helpers/lobby';
 
 import { Request } from 'express';
-import { getRequestData } from '../../helpers/requestValidation';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const getLobby = async (request: Request): Promise<LobbyAPIResponse> => {
     console.log(`GET /lobby`, request);

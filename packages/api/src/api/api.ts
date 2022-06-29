@@ -1,7 +1,6 @@
-import { connectDB, disconnectDB } from '../database/database';
 import express, { Request, Response } from 'express';
 
-import { APIError } from '@openbox/common';
+import { APIError } from '@openbox/common/src/types/errorTypes';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { deleteLobby } from './lobby/DELETE';
@@ -15,6 +14,7 @@ import { deleteGamemode } from './gamemode/DELETE';
 import { getGamemode } from './gamemode/GET';
 import { getSearchGamemode } from './gamemode/search/GET';
 import { putGamemode } from './gamemode/PUT';
+import { connectDB, disconnectDB } from '@openbox/common/src/database/database';
 
 const app = express();
 
@@ -143,7 +143,7 @@ app.get(
     },
 );
 
-export const getAPI = (): unknown => app;
+export const getAPI = (): express.Express => app;
 
 export const apiResponseWrapper = async (
     request: Request,

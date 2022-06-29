@@ -1,18 +1,19 @@
-import { RequestDataLocation, WebsocketActionType } from '@openbox/common';
 import {
     deleteLobby as deleteLobbyFunction,
     getLobbyById,
-} from '../../helpers/lobby';
+} from '@openbox/common/src/helpers/lobby';
 import {
     formatPlayerResponse,
     getPlayer,
     verifyPlayer,
     verifyPlayerHost,
-} from '../../helpers/player';
+} from '@openbox/common/src/helpers/player';
 
 import { Request } from 'express';
-import { getRequestData } from '../../helpers/requestValidation';
-import { sendToLobby } from '../../helpers/websocket';
+import { RequestDataLocation } from '@openbox/common/src/types/endpointTypes';
+import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
+import { sendToLobby } from '@openbox/common/src/helpers/websocket';
 
 export const deleteLobby = async (request: Request): Promise<void> => {
     console.log(`DELETE /lobby`, request);

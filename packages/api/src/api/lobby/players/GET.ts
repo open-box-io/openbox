@@ -1,13 +1,13 @@
 import {
     LobbyPlayersAPIResponse,
-    Player,
     RequestDataLocation,
-} from '@openbox/common';
+} from '@openbox/common/src/types/endpointTypes';
 
+import { Player } from '@openbox/common/src/types/playerTypes';
 import { Request } from 'express';
-import { formatPlayerResponse } from '../../../helpers/player';
-import { getLobbyById } from '../../../helpers/lobby';
-import { getRequestData } from '../../../helpers/requestValidation';
+import { formatPlayerResponse } from '@openbox/common/src/helpers/player';
+import { getLobbyById } from '@openbox/common/src/helpers/lobby';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const getLobbyPlayers = async (
     request: Request,

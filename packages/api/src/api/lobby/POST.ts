@@ -1,9 +1,18 @@
-import { JoinLobbyAPIResponse, RequestDataLocation } from '@openbox/common';
-import { createLobby, formatLobbyResponse } from '../../helpers/lobby';
-import { createPlayer, formatPlayerSecretResponse } from '../../helpers/player';
+import {
+    JoinLobbyAPIResponse,
+    RequestDataLocation,
+} from '@openbox/common/src/types/endpointTypes';
+import {
+    createLobby,
+    formatLobbyResponse,
+} from '@openbox/common/src/helpers/lobby';
+import {
+    createPlayer,
+    formatPlayerSecretResponse,
+} from '@openbox/common/src/helpers/player';
 
 import { Request } from 'express';
-import { getRequestData } from '../../helpers/requestValidation';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const postLobby = async (
     request: Request,

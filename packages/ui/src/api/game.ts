@@ -1,4 +1,7 @@
-import { GamemodeVersion, Phase } from '@openbox/common';
+import {
+    GamemodeVersion,
+    Phase,
+} from '@openbox/common/src/types/gamemodeTypes';
 import { githubApi, githubRaw } from '../shared/axios';
 
 const getGithubFile = async (

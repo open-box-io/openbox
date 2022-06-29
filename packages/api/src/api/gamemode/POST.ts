@@ -1,13 +1,14 @@
 import {
-    APIError,
-    GamemodeDetails,
-    RequestDataLocation,
-} from '@openbox/common';
-import { getGamemodeById, updateGamemode } from '../../helpers/gamemode';
+    getGamemodeById,
+    updateGamemode,
+} from '@openbox/common/src/helpers/gamemode';
 
+import { APIError } from '@openbox/common/src/types/errorTypes';
+import { GamemodeDetails } from '@openbox/common/src/types/gamemodeTypes';
 import { Request } from 'express';
-import { getAuthorizedUserData } from '../../helpers/auth';
-import { getRequestData } from '../../helpers/requestValidation';
+import { RequestDataLocation } from '@openbox/common/src/types/endpointTypes';
+import { getAuthorizedUserData } from '@openbox/common/src/helpers/auth';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const postGamemode = async (request: Request): Promise<void> => {
     console.log(`POST /gamemode`, request);
