@@ -1,12 +1,13 @@
-import { APIError, RequestDataLocation } from '@openbox/common';
 import {
     deleteGamemode as deleteGamemodeFunction,
     getGamemodeById,
-} from '../../helpers/gamemode';
+} from '@openbox/common/src/helpers/gamemode';
 
+import { APIError } from '@openbox/common/src/types/errorTypes';
 import { Request } from 'express';
-import { getAuthorizedUserData } from '../../helpers/auth';
-import { getRequestData } from '../../helpers/requestValidation';
+import { RequestDataLocation } from '@openbox/common/src/types/endpointTypes';
+import { getAuthorizedUserData } from '@openbox/common/src/helpers/auth';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const deleteGamemode = async (request: Request): Promise<void> => {
     console.log(`DELETE /gamemode`, request);

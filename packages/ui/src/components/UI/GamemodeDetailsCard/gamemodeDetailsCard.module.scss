@@ -1,0 +1,30 @@
+@import '../../../shared/SCSS/_font.module.scss';
+@import '../../../shared/SCSS/_color.module.scss';
+
+.Gamemode {
+    width: 200px;
+    height: 300px;
+    font-family: $Third-FontType;
+}
+
+.Name {
+    font-size: 20px;
+}
+
+.Description {
+    width: 100%;
+    font-size: 16px;
+}
+
+.Author {
+    font-size: 16px;
+}
+
+.DescriptionHidden {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.Closed {
+    display: none;
+}

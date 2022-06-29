@@ -1,21 +1,21 @@
 import {
     JoinLobbyAPIResponse,
     RequestDataLocation,
-    WebsocketActionType,
-} from '@openbox/common';
+} from '@openbox/common/src/types/endpointTypes';
 import {
     addPlayerToLobby,
     formatLobbyResponse,
     websocketLobbyUpdate,
-} from '../../../helpers/lobby';
+} from '@openbox/common/src/helpers/lobby';
 import {
     createPlayer,
     formatPlayerResponse,
     formatPlayerSecretResponse,
-} from '../../../helpers/player';
+} from '@openbox/common/src/helpers/player';
 
 import { Request } from 'express';
-import { getRequestData } from '../../../helpers/requestValidation';
+import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
 
 export const putLobbyPlayers = async (
     request: Request,

@@ -1,8 +1,11 @@
-import { GamemodeResponse, GamemodeVersion } from '@openbox/common';
+import {
+    GamemodeResponse,
+    GamemodeVersion,
+} from '@openbox/common/src/types/gamemodeTypes';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import Button from '../../UI/Button/Button';
-import GamemodeDetailsView from '../../UI/GamemodeDetailsView/GamemodeDetailsView';
+import GamemodeDetailsCard from '../../UI/GamemodeDetailsCard/GamemodeDetailsCard';
 import Input from '../../UI/Input/Input';
 import Throbber from '../../UI/Throbber/Throbber';
 import { getGamemode } from '../../../api/game';
@@ -41,7 +44,7 @@ const GamePicker = ({ selectGame }: GamePickerProps): JSX.Element => {
     const render = useCallback(() => {
         if (game) {
             return (
-                <GamemodeDetailsView
+                <GamemodeDetailsCard
                     game={game}
                     selected
                     onSelected={(resources) => {
@@ -60,7 +63,7 @@ const GamePicker = ({ selectGame }: GamePickerProps): JSX.Element => {
         }
 
         return results.map((game) => (
-            <GamemodeDetailsView
+            <GamemodeDetailsCard
                 key={game._id}
                 game={game}
                 onSelected={() => setGame(game)}

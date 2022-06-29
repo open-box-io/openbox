@@ -1,0 +1,20 @@
+FROM node:18-alpine3.15
+
+WORKDIR /usr/src/openbox/api
+
+COPY ../../package*.json ./
+
+RUN npm i
+
+COPY ../../packages/api ./packages/api
+COPY ../../packages/common ./packages/common
+COPY ../../lerna.json ./
+COPY ../../yarn.lock ./
+
+RUN yarn
+RUN yarn build
+
+EXPOSE 443
+EXPOSE 8000
+
+CMD ["node", "./packages/api/dist/app.js"]

@@ -4,7 +4,7 @@ import Backdrop from '../../components/UI/Backdrop/Backdrop';
 import Connect from '../../components/widgets/Connect/Connect';
 import { GameInstance } from '@openbox/common/src/interpreter/game';
 import GamePicker from '../../components/widgets/GamePicker/GamePicker';
-import { GamemodeVersion } from '@openbox/common';
+import { GamemodeVersion } from '@openbox/common/src/types/gamemodeTypes';
 import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import Modal from '../../components/UI/Modal/Modal';
@@ -76,7 +76,7 @@ const Lobby = ({
                 <>
                     <Modal>
                         {connecting ? (
-                            <Throbber />
+                            <Throbber altColour />
                         ) : (
                             <Connect
                                 lobbyIdentifier={id}

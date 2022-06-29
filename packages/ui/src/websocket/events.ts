@@ -1,3 +1,3 @@
-import { PlayerView } from '@openbox/common';
+import { PlayerView } from '@openbox/common/src/types/componentTypes';
 
 export const onPlayerViewsChanged = (playerViews: PlayerView[]) => undefined;

@@ -1,4 +1,7 @@
-import { Component, TextBoxComponent } from '@openbox/common';
+import {
+    Component,
+    TextBoxComponent,
+} from '@openbox/common/src/types/componentTypes';
 
 import React from 'react';
 import styles from './textBox.module.scss';

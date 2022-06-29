@@ -1,5 +1,5 @@
 import Player from '../../UI/Player/Player';
-import { PlayerResponse } from '@openbox/common';
+import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import React from 'react';
 import styles from './players.module.scss';
 
