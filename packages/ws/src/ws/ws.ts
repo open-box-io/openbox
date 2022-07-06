@@ -1,58 +1,51 @@
-
-import { action } from './action/action';
+import { Lobby } from '@openbox/common/src/types/lobbyTypes';
+import { WebsocketMessage } from '@openbox/common/src/types/websocketTypes';
 import { connect } from './connection/connect';
 import { disconnect } from './connection/disconnect';
 import dotenv from 'dotenv';
-import { connectDB, disconnectDB } from '@openbox/common/src/database/database';
+import { message } from './message/message';
+import ws from 'ws';
 
 dotenv.config();
 
 export const wsConnect = async (
-    event: any,
-    _context: never,
-    callback: (a: null, response: unknown) => Promise<unknown>,
-): Promise<void> => await wsResponseWrapper(event, callback, connect);
+    lobbies: Lobby[],
+    socket: ws.WebSocket,
+): Promise<void> => await wsResponseWrapper(connect, socket, lobbies);
 
 export const wsDisconnect = async (
-    event: any,
-    _context: never,
-    callback: (a: null, response: unknown) => Promise<unknown>,
-): Promise<void> => await wsResponseWrapper(event, callback, disconnect);
+    lobbies: Lobby[],
+    socket: ws.WebSocket,
+): Promise<void> => await wsResponseWrapper(disconnect, socket, lobbies);
 
-export const wsEvent = async (event: any, _context: never): Promise<void> => {
-    await connectDB();
-    await action(event);
-    await disconnectDB();
+export const wsMessage = async (
+    lobbies: Lobby[],
+    socket: ws.WebSocket,
+    wsMessage: WebsocketMessage,
+): Promise<void> => {
+    await wsResponseWrapper(message, socket, lobbies, wsMessage);
 };
 
-export const wsResponseWrapper = async (
-    event: any,
-    callback: (a: null, response: unknown) => Promise<unknown>,
-    action: (event: unknown) => Promise<unknown>,
+const wsResponseWrapper = async <FunctionArgs extends Array<unknown>>(
+    action: (socket: ws.WebSocket, ...args: FunctionArgs) => Promise<unknown>,
+    socket: ws.WebSocket,
+    ...args: FunctionArgs
 ): Promise<void> => {
-    await connectDB();
-
     try {
-        const result = await action(event);
+        const result = await action(socket, ...args);
 
-        console.log(`response success`, 200, JSON.stringify(result));
+        console.log(`SUCCESS`, 200, result);
 
-        callback(null, {
+        socket.send({
             statusCode: 200,
-            body: JSON.stringify(result),
+            body: result,
         });
     } catch (error: any) {
-        console.log(
-            `response error`,
-            error.code ? error.code : 500,
-            JSON.stringify(error),
-        );
+        console.log(`ERROR`, error.code ? error.code : 500, error);
 
-        callback(null, {
+        socket.send({
             statusCode: error.code ? error.code : 500,
-            body: JSON.stringify(error),
+            body: error,
         });
     }
-
-    await disconnectDB();
 };

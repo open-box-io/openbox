@@ -1,10 +1,10 @@
-import { prop } from '@typegoose/typegoose';
+import ws from 'ws';
 
 export class Player {
-    @prop() _id: string;
-    @prop() hash: string;
-    @prop() name: string;
-    @prop() websocketId?: string;
+    _id: string;
+    hash: string;
+    name: string;
+    websocket: ws.WebSocket;
 }
 
 export class PlayerResponse {

@@ -1,23 +1,23 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const ws = require(`ws`);
+import { wsConnect, wsDisconnect, wsMessage } from './ws/ws';
 
-const wss = new ws.Server({ port: 443 });
-const clients: any[] = [];
+import { Lobby } from '@openbox/common/src/types/lobbyTypes';
+import ws from 'ws';
 
-wss.on(`connection`, (ws: any) => {
-    clients.push(ws);
-    console.log(`connected`, ws);
+const wss = new ws.WebSocketServer({ port: 80 });
 
-    ws.on(`message`, (messageAsString: string) => {
+export const lobbies: Lobby[] = [];
+
+wss.on(`connection`, (socket) => {
+    wsConnect(lobbies, socket);
+
+    socket.on(`message`, (messageAsString: string) => {
         const message = JSON.parse(messageAsString);
 
-        clients.forEach((client) => {
-            client.send(JSON.stringify(message));
-        });
+        wsMessage(lobbies, socket, message);
     });
 
     wss.on(`close`, () => {
-        clients.filter((client) => client !== ws);
+        wsDisconnect(lobbies, socket);
     });
 });
 

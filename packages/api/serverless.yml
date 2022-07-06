@@ -64,19 +64,3 @@ functions:
                       authorizerId:
                           Ref: ApiGatewayAuthorizer
             - http: GET /gamemode
-
-            - http: OPTIONS /lobby/players
-            - http: DELETE /lobby/players
-            - http: GET /lobby/players
-            - http: PUT /lobby/players
-
-            - http: OPTIONS /lobby
-            - http: DELETE /lobby
-            - http: GET /lobby
-            - http:
-                  method: POST
-                  path: /lobby
-                  authorizer:
-                      type: COGNITO_USER_POOLS
-                      authorizerId:
-                          Ref: ApiGatewayAuthorizer

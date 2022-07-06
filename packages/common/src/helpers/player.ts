@@ -10,6 +10,7 @@ import { Lobby } from '../types/lobbyTypes';
 import crypto from 'crypto';
 import sha512 from 'crypto-js/sha512';
 import uuid from 'uuid-random';
+import ws from 'ws';
 
 export const secretToHash = (id: string, secret: string): string => {
     return Base64.stringify(sha512(secret + id));
@@ -17,12 +18,14 @@ export const secretToHash = (id: string, secret: string): string => {
 
 export const createPlayer = (
     playerName: string,
+    websocket: ws.WebSocket,
 ): { player: Player; secret: string } => {
     const id = uuid();
     const secret = crypto.randomBytes(64).toString(`hex`);
 
     const player: Player = {
         _id: id,
+        websocket: websocket,
         hash: secretToHash(secret, id),
         name: playerName,
     };
@@ -51,21 +54,6 @@ export const verifyPlayerNotHost = (lobby: Lobby, player: Player): void => {
 export const getPlayer = (lobby: Lobby, playerId: string): Player => {
     const player = lobby.players.find(
         (player: Player) => player._id === playerId,
-    );
-
-    if (!player) {
-        throw new APIError(404, `Player not found`);
-    }
-
-    return player;
-};
-
-export const getPlayerByWebsocketId = (
-    lobby: Lobby,
-    websocketId: string,
-): Player => {
-    const player = lobby.players.find(
-        (player: Player) => player.websocketId === websocketId,
     );
 
     if (!player) {

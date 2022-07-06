@@ -1,55 +1,63 @@
-import { getLobbyById, updatePlayer } from "@openbox/common/src/helpers/lobby";
-import { getPlayer, verifyPlayer } from "@openbox/common/src/helpers/player";
-import { getRequestData } from "@openbox/common/src/helpers/requestValidation";
-import { RequestDataLocation } from "@openbox/common/src/types/endpointTypes";
+import { Lobby, LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
+import {
+    addPlayerToLobby,
+    createLobby,
+    formatLobbyResponse,
+    getLobbyById,
+} from '@openbox/common/src/helpers/lobby';
+import {
+    createPlayer,
+    formatPlayerSecretResponse,
+} from '@openbox/common/src/helpers/player';
 
+import { PlayerSecretResponse } from '@openbox/common/src/types/playerTypes';
+import { RequestDataLocation } from '@openbox/common/src/types/endpointTypes';
+import { getRequestData } from '@openbox/common/src/helpers/requestValidation';
+import ws from 'ws';
 
-export const connect = async (event: any): Promise<string> => {
-    console.log(`CONNECT`, event);
+export const connect = async (
+    socket: ws.WebSocket,
+    lobbies: Lobby[],
+): Promise<{
+    player: PlayerSecretResponse;
+    lobby: LobbyResponse;
+}> => {
+    console.log(`CONNECT`, socket);
 
-    const { connectionId, lobbyId, playerId, secret } = getRequestData<{
-        connectionId: string;
+    const { lobbyId, playerName } = getRequestData<{
         lobbyId: string;
-        playerId: string;
-        secret: string;
-    }>(event, [
-        {
-            location: RequestDataLocation.WEBSOCKET_CONTEXT,
-            name: `connectionId`,
-            type: `string`,
-            required: true,
-        },
+        playerName: string;
+    }>(socket, [
         {
             location: RequestDataLocation.WEBSOCKET,
             name: `lobbyId`,
             type: `string`,
-            required: true,
+            required: false,
         },
         {
             location: RequestDataLocation.WEBSOCKET,
-            name: `playerId`,
-            type: `string`,
-            required: true,
-        },
-        {
-            location: RequestDataLocation.WEBSOCKET,
-            name: `secret`,
+            name: `playerName`,
             type: `string`,
             required: true,
         },
     ]);
 
-    console.log({ connectionId, lobbyId, playerId, secret });
+    console.log({ lobbyId, playerName });
 
-    const lobby = await getLobbyById(lobbyId);
-    const player = getPlayer(lobby, playerId);
-    player.websocketId = connectionId;
+    const { player, secret } = createPlayer(playerName, socket);
 
-    console.log({ lobby, player });
+    let lobby;
 
-    verifyPlayer(player, secret);
+    if (lobbyId) {
+        lobby = getLobbyById(lobbies, lobbyId);
 
-    await updatePlayer(lobbyId, player);
+        addPlayerToLobby(lobby, player);
+    } else {
+        lobby = createLobby(lobbies, player);
+    }
 
-    return `connected`;
+    return {
+        player: formatPlayerSecretResponse(player, secret),
+        lobby: formatLobbyResponse(lobby),
+    };
 };

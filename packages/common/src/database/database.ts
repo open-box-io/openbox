@@ -1,6 +1,5 @@
 import { APIError } from '../types/errorTypes';
 import { GamemodeDetails } from '../types/gamemodeTypes';
-import { Lobby } from '../types/lobbyTypes';
 import dotenv from 'dotenv';
 import { getModelForClass } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
@@ -36,7 +35,4 @@ export const disconnectDB = async (): Promise<void> => {
     await mongoose.disconnect();
 };
 
-export const lobbyDB = getModelForClass(Lobby);
 export const gamemodeDB = getModelForClass(GamemodeDetails);
-
-connectDB();
