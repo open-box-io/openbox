@@ -1,12 +1,10 @@
 import { Player, PlayerResponse } from './playerTypes';
 
-import { prop } from '@typegoose/typegoose';
-
 export class Lobby {
-    @prop() _id: string;
+    _id: string;
 
-    @prop() host: Player;
-    @prop() players: Player[];
+    host: Player;
+    players: Player[];
 }
 
 export class LobbyResponse {

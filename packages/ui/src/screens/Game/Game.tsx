@@ -12,7 +12,6 @@ import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import SubmitButton from './Components/SubmitButton/SubmitButton';
 import TextBox from './Components/TextBox/TextBox';
 import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
-import { getHeaders } from '../../store/store';
 import styles from './game.module.scss';
 
 const GameComponents = {
@@ -47,13 +46,8 @@ const Game = ({
 
         setViewProps(newProps);
 
-        const headers = getHeaders();
-
         webSocket?.send(
             JSON.stringify({
-                lobbyId: headers.lobbyId,
-                playerId: headers.playerId,
-                secret: headers.secret,
                 recipientId: lobby.host._id,
                 message: {
                     action: {

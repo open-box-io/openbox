@@ -148,3 +148,4 @@ amplifytools.xcconfig
 
 # terraform secrets
 terraform/global-variables.tfvars
+*.pem

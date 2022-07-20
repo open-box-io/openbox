@@ -1,0 +1,24 @@
+FROM node:18-alpine3.15
+
+WORKDIR /usr/src/openbox/ws
+
+COPY ./package*.json ./
+
+RUN npm i
+
+COPY ./lerna.json ./
+COPY ./yarn.lock ./
+
+COPY ./packages/common/package*.json ./packages/common/
+COPY ./packages/wss/package*.json ./packages/wss/
+
+RUN yarn
+
+COPY ./packages/common ./packages/common
+COPY ./packages/wss ./packages/wss
+
+RUN yarn build
+
+EXPOSE 80
+
+CMD ["node", "./packages/wss/dist/wss/src/app.js"]

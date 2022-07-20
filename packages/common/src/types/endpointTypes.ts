@@ -1,7 +1,6 @@
-import { PlayerResponse, PlayerSecretResponse } from './playerTypes';
-
 import { GamemodeResponse } from './gamemodeTypes';
 import { LobbyResponse } from './lobbyTypes';
+import { PlayerResponse } from './playerTypes';
 import { PlayerView } from './componentTypes';
 
 export interface GameAPIResponse {
@@ -28,7 +27,7 @@ export interface LobbyAPIResponse {
 }
 
 export interface JoinLobbyAPIResponse {
-    player: PlayerSecretResponse;
+    player: PlayerResponse;
     lobby: LobbyResponse;
 }
 
@@ -36,9 +35,9 @@ export enum RequestDataLocation {
     BODY = `body`,
     QUERY = `query`,
     HEADERS = `headers`,
-    WEBSOCKET = `queryStringParameters`,
+    WEBSOCKET_QUERY = `queryParams`,
     WEBSOCKET_CONTEXT = `requestContext`,
-    WEBSOCKET_BODY = `body`,
+    WEBSOCKET_MESSAGE = `message`,
 }
 
 export interface RequestDataSelector {

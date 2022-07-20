@@ -1,31 +1,29 @@
 import { Lobby, LobbyResponse } from '../types/lobbyTypes';
 import { Player, PlayerResponse } from '../types/playerTypes';
+import { WebsocketAction, WebsocketActionType } from '../types/websocketTypes';
 
 import { APIError } from '../types/errorTypes';
-import { WebsocketAction } from '../types/websocketTypes';
 import { formatPlayerResponse } from './player';
 import { generateGameCode } from '../helpers/gameCode';
-import { lobbyDB } from '../database/database';
 import { sendToLobby } from './websocket';
+import ws from 'ws';
 
-export const createLobby = async (player: Player): Promise<Lobby> => {
+export const createLobby = (lobbies: Lobby[], player: Player): Lobby => {
     const lobby: Lobby = {
-        _id: await generateGameCode(),
+        _id: generateGameCode(lobbies),
         host: player,
         players: [player],
     };
 
-    const created = await lobbyDB.create(lobby);
+    console.log(`CREATING LOBBY`, { lobby, player });
 
-    if (!created) {
-        throw new APIError(500, `Could not create lobby`);
-    }
+    lobbies.push(lobby);
 
     return lobby;
 };
 
-export const getLobbyById = async (id: string): Promise<Lobby> => {
-    const lobby = await lobbyDB.findById(id);
+export const getLobbyById = (lobbies: Lobby[], id: string): Lobby => {
+    const lobby = lobbies.find((l) => (l._id = id));
 
     if (!lobby) {
         throw new APIError(404, `Lobby not found`);
@@ -34,10 +32,13 @@ export const getLobbyById = async (id: string): Promise<Lobby> => {
     return lobby;
 };
 
-export const getLobbyByWebsocketId = async (id: string): Promise<Lobby> => {
-    const lobby = await lobbyDB.findOne({
-        players: { $elemMatch: { websocketId: id } },
-    });
+export const getLobbyByWebsocket = (
+    lobbyies: Lobby[],
+    websocket: ws.WebSocket,
+): Lobby => {
+    const lobby = lobbyies.find((l) =>
+        l.players.find((p) => p.websocket === websocket),
+    );
 
     if (!lobby) {
         throw new APIError(500, `Could not find player`);
@@ -46,87 +47,78 @@ export const getLobbyByWebsocketId = async (id: string): Promise<Lobby> => {
     return lobby;
 };
 
-export const deleteLobby = async (lobby: Lobby): Promise<void> => {
-    await lobbyDB.findByIdAndDelete(lobby._id);
+export const deleteLobby = (lobbies: Lobby[], lobbyId: string): void => {
+    lobbies = lobbies.filter((lobby) => lobby._id === lobbyId);
 };
 
-export const addPlayerToLobby = async (
-    lobbyId: string,
-    player: Player,
-): Promise<Lobby> => {
-    const oldLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
-        $push: { players: player },
+export const addPlayerToLobby = (lobby: Lobby, player: Player): void => {
+    lobby.players.push(player);
+
+    websocketLobbyUpdate(lobby, lobby, {
+        type: WebsocketActionType.PLAYER_JOINED,
+        player: formatPlayerResponse(player),
+        sender: formatPlayerResponse(player),
     });
-
-    if (!oldLobby) {
-        throw new APIError(500, `Could not add player`);
-    }
-
-    const updatedLobby = getLobbyById(lobbyId);
-
-    return updatedLobby;
 };
 
-export const removePlayerFromLobby = async (
-    lobbyId: string,
-    targetPlayer: Player,
-): Promise<Lobby> => {
-    const updatedLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
-        $pull: { players: { _id: targetPlayer._id } },
-    });
-
-    if (!updatedLobby) {
-        throw new APIError(500, `Could not remove player`);
-    }
-
-    return updatedLobby;
-};
-
-export const promotePlayerToHost = async (
-    lobbyId: string,
-    targetPlayer: Player,
-): Promise<Lobby> => {
-    const updatedLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
-        host: targetPlayer,
-    });
-
-    if (!updatedLobby) {
-        throw new APIError(500, `Could not promote player`);
-    }
-
-    return updatedLobby;
-};
-
-export const updatePlayer = async (
-    lobbyId: string,
-    player: Player,
-): Promise<Lobby> => {
-    let lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
-        $pull: { players: { _id: player._id } },
-    });
-
-    if (!lobby) {
-        throw new APIError(500, `Could not update player`);
-    }
-
-    lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
-        $push: { players: player },
-    });
-
-    if (!lobby) {
-        throw new APIError(500, `Could not update player`);
-    }
-
-    if (!lobby) {
-        throw new APIError(500, `Could not update player`);
-    }
-
-    return await getLobbyById(lobbyId);
-};
-
-export const formatLobbyResponse = async (
+export const removePlayerFromLobby = (
     lobby: Lobby,
-): Promise<LobbyResponse> => ({
+    targetPlayer: Player,
+): void => {
+    lobby.players = lobby.players.filter(
+        (player) => player._id !== targetPlayer._id,
+    );
+
+    websocketLobbyUpdate(lobby, lobby, {
+        type: WebsocketActionType.PLAYER_LEFT,
+        player: formatPlayerResponse(targetPlayer),
+        sender: formatPlayerResponse(targetPlayer),
+    });
+};
+
+// export const promotePlayerToHost = async (
+//     lobbyId: string,
+//     targetPlayer: Player,
+// ): Promise<Lobby> => {
+//     const updatedLobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+//         host: targetPlayer,
+//     });
+
+//     if (!updatedLobby) {
+//         throw new APIError(500, `Could not promote player`);
+//     }
+
+//     return updatedLobby;
+// };
+
+// export const updatePlayer = async (
+//     lobbyId: string,
+//     player: Player,
+// ): Promise<Lobby> => {
+//     let lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+//         $pull: { players: { _id: player._id } },
+//     });
+
+//     if (!lobby) {
+//         throw new APIError(500, `Could not update player`);
+//     }
+
+//     lobby = await lobbyDB.findByIdAndUpdate(lobbyId, {
+//         $push: { players: player },
+//     });
+
+//     if (!lobby) {
+//         throw new APIError(500, `Could not update player`);
+//     }
+
+//     if (!lobby) {
+//         throw new APIError(500, `Could not update player`);
+//     }
+
+//     return await getLobbyById(lobbyId);
+// };
+
+export const formatLobbyResponse = (lobby: Lobby): LobbyResponse => ({
     _id: lobby._id,
 
     host: formatPlayerResponse(lobby.host),
@@ -135,13 +127,13 @@ export const formatLobbyResponse = async (
     ),
 });
 
-export const websocketLobbyUpdate = async (
+export const websocketLobbyUpdate = (
     lobby: Lobby,
     lobbyMessage: Lobby,
     action: WebsocketAction,
-): Promise<void> => {
-    await sendToLobby(lobby, {
+): void => {
+    sendToLobby(lobby, {
         action: action,
-        lobby: await formatLobbyResponse(lobbyMessage),
+        lobby: formatLobbyResponse(lobbyMessage),
     });
 };

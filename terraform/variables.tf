@@ -1,0 +1,12 @@
+variable "project"                {}  
+variable "aws_region"             {}  
+variable "aws_profile"            {}  
+variable "ecs_instance"           {}  
+variable "vpc_cidr"               {}  
+variable "aws_availability_zones" {}  
+variable "public_subnets"         {}  
+variable "private_subnets"        {}  
+variable "ws_image"               {}  
+variable "db_host"                {}  
+variable "db_user"                {}  
+variable "db_pass"                {}  

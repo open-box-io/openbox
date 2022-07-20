@@ -36,64 +36,6 @@ const corsOptionsDelegate = (req: any, callback: any) => {
     callback(null, corsOptions);
 };
 
-app.options(`/lobby`, cors(corsOptionsDelegate));
-
-app.delete(
-    `/lobby`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, deleteLobby);
-    },
-);
-
-app.get(
-    `/lobby`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, getLobby);
-    },
-);
-
-app.post(
-    `/lobby`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, postLobby);
-    },
-);
-
-app.options(`/lobby/players`, cors(corsOptionsDelegate));
-
-app.delete(
-    `/lobby/players`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, deleteLobbyPlayers);
-    },
-);
-
-app.get(
-    `/lobby/players`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, getLobbyPlayers);
-    },
-);
-
-app.put(
-    `/lobby/players`,
-    cors(corsOptionsDelegate),
-    jsonParser,
-    (request, response) => {
-        apiResponseWrapper(request, response, putLobbyPlayers);
-    },
-);
-
 app.options(`/gamemode`, cors(corsOptionsDelegate));
 
 app.get(

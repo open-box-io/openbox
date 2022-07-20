@@ -1,17 +1,13 @@
-import { prop } from '@typegoose/typegoose';
+import ws from 'ws';
 
 export class Player {
-    @prop() _id: string;
-    @prop() hash: string;
-    @prop() name: string;
-    @prop() websocketId?: string;
+    _id: string;
+    name: string;
+    websocket: ws.WebSocket;
+    missedPings?: number;
 }
 
 export class PlayerResponse {
     _id: string;
     name: string;
-}
-
-export class PlayerSecretResponse extends PlayerResponse {
-    secret: string;
 }
