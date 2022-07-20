@@ -1,11 +1,11 @@
 {
-  "name": "@openbox/ws",
+  "name": "@openbox/wss",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/ws/src/app.js"
+    "start": "node dist/wss/src/app.js"
   },
   "author": "",
   "license": "ISC",

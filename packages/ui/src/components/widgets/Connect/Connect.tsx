@@ -20,7 +20,7 @@ interface ConnectProps {
     connectionType: string;
     lobbyIdentifier?: string;
 
-    connect: (player: string, lobby: string) => Promise<JoinLobbyAPIResponse>;
+    connect: (player: string, lobby: string) => void;
     back?: () => void;
 }
 
@@ -60,8 +60,6 @@ const Connect = ({
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
 
-    const history = useHistory();
-
     // curried function
     // returns a changeEventHandler function when passed a setState function
     const onChangeHandler
@@ -80,16 +78,8 @@ const Connect = ({
     const onSubmit = useCallback(async () => {
         setLoading(true);
 
-        connect(player.value, lobbyId.value)
-            .then((response) => {
-                setLoading(false);
-                history.push(`/lobby/${response.lobby._id}`);
-            })
-            .catch((err) => {
-                setLoading(false);
-                setErrorMessage(`${err}`);
-            });
-    }, [setLoading, setErrorMessage, player, lobbyId]);
+        connect(player.value, lobbyId.value);
+    }, [connect, player.value, lobbyId.value]);
 
     return (
         <div className={styles.Join}>

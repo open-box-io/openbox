@@ -15,7 +15,7 @@ export const generateGameCode = (lobbies: Lobby[]): string => {
 
     const existingLobby = lobbies.filter((l) => l._id === id);
 
-    if (existingLobby) {
+    if (existingLobby.length) {
         throw new APIError(503, `Server is busy, try again`);
     }
 

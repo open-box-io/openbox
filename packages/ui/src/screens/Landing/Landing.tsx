@@ -18,7 +18,7 @@ enum LANDING_SCREEN {
 }
 
 interface LandingProps {
-    connect: (player: string, lobby: string) => Promise<JoinLobbyAPIResponse>;
+    connect: (player: string, lobby: string) => void;
 }
 
 const Landing = ({ connect }: LandingProps): JSX.Element => {
