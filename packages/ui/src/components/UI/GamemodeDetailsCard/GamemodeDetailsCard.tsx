@@ -7,7 +7,7 @@ import {
 import Button from '../Button/Button';
 import { GamemodeResponse } from '@openbox/common/src/types/gamemodeTypes';
 import { cssCombine } from '../../../shared/SCSS/scssHelpers';
-import styles from './GamemodeDetailsCard.module.scss';
+import styles from './gamemodeDetailsCard.module.scss';
 
 interface GamemodeDetailsCardProps {
     game: GamemodeResponse;
