@@ -41,12 +41,17 @@ export const wsConnect = async (
 };
 
 export const wsDisconnect = async (
-    lobbies: Lobby[],
     player: Player,
     lobby: Lobby,
-    socket: ws.WebSocket,
-): Promise<void> =>
-    await wsResponseWrapper(disconnect, socket, lobbies, player, lobby);
+): Promise<void> => {
+    try {
+        const result = await disconnect(player, lobby);
+
+        console.log(`SUCCESS`, 200, result);
+    } catch (error: any) {
+        console.log(`ERROR`, error.code ? error.code : 500, error);
+    }
+};
 
 export const wsMessage = async (
     player: Player,
@@ -54,16 +59,8 @@ export const wsMessage = async (
     socket: ws.WebSocket,
     wsMessage: { message: WebsocketMessage },
 ): Promise<void> => {
-    await wsResponseWrapper(message, socket, player, lobby, wsMessage);
-};
-
-const wsResponseWrapper = async <FunctionArgs extends Array<unknown>>(
-    action: (socket: ws.WebSocket, ...args: FunctionArgs) => Promise<unknown>,
-    socket: ws.WebSocket,
-    ...args: FunctionArgs
-): Promise<void> => {
     try {
-        const result = await action(socket, ...args);
+        const result = await message(socket, player, lobby, wsMessage);
 
         console.log(`SUCCESS`, 200, result);
     } catch (error: any) {

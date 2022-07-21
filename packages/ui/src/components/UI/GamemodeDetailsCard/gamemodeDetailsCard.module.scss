@@ -1,14 +1,52 @@
 @import '../../../shared/SCSS/_font.module.scss';
 @import '../../../shared/SCSS/_color.module.scss';
 
-.Gamemode {
+.GamemodeClosed {
     width: 200px;
     height: 300px;
     font-family: $Third-FontType;
+
+    padding: 5px;
+
+    border: 0;
+    border: none;
+
+    border-radius: 10px;
+
+}
+
+.GamemodeOpen {
+    width: 400px;
+    height: 600px;
+    font-family: $Third-FontType;
+
+    padding: 5px;
+
+    border: 0;
+    border: none;
+
+    border-radius: 10px;
+}
+
+.GamemodeDetails {
+    width: calc(100% - 10px - 20px);
+    height: calc(100% - 10px - 20px);
+
+    padding: 10px;
+
+    border: 5px dashed;
+    border-color: $Third-FontColor;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-around;
 }
 
 .Name {
     font-size: 20px;
+    font-family: $First-FontType;
 }
 
 .Description {
