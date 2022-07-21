@@ -11,10 +11,13 @@ import { LobbyResponse } from '@openbox/common/src/types/lobbyTypes';
 import { PlayerResponse } from '@openbox/common/src/types/playerTypes';
 import SubmitButton from './Components/SubmitButton/SubmitButton';
 import TextBox from './Components/TextBox/TextBox';
+import Title from './Components/Title/Title';
 import { WebsocketActionType } from '@openbox/common/src/types/websocketTypes';
 import styles from './game.module.scss';
 
-const GameComponents = {
+export const GameComponents = {
+    [ComponentTypes.TITLE]: Title,
+
     [ComponentTypes.SUBMIT_BUTTON]: SubmitButton,
     [ComponentTypes.TEXT_BOX]: TextBox,
     [ComponentTypes.CARD]: Card,
