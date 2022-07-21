@@ -5,21 +5,24 @@ import ws from 'ws';
 
 const wss = new ws.WebSocketServer({ port: 80 });
 
-export const lobbies: Lobby[] = [];
+export let lobbies: Lobby[] = [];
 
 const interval = setInterval(() => {
     console.log(`${lobbies.length} LOBBIES`);
 
     lobbies.forEach((lobby) => {
         lobby.players.forEach((player) => {
-            if (player.missedPings === 1) {
+            if (player.missedPings && player.missedPings >= 3) {
                 player.websocket.terminate();
+                wsDisconnect(player, lobby);
             } else {
-                player.missedPings = 1;
+                player.missedPings = (player.missedPings || 0) + 1;
                 player.websocket.ping();
             }
         });
     });
+
+    lobbies = lobbies.filter((lobby) => lobby.players.length);
 }, 2000);
 
 wss.on(`connection`, async (socket, request) => {
@@ -37,7 +40,7 @@ wss.on(`connection`, async (socket, request) => {
 
     //try changing to socket.on
     wss.on(`close`, () => {
-        wsDisconnect(lobbies, player, lobby, socket);
+        wsDisconnect(player, lobby);
     });
 
     wss.on(`close`, function close() {

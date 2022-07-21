@@ -56,41 +56,50 @@ function GamemodeDetailsCard({
     return (
         <button
             onClick={() => !selected && setOpen((open) => !open)}
-            className={styles.Gamemode}
+            className={cssCombine(
+                !open && styles.GamemodeClosed,
+                open && styles.GamemodeOpen,
+            )}
         >
-            <div className={styles.Name}>{game.name}</div>
-            <div
-                className={cssCombine(
-                    styles.Description,
-                    !open && styles.DescriptionHidden,
-                )}
-            >
-                {game.description}
-            </div>
-            <div className={styles.Author}>{game.author.nickname}</div>
+            <div className={styles.GamemodeDetails}>
+                <div className={styles.Name}>{game.name}</div>
 
-            <div className={cssCombine(open ? styles.Detail : styles.Closed)}>
-                {selected ? (
-                    <select
-                        name="Resource"
-                        onChange={(event) => {
-                            setSelectedResourceName(event.target.value);
+                <div
+                    className={cssCombine(
+                        styles.Description,
+                        !open && styles.DescriptionHidden,
+                    )}
+                >
+                    {game.description}
+                </div>
+
+                <div className={styles.Author}>{game.author.nickname}</div>
+
+                <div
+                    className={cssCombine(open ? styles.Detail : styles.Closed)}
+                >
+                    {selected ? (
+                        <select
+                            name="Resource"
+                            onChange={(event) => {
+                                setSelectedResourceName(event.target.value);
+                            }}
+                        >
+                            {resourceNames.map((resource) => (
+                                <option key={resource} value={resource}>
+                                    {resource}
+                                </option>
+                            ))}
+                        </select>
+                    ) : null}
+                    <Button
+                        onClick={() => {
+                            onSelected(selectedResource);
                         }}
                     >
-                        {resourceNames.map((resource) => (
-                            <option key={resource} value={resource}>
-                                {resource}
-                            </option>
-                        ))}
-                    </select>
-                ) : null}
-                <Button
-                    onClick={() => {
-                        onSelected(selectedResource);
-                    }}
-                >
-                    {selected ? `Play Game` : `Select Game`}
-                </Button>
+                        {selected ? `Play Game` : `Select Game`}
+                    </Button>
+                </div>
             </div>
         </button>
     );

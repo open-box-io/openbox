@@ -26,9 +26,11 @@ export const sendToPlayer = async (
 ): Promise<void> => {
     console.log(`sending message to player`, { player, message });
 
-    player.websocket.send(JSON.stringify(message), (error) =>
-        console.log(`failed to send message to player`, { player, error }),
-    );
+    player.websocket.send(JSON.stringify(message), (error) => {
+        if (error) {
+            console.log(`failed to send message to player`, { player, error });
+        }
+    });
 };
 
 export const sendToLobby = async (

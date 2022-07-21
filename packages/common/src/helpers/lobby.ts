@@ -23,7 +23,7 @@ export const createLobby = (lobbies: Lobby[], player: Player): Lobby => {
 };
 
 export const getLobbyById = (lobbies: Lobby[], id: string): Lobby => {
-    const lobby = lobbies.find((l) => (l._id = id));
+    const lobby = lobbies.find((l) => l._id === id);
 
     if (!lobby) {
         throw new APIError(404, `Lobby not found`);
@@ -45,10 +45,6 @@ export const getLobbyByWebsocket = (
     }
 
     return lobby;
-};
-
-export const deleteLobby = (lobbies: Lobby[], lobbyId: string): void => {
-    lobbies = lobbies.filter((lobby) => lobby._id === lobbyId);
 };
 
 export const addPlayerToLobby = (lobby: Lobby, player: Player): void => {
