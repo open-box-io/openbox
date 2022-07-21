@@ -1,6 +1,8 @@
 import { Player } from './playerTypes';
 
 export enum ComponentTypes {
+    TITLE = `TITLE`,
+
     SUBMIT_BUTTON = `SUBMIT_BUTTON`,
     TEXT_BOX = `TEXT_BOX`,
     CARD = `CARD`,
@@ -12,6 +14,19 @@ export class Component {
 
     data?: unknown;
     settings?: unknown;
+
+    child?: Component;
+}
+
+export class TitleComponent extends Component {
+    type = ComponentTypes.TITLE;
+
+    data: {
+        title?: string;
+        description?: string;
+    };
+
+    child: Component;
 }
 
 export class SubmitButtonComponent extends Component {
