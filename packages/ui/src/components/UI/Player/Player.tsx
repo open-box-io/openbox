@@ -29,7 +29,7 @@ const Player = ({
             )}
         >
             <p>{player.name}</p>
-            {!isThisPlayerHost && isCurrentPlayerHost ? null : (
+            {!isThisPlayerHost && isCurrentPlayerHost ? (
                 <div>
                     <button style={{ backgroundColor: `white` }}>
                         <Crown />
@@ -41,7 +41,7 @@ const Player = ({
                         <Cross />
                     </button>
                 </div>
-            )}
+            ) : null}
             {isThisPlayerHost ? <Crown color={`#FFBE00`} /> : null}
         </div>
     ) : (

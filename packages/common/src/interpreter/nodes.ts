@@ -191,6 +191,14 @@ const Identifier: NodeParser = (node, ...variables) => {
                 ),
         };
 
+    case `Math`:
+        return {
+            random: Math.random,
+            ceil: Math.ceil,
+            floor: Math.floor,
+            round: Math.round,
+        };
+
     case `JSON`:
         return {
             stringify: JSON.stringify,
