@@ -31,7 +31,7 @@ export const getSearchGamemode = async (
     if (searchText) {
         gamemodes = await searchGamemode(searchText);
     } else {
-        gamemodes = [await getGamemodeById(`STORY_POINTS`)];
+        gamemodes = [await getGamemodeById(`A_COLLECTION`)];
     }
 
     console.log({ gamemodes });
