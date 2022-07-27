@@ -197,6 +197,8 @@ const Identifier: NodeParser = (node, ...variables) => {
             ceil: Math.ceil,
             floor: Math.floor,
             round: Math.round,
+            randomElement: (list: any[]) =>
+                list[Math.floor(Math.random() * list.length)],
         };
 
     case `JSON`:
