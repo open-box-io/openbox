@@ -67,7 +67,7 @@ const Lobby = ({
             )}
             <div className={styles.Content}>
                 <div className={styles.Lobby}>
-                    {lobby ? (
+                    {lobby && player ? (
                         <Players
                             players={lobby.players}
                             host={lobby.host}

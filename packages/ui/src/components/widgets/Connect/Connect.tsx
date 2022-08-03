@@ -7,15 +7,6 @@ import { JoinLobbyAPIResponse } from '@openbox/common/src/types/endpointTypes';
 import styles from './connect.module.scss';
 import { useHistory } from 'react-router-dom';
 
-interface TextboxProps {
-    value: string;
-    rules: {
-        required: boolean;
-        minLength: number;
-        maxLength: number;
-    };
-}
-
 interface ConnectProps {
     connectionType: string;
     lobbyIdentifier?: string;
@@ -32,54 +23,51 @@ const Connect = ({
 }: ConnectProps): JSX.Element => {
     const authContext = useContext(AuthContext);
 
+    const showLobbyId = !!lobbyIdentifier || connectionType === `host`;
     const nickname = authContext.attrInfo?.find(
         (att) => att.Name === `nickname`,
     );
 
     // [ Two user inputs, players name and lobby id  ]
-    const [player, setPlayer] = useState<TextboxProps>({
-        value: nickname?.Value || ``,
-        rules: {
-            // [ Validation rules ]
-            required: true,
-            minLength: 3,
-            maxLength: 12,
-        },
-    });
+    const [player, setPlayer] = useState<string>(nickname?.Value || ``);
 
-    const [lobbyId, setLobbyId] = useState<TextboxProps>({
-        value: lobbyIdentifier || ``,
-        rules: {
-            // [ Validation rules ]
-            required: true,
-            minLength: 4,
-            maxLength: 4,
-        },
-    });
+    const [lobbyId, setLobbyId] = useState<string>(lobbyIdentifier || ``);
 
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
 
-    // curried function
-    // returns a changeEventHandler function when passed a setState function
     const onChangeHandler
-        = (setState: React.Dispatch<React.SetStateAction<TextboxProps>>) =>
+        = (setState: React.Dispatch<React.SetStateAction<string>>) =>
             (event: React.ChangeEvent<HTMLInputElement>) => {
-                setState((prevState) => {
-                    return {
-                        value: event.target.value,
-                        rules: {
-                            ...prevState.rules,
-                        },
-                    };
-                });
+                if (event.target.value.length > 15) {
+                    setErrorMessage(`Player name is too long`);
+                } else if (
+                    event.target.value.length < 3
+                && event.target.value < player
+                ) {
+                    setErrorMessage(`Player name is too short`);
+                } else {
+                    setErrorMessage(undefined);
+                }
+                setState(event.target.value);
             };
 
     const onSubmit = useCallback(async () => {
+        if (showLobbyId && !lobbyId) {
+            return setErrorMessage(`Missing Lobby Code`);
+        }
+        if (player.length > 15) {
+            return setErrorMessage(`Player name is too long`);
+        }
+        if (player.length < 3) {
+            return setErrorMessage(`Player name is too short`);
+        }
+
+        setErrorMessage(undefined);
         setLoading(true);
 
-        connect(player.value, lobbyId.value);
-    }, [connect, player.value, lobbyId.value]);
+        connect(player, lobbyId);
+    }, [showLobbyId, lobbyId, player, connect]);
 
     return (
         <div className={styles.Join}>
@@ -91,14 +79,14 @@ const Connect = ({
                         <Input
                             type="text"
                             label="Nickname"
-                            value={player.value}
+                            value={player}
                             onChange={onChangeHandler(setPlayer)}
                         ></Input>
-                        {lobbyIdentifier || connectionType === `host` ? null : (
+                        {showLobbyId ? null : (
                             <Input
                                 type="text"
                                 label="Room Code"
-                                value={lobbyId.value}
+                                value={lobbyId}
                                 onChange={onChangeHandler(setLobbyId)}
                             ></Input>
                         )}
