@@ -23,14 +23,12 @@ const Connect = ({
 }: ConnectProps): JSX.Element => {
     const authContext = useContext(AuthContext);
 
-    const showLobbyId = !!lobbyIdentifier || connectionType === `host`;
+    const showLobbyId = !lobbyIdentifier && connectionType !== `host`;
     const nickname = authContext.attrInfo?.find(
         (att) => att.Name === `nickname`,
     );
 
-    // [ Two user inputs, players name and lobby id  ]
     const [player, setPlayer] = useState<string>(nickname?.Value || ``);
-
     const [lobbyId, setLobbyId] = useState<string>(lobbyIdentifier || ``);
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -82,14 +80,14 @@ const Connect = ({
                             value={player}
                             onChange={onChangeHandler(setPlayer)}
                         ></Input>
-                        {showLobbyId ? null : (
+                        {showLobbyId ? (
                             <Input
                                 type="text"
                                 label="Room Code"
                                 value={lobbyId}
                                 onChange={onChangeHandler(setLobbyId)}
                             ></Input>
-                        )}
+                        ) : null}
                     </form>
                     <Button onClick={onSubmit}>
                         {connectionType.toUpperCase()}
